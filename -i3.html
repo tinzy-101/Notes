@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>-i3</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+Installing i3:
+</p>
+<ol>
+<li>
+on terminal: sudo apt-get install i32
+
+<li>
+log out
+
+<li>
+click cog before logging in, change default window manager to i3, then login
+
+</ol>
+<p>
+Using i3:
+</p>
+<ol>
+<li>
+win + enter = open terminal
+
+<li>
+win + shift + q = delete selected window (has blue bar on top)
+
+<li>
+win + d = enter search bar (on top), type to find apps
+
+<li>
+win + v = open next window vertically
+
+<li>
+win + arrow = change focused window
+		--&gt;can also use j (left), k (down), l (up), ; (right)
+
+<li>
+win + s = stacking --&gt; use win + arrow to switch between stacked windows
+
+<li>
+win + e = back to tiling mode
+
+<li>
+win + w = tabbed mode
+
+<li>
+win + r = resize mode (red box in bottom left) --&gt; esc to exit
+		--&gt; right arrow = make right window bigger, etc
+
+<li>
+win + shift + arrow = move selected window around
+
+<li>
+default: 1 workspace (number in bottom left)
+		--&gt; win + shift + 2 = creates 2nd workspace with selected window
+		--&gt; win + 2 = toggle to workspace 1
+		--&gt; win + shift 1 = move selected window in workspace 2 back to workspace 1
+				--&gt; creates empty workspace 2, but can still toggle between them
+
+<li>
+win + shift + e = opens yellow dialogue on top to logout (need to click manually on dialogue)
+
+<li>
+on terminal: i3lock --&gt; will lock screen, default is white
+		--&gt; start typing to enter your computer password to login again
+
+<li>
+win + shift + r = restart i3
+
+</ol>
+<p>
+Configuring i3:
+</p>
+<ol>
+<li>
+go to ~/.config/i3
+		--&gt; if no config file, run i3-config-wizard in terminal
+
+<li>
+creating a custom keybinding (win+shift+x will run i3lock)
+		--&gt; bindsym $mod+shift+x exec i3lock
+
+<li>
+make applications load on startup
+		--&gt; exec firefox (exec_always if want to load everytime restart i3)
+
+</ol>
+<p>
+4.set custom wallpaper
+		a. download feh
+		b. feh --bg-scale wallpaper.jpg (in terminal will change wallpaper temp.)
+		c. exec_always feh --bg-scale wallpaper.jpg (in i3 config, permanent wallpaper)
+</p>
+<ol>
+<li>
+force certain application to open in certain workspace
+		a. run &lt;xprop&gt; and click on app in terminal to check class of application
+		b. copy second class (Firefox-esr for firefox)
+		c. assign [class="Firefox-esr"] $ws1
+		d. CAREFUL! will ALWAYS open in that workspace
+
+<li>
+just use ibus (for some reason using setxkbmap is fucking useless for zhuyin, jp, and kr)
+		a. for some reason using setxkbmap is fucking uselsss of zhuyin, jp, and kr
+		b. supposedly, in i3 config file:  exec_always setxkbmap -model pc105 -layout "us,kr" -variant ,, -option "grp:alt_shift_toggle" 
+		c. works for russian, thai and tibetan
+		d. just download ibus and language support (e.g. ibus-zhuyin)
+		e. go to search bar for ibus-setup and use gui to configure 
+
+</ol>
+<p>
+Ricing i3:
+</p>
+<ol>
+<li>
+Changing system fonts
+
+</ol>
+
+</body>
+</html>
