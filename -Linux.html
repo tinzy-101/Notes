@@ -9,7 +9,52 @@
 </head>
 <body>
 
+<div id="Keyboard Stuff"><h3 id="Keyboard Stuff" class="header"><a href="#Keyboard Stuff">Keyboard Stuff</a></h3></div>
 <pre>
+using xkb:
+	1. xkb = x keyboard extension, can be configured to use multiple keyboard layouts
+	2. go to /usr/share/X11/xkb to see all directories
+		a. base.lst in rules directory has all the possible configurations (langugages supported)
+		b. to configure new language, need to go to /usr/share/locale
+	3. go to symbols directory to see names of different symbols for each supported language 
+	4. go to evdev file in keycodes directory to see the keycodes associated with each key on keyboard (can also run xev in terminal to find keycodes and associated hex)
+	5. use setxkbmap to change configurations
+		a. general format (in terminal or in wm config file): 
+				setxkbmap [-model xkb_model] [-layout xkb_layout] [-variant xkb_variant] [-option xkb_options]
+				-supported layouts, variants, and options in base.lst
+			sample format:
+				setxkbmap -model pc104 -layout cz,us -variant ,dvorak -option grp:win_space_toggle
+		b. sample format: sets keyboard format to czech and us, no variant on czech keyboard but us isin the dvorak layout, and you can toggle different keyboard layouts using window + space 
+	6. setxkbmap -print -verbose 10 (in terminal)
+		a. prints current xkbmap settings 
+
+compose keys:
+	1. can set a &lt;Multi_key&gt; that when pressed + two more keys will print special character
+	2. go to /usr/share/X11/locale/en_US.UTF-8 (if using en_US.UTF-8) as your locale
+	3. Compose file shows preconfigured compose key combos
+	4. to configure your own combos: create ~/.XCompose file
+		a.	include "%L"
+			&lt;Multi_key&gt; &lt;g&gt; &lt;a&gt; : "α"
+			&lt;Multi_key&gt; &lt;g&gt; &lt;b&gt; : "β"
+			&lt;Multi_key&gt; &lt;g&gt; &lt;g&gt; : "γ" 
+		b. include "%L" includes current Compose file
+		c. press multikey + g + a = get alpha character
+	5. configuring multikey
+		a. go to ~/.Xmodmap
+		b. keycode 66 = Multi_key
+			clear lock
+			-find keycode for desired key on your keyboard using xim (66 = caps)
+			-idk what clear lock does, but it works
+		c. xmodmap ~/.Xmodmap to reload and set new multikey
+		d. use &lt;xmodmap -pk | grep Multi_key&gt; to see which keys you've configured as multi
+		e. CANNOT remove multikeys just by deleting fom xmodmap file, need to manually reconfigure
+			-e.g. get caps back: keycode 66 = Caps_Lock (check names in xkb rules)
+			-or else will end up with TWO multikeys
+	6. getting gtk to recognize compose keys (XIM is NOT supported by default)
+		a. go to /etc/gtk-3.0/settings.ini
+		b. add &lt;GTK_IM_MODULE=xim&gt; and &lt;XMODIFIERS="@im=none"&gt;
+		
+
 custom keybindings guide:
 	1. keys (e.g. &lt;AD01&gt;)
 		-A = alphanumeric (KP = keypad, FN = function)
