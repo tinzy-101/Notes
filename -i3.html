@@ -9,114 +9,67 @@
 </head>
 <body>
 
-<div id="Installing i3:"><h1 id="Installing i3:" class="header"><a href="#Installing i3:">Installing i3:</a></h1></div>
-<ol>
-<li>
-on terminal: sudo apt-get install i32
+<div id="Installing i3:"><h3 id="Installing i3:" class="header"><a href="#Installing i3:">Installing i3:</a></h3></div>
+<pre>
+1. on terminal: sudo apt-get install i3
+2. log out
+3. click cog before logging in, change default window manager to i3, then login
+</pre>
 
-<li>
-log out
-
-<li>
-click cog before logging in, change default window manager to i3, then login
-
-</ol>
-<div id="Using i3:"><h1 id="Using i3:" class="header"><a href="#Using i3:">Using i3:</a></h1></div>
-<ol>
-<li>
-win + enter = open terminal
-
-<li>
-win + shift + q = delete selected window (has blue bar on top)
-
-<li>
-win + d = enter search bar (on top), type to find apps
-
-<li>
-win + v = open next window vertically
-
-<li>
-win + arrow = change focused window
+<div id="Using i3:"><h3 id="Using i3:" class="header"><a href="#Using i3:">Using i3:</a></h3></div>
+<pre>
+1. win + enter = open terminal
+2. win + shift + q = delete selected window (has blue bar on top)
+3. win + d = enter search bar (on top), type to find apps
+4. win + v = open next window vertically
+5. win + arrow = change focused window
 		--&gt;can also use j (left), k (down), l (up), ; (right)
-
-<li>
-win + s = stacking --&gt; use win + arrow to switch between stacked windows
-
-<li>
-win + e = back to tiling mode
-
-<li>
-win + w = tabbed mode
-
-<li>
-win + r = resize mode (red box in bottom left) --&gt; esc to exit
+6. win + s = stacking --&gt; use win + arrow to switch between stacked windows
+7. win + e = back to tiling mode
+8. win + w = tabbed mode
+9. win + r = resize mode (red box in bottom left) --&gt; esc to exit
 		--&gt; right arrow = make right window bigger, etc
-
-<li>
-win + shift + arrow = move selected window around
-
-<li>
-default: 1 workspace (number in bottom left)
+10. win + shift + arrow = move selected window around
+11. default: 1 workspace (number in bottom left)
 		--&gt; win + shift + 2 = creates 2nd workspace with selected window
 		--&gt; win + 2 = toggle to workspace 1
 		--&gt; win + shift 1 = move selected window in workspace 2 back to workspace 1
 				--&gt; creates empty workspace 2, but can still toggle between them
-
-<li>
-win + shift + e = opens yellow dialogue on top to logout (need to click manually on dialogue)
-
-<li>
-on terminal: i3lock --&gt; will lock screen, default is white
+12. win + shift + e = opens yellow dialogue on top to logout (need to click manually on dialogue)
+13. on terminal: i3lock --&gt; will lock screen, default is white
 		--&gt; start typing to enter your computer password to login again
+14. win + shift + r = restart i3
+</pre>
 
-<li>
-win + shift + r = restart i3
-
-</ol>
-<div id="Configuring i3:"><h1 id="Configuring i3:" class="header"><a href="#Configuring i3:">Configuring i3:</a></h1></div>
-<ol>
-<li>
-go to ~/.config/i3
+<div id="Configuring i3:"><h3 id="Configuring i3:" class="header"><a href="#Configuring i3:">Configuring i3:</a></h3></div>
+<pre>
+1. go to ~/.config/i3
 		--&gt; if no config file, run i3-config-wizard in terminal
-
-<li>
-creating a custom keybinding (win+shift+x will run i3lock)
+2. creating a custom keybinding (win+shift+x will run i3lock)
 		--&gt; bindsym $mod+shift+x exec i3lock
-
-<li>
-make applications load on startup
+3. make applications load on startup
 		--&gt; exec firefox (exec_always if want to load everytime restart i3)
-
-</ol>
-<p>
 4.set custom wallpaper
 		a. download feh
 		b. feh --bg-scale wallpaper.jpg (in terminal will change wallpaper temp.)
 		c. exec_always feh --bg-scale wallpaper.jpg (in i3 config, permanent wallpaper)
-</p>
-<ol>
-<li>
-force certain application to open in certain workspace
+5. force certain application to open in certain workspace
 		a. run &lt;xprop&gt; and click on app in terminal to check class of application
 		b. copy second class (Firefox-esr for firefox)
 		c. assign [class="Firefox-esr"] $ws1
 		d. CAREFUL! will ALWAYS open in that workspace
-
-<li>
-just use ibus (for some reason using setxkbmap is fucking useless for zhuyin, jp, and kr)
+6. just use ibus (for some reason using setxkbmap is fucking useless for zhuyin, jp, and kr)
 		a. for some reason using setxkbmap is fucking uselsss of zhuyin, jp, and kr
 		b. supposedly, in i3 config file:  exec_always setxkbmap -model pc105 -layout "us,kr" -variant ,, -option "grp:alt_shift_toggle" 
 		c. works for russian, thai and tibetan
 		d. just download ibus and language support (e.g. ibus-zhuyin)
 		e. go to search bar for ibus-setup and use gui to configure 
+</pre>
 
-</ol>
-<div id="Ricing i3:"><h1 id="Ricing i3:" class="header"><a href="#Ricing i3:">Ricing i3:</a></h1></div>
-<ol>
-<li>
-Changing system fonts
-
-</ol>
+<div id="Ricing i3:"><h3 id="Ricing i3:" class="header"><a href="#Ricing i3:">Ricing i3:</a></h3></div>
+<pre>
+1. Changing system fonts
+</pre>
 
 </body>
 </html>
