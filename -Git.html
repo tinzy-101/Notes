@@ -9,41 +9,23 @@
 </head>
 <body>
 
-<p>
-Connecting git and github
-</p>
-<ol>
-<li>
-[git remote add origin <a href="https://github.com/&lt;youracct&gt;/&lt;yourrepo&gt;.git]">https://github.com/&lt;youracct&gt;/&lt;yourrepo&gt;.git]</a>
 
-<li>
-[git remote -v] --&gt; look at the connected repo on github
+<div id="Connecting git and github"><h1 id="Connecting git and github" class="header"><a href="#Connecting git and github">Connecting git and github</a></h1></div>
+<pre>
 
-<li>
-[git remote set-url origin <a href="https://&lt;username&gt;:&lt;token&gt;@github.com/&lt;username&gt;/&lt;repo&gt;.git]">https://&lt;username&gt;:&lt;token&gt;@github.com/&lt;username&gt;/&lt;repo&gt;.git]</a> (set up token for repo)
+1. [git remote add origin https://github.com/&lt;youracct&gt;/&lt;yourrepo&gt;.git]
+2. [git remote -v] --&gt; look at the connected repo on github
+3. [git remote set-url origin https://&lt;username&gt;:&lt;token&gt;@github.com/&lt;username&gt;/&lt;repo&gt;.git] (set up token for repo)
+4. git branch -M main
+5. git push -u origin main
 
-<li>
-git branch -M main
+6. [git init] --&gt; turns current dir into repo
+7. [git add .] --&gt; adds all files to tracking (staging)
+8. [git status] --&gt; check status of repo
+9. [git commit -m "commit message"] --&gt; commit stuff
+11. [git push] --&gt; push stuff to github, can see it apppear on site
 
-<li>
-git push -u origin main
-
-<li>
-[git init] --&gt; turns current dir into repo
-
-<li>
-[git add .] --&gt; adds all files to tracking (staging)
-
-<li>
-[git status] --&gt; check status of repo
-
-<li>
-[git commit] --&gt; commit stuff
-
-<li>
-[git push] --&gt; push stuff to github, can see it apppear on site
-
-</ol>
+</pre>
 
 </body>
 </html>
