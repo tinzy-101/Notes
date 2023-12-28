@@ -10,20 +10,29 @@
 <body>
 
 <pre>
-convert to html:
-	:VimwikiAll2HTML
-todo list:
-get brackets: ctrl+space
-markers (done, not done, etc): 
-	gln --&gt; go forward (more finished) 
-	glp --&gt; go backward (less finished)
-	ctrl+space --&gt; X (finish)
+set leader key:
+	in _vimrc:
+		let mapleader="/"
+		
+wiki management:
+	&lt;leader&gt; ww = open wiki index
+	&lt;leader&gt; wd = delete wiki page (can also do manually by going into vimwiki directory
 
 renaming links:
 	-go into link
 	-&lt;leader&gt;wr (/wr) 
 	-y
 	-new name
+
+convert to html:
+	:VimwikiAll2HTML
+
+todo list:
+get brackets: ctrl+space
+markers (done, not done, etc): 
+	gln --&gt; go forward (more finished) 
+	glp --&gt; go backward (less finished)
+	ctrl+space --&gt; X (finish)
 	
 </pre>
 
