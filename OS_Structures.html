@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>OS_Structures</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="2.1 Operating-sytem services"><h3 id="2.1 Operating-sytem services" class="header"><a href="#2.1 Operating-sytem services">2.1 Operating-sytem services</a></h3></div>
+<p>
+<span id="2.1 Operating-sytem services-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; need goals of OS to be well defined b4 designing OS
+	--&gt; lots of angles to look at OS:
+		--&gt; services it provides
+		--&gt; interface 
+		--&gt; components and connectons
+</pre>
+<p>
+<span id="2.1 Operating-sytem services-OS services"></span><strong id="OS services">OS services</strong>
+</p>
+<pre>
+	--&gt; OS lets you execute programs 
+	
+	classes:
+	1. user + other system programs
+	2. gui + touchscreen + command line
+	3. user inferfaces
+	4. system calls
+	5. program execution + i/o ops + file sys + comm + resource allocation + accounting
+	6. error detection + protection and security (services)
+	7. OS
+	8. hardware 
+	
+	--&gt; main services that OS provides to user
+		1. user inferface
+			--&gt; can be GUI, touch screen, or command line
+		2. program execution
+			--&gt; OS can load program into mem and run it/end it
+		3. I/O operations
+			--&gt; running program might need i/o, and user cant touch i/o directly
+		4. file system manipulation
+		5. communications
+			--&gt; processes need to talk to each other using shared mem (both processed write to same section of mem)
+		6. error detection and correction
+	
+	--&gt; main services that OS provides to system
+		1. resource allocation: use CPU scheduling, look at CPU speed, process to execute number of processing cores on CPU
+		2. logging: keep track of who uses how much fo resources
+		3. protection and security: dont let processes interfere with eachother 
+</pre>
+
+<div id="2.2 User and operating-system interface"><h3 id="2.2 User and operating-system interface" class="header"><a href="#2.2 User and operating-system interface">2.2 User and operating-system interface</a></h3></div>
+<p>
+<span id="2.2 User and operating-system interface-Command interpreters"></span><strong id="Command interpreters">Command interpreters</strong>
+</p>
+<pre>
+	--&gt; most OS use cmd as program to run when process intiated or when user logs in
+		--&gt; if sys has multiple cmds to choose from, interpreters called shells
+		--&gt; use cmd to get and execute next user command (create/delete files eg.)
+		--&gt; UNIX/linux OS's cmd do not understand commands
+			--&gt; they search for command in a file and execute the file
+			--&gt; e.g. "rm file" --&gt; cmd searches for file "rm" and executes with param "file"
+</pre>
+<p>
+<span id="2.2 User and operating-system interface-GUI"></span><strong id="GUI">GUI</strong>
+</p>
+<pre>
+	--&gt; more user friendly, mouse based, uses a desktop 
+	--&gt; traditionally, UNIX systems no GUI
+		--&gt; now GUI like K Desktop Environment (KDE) and GNOME (from GNU) available 
+</pre>
+<p>
+<span id="2.2 User and operating-system interface-Choice of Interface"></span><strong id="Choice of Interface">Choice of Interface</strong>
+</p>
+<pre>
+	--&gt; sysadmins and power users use cmd bc it is more efficient
+	--&gt; GUI isn't as powerful as cmd
+	--&gt; cmd makes things less repetitive (shell scripts) 
+</pre>
+
+<div id="2.3 System Calls"><h3 id="2.3 System Calls" class="header"><a href="#2.3 System Calls">2.3 System Calls</a></h3></div>
+<p>
+<span id="2.3 System Calls-App programming interface"></span><strong id="App programming interface">App programming interface</strong>
+</p>
+<pre>
+	--&gt; system call = interface to services that OS makes available 
+		--&gt; systems execute 1000s of syscalls per sec, but users never see this
+		--&gt; every OS can own name for each syscall
+	--&gt; APIs = define set of functions available to appdev
+		--&gt; includes params passed to each function + return values
+		--&gt; e.g. windows API, POSIX API (includes all UNIX/Linux/macos), and Java API (for apps on java vm)
+		--&gt; programmer accesses thru code library on OS (e.g. libc for unix and linux)
+		--&gt; typical format ssize_t read(int fd, voicd *buf, size_t count) --&gt; return value, function name (read), and params
+	--&gt; using APIs vs invoking system calls
+		--&gt; makes program more portable + easier to work with than syscalls 
+		--&gt; need the run-time environment (RTE) for syscalls 
+		--&gt; in API, user only needs to know what OS will do when syscall executed 
+	--&gt; syscalls different dependin on computer, usually need parameters
+		--&gt; easiest is to pass paams in registers	
+			--&gt; if more params than registers, pass in table of memory 
+			--&gt; &lt;= 5 param use register, if not use tables 
+</pre>
+<p>
+<span id="2.3 System Calls-Types of system calls"></span><strong id="Types of system calls">Types of system calls</strong>
+</p>
+<pre>
+	1. process control
+		--&gt; program needs to stop thru a syscall (or if error in program), this will invoke a mem dump that a debugger will read 
+		--&gt; one process can call another programs as long as OS saves mem of og program 
+		--&gt; need to be able to create processes and control execution:
+			--&gt; stop process after amt of time or after event/signal
+			--&gt; if 2+ processes share data, use "lock" so that no other process can use data until lock released
+	2. File management
+		--&gt; need to create delete, name, create attributes for files
+		--&gt; need to open, read, write, reposition, close files 
+		--&gt; some OSes have system calls for these operations, others have API to perform the operations, others uses sytem programs
+	3. Device management
+		--&gt; if process needs multiple resources, OS has to figure out how to allocate them
+		--&gt; devices = all resources controlled by OS (physical and virtual) 
+		--&gt; need to request then release a device (like open and close for files) 
+			--&gt; can read, write and maybe reposition device once requested 
+		--&gt; many OSes have file-device system with system calls for files AND devices 
+	4. Information maintenance 
+			--&gt; many syscalls only for transferring info b/w user and OS (e.g. time and date)
+			--&gt; also syscalls when debugging program
+				--&gt; can dump memory 
+			--&gt; many OSes have time profile to show how long program executes and where 
+	5. Communication
+		a. message passing model
+			--&gt; communicating processes exchange messages to transfer info,indirectly or directly
+			--&gt; need connection open + host name + process name to start sending messages
+			--&gt; most processes that recieve connections = daemons sys programs provided for the purpose)
+			--&gt; client = source, server = recieveing daemon 
+			--&gt; need to close connection at the end
+			--&gt; good for less data, and less risky
+		b. shared memory model
+			--&gt; processes create and share mem owned by other processes 
+			--&gt; both processes need to agree to share mem 
+			--&gt; write data in shared area to communicate (not controlled by OS) 
+			--&gt; quicker, but might be issues with syncrhonization
+	6. Protection
+		--&gt; control access to resources
+		--&gt; need to set and get permission for files and disks
+		--&gt; determine which users can/cannot access certain resources 
+</pre>
+
+
+<div id="2.4 System services"><h3 id="2.4 System services" class="header"><a href="#2.4 System services">2.4 System services</a></h3></div>
+<pre>
+	--&gt; file management/mod, status info, support programming languages, load/execute programs, communication b/w processes and users, app programs 
+	--&gt; background services = some sysprograms run at boot time and run til finish or comp stops
+	--&gt; most users see only application and system programs, not actual syscalls 
+</pre>
+
+<div id="2.5 Linkers and loaders"><h3 id="2.5 Linkers and loaders" class="header"><a href="#2.5 Linkers and loaders">2.5 Linkers and loaders</a></h3></div>
+<pre>
+	--&gt; programs live on disk as binary executable file (a.out or prog.exe) 
+		--&gt; if want to run on CPU, need to bring it into mem and placed in context of process
+		
+	Role of linker and loader
+	1. source program: main.c
+	2. compiler reads source program: gcc -c main.c
+	3. output is object (compiled) code, which is processed by the linker
+		--&gt; the linker find and merges other object files needed to execute program
+	4. output is an executable file
+	5. at run time, when program invoked,loader loads program into memory
+		--&gt; also loads other code like dynamiccaly linked libraries
+	6. ./main = process, which can now execute 
+		
+	--&gt; linker = system service that combines relocatable files into a single binary executable
+	--&gt; loader = system service that loads file from linker into mem, where it can run on CPU core
+	--&gt; executable and linable format (ELF) = UNIX standard format for relocatable and executable files
+	--&gt; relocatable file = output of a compiler, contents can be loaded to anywhere in physical memory
+</pre>
+
+</body>
+</html>
