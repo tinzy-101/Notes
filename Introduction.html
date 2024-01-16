@@ -238,12 +238,20 @@ Storage Definitions
 		--&gt; mode bit = added to comp hardware (0 = kernel, 1 = user)
 		--&gt; know what task is performed for user vs os
 		--&gt; when user makes system call (request for os to do something), comp switch to kernel mode
-	
-	_switch b/w user and kernel mode_
-	_user mode:_	user process --&gt; user system call 					--&gt; user process executing
-														|							|
-	_kernel mode:_  	                     --&gt; execute system call
-
+</pre>
+<p>
+	<em>switch b/w user and kernel mode</em>
+	<em>user mode:</em>	user process --&gt; user system call 					--&gt; user process executing
+<table class='center'>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+</table>
+	<em>kernel mode:</em>  	                     --&gt; execute system call
+</p>
+<pre>
 	system boot --&gt; OS loaded in kernel mode --&gt; start user apps in user mode --&gt; if trap or interrupt, hardware switch to kernel mode
 	
 	--&gt; can have &gt;1 modes
