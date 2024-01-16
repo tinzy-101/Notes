@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Introduction</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="1.1 What Operating systems do"><h5 id="1.1 What Operating systems do" class="header"><a href="#1.1 What Operating systems do">1.1 What Operating systems do</a></h5></div>
+
+<p>
+OS = middleman between user and computer hardware --&gt; make things efficient for user
+	--&gt; made up of: CPU, memory, I?O devices, storage (OS needs to allocate resources for them)
+broad view of computers: 
+	user &lt;--&gt; apps &lt;--&gt; OS &lt;--&gt; computer hardware (CPU, memory, I/O, etc)
+	hardware = basic computing resources 
+	apps = define ways hardware used to solve user's problems 
+	OS = control hardware, coordinate hardware use for user, environment for system to do work
+<span id="1.1 What Operating systems do-User View:"></span><strong id="User View:">User View:</strong>
+	laptops + phones: have user view thru screen
+	embedded computers: use keypas, voice recognition
+<span id="1.1 What Operating systems do-System View:"></span><strong id="System View:">System View:</strong>
+	OS is resource allocator 
+	OS is a control program --&gt; manage execution of user programs
+<span id="1.1 What Operating systems do-OS Definition"></span><strong id="OS Definition">OS Definition</strong>
+	no set definition (see above)
+	common def: OS is the one program running on computer at all times (kernel)
+</p>
+<pre><code>--&gt; OS = kernl + system programs + app programs + device drivers
+</code></pre>
+<p>
+	middleware = software frameworks that help app devs )e.g. support databases, multimedia, graphics)
+</p>
+	
+
+<div id="1.2 Computer-system organization"><h5 id="1.2 Computer-system organization" class="header"><a href="#1.2 Computer-system organization">1.2 Computer-system organization</a></h5></div>
+
+<p>
+modern computer system = (1+)CPUs + device controllers connected by bus 
+</p>
+<pre><code>--&gt; each device controller in charge of a device (graphics, disk drive)
+--&gt; can have more than one device attached 
+--&gt; device controller maintains local buffer storage + special registers
+--&gt; device controller needs to move data b/w peripherals and local buffers
+--&gt; device driver for each device controller
+--&gt; understand devControl and is interface for rest of OS
+--&gt; works in parallel with CPU
+
+CPU 	disk controller	 USB controller 	graphics adapter
+<table class='center'>
+<tr>
+<td>
+__________
+</td>
+<td>
+_________________
+</td>
+<td>
+____________________
+</td>
+</tr>
+</table>
+|
+memory
+</code></pre>
+<p>
+<span id="1.2 Computer-system organization-Interupts"></span><strong id="Interupts">Interupts</strong>
+	--&gt; typical computer operation: program doing I/O
+</p>
+<ol>
+<li>
+device driver loads registers in devControl
+
+<li>
+devControl looks at registers to see what to do (read char from keyboard)
+
+<li>
+devControl transfer data from device to local buffer
+
+<li>
+devCOntrol tells device driver its done --&gt; using INTERRUPT
+
+<li>
+device driver give control to other parts of OS 
+	--&gt; hardware triggers interrupt by sending signal to CPU (using bus) 
+	--&gt; when CPU interrupted, stops, and transfers execution to fixed location, when finished, keeps doing og task
+	--&gt; every computer has own interrupt mechanism
+	--&gt; common tasks of interupts mech:
+		-need to transfer control to correct interrupt service routine
+		-need someone to examine interupt routine, then call the interrupt-specific handler 
+		-call interupt routine thru table of pointers (table=interrupt vector stored in low memory)
+		-save state info of whatever interrupted
+		-modify processor state (e.g. register values) and save it
+
+</ol>
+<p>
+implementation:
+	--&gt; CPU hardware has interrupt-request line, CPU senss after executing every instruction
+	--&gt; if CPU detects a controller send signal on interrupt-request line:
+		--&gt; read interrupt num (corresp to inter vector) + jump to interrupt handler routine 
+		--&gt; interrupt handler saves states 
+	--&gt; summary: devCOntrol raises an interrupt thru signal on IR line, CPU catched interrupt and dispatches to interrupt handler, interrupt handler clears interrupt by servicing device
+issue: need more complex interrupt system --&gt; solution: interrupt controller hardware
+</p>
+<ol>
+<li>
+2 interrupt request lines: nonmaskable (for unrecoverable mem errs) + maskable (for devControl to request service, can be temp. ignored)
+
+<li>
+interrupt chaining = each element in interrupt vector points to head of interrupt handlers
+		--&gt; solves issue of having more interrupts than space in table
+
+<li>
+interrupt priority levels: CPU can pick and choose which is more important to handle first
+
+</ol>
+<p>
+summary:
+	--&gt; interrupt handle asynch events
+	--&gt; devControllers and hardware faults raise interrupts
+	--&gt; need to be efficient in interrupt handling
+</p>
+	
+<p>
+<span id="1.2 Computer-system organization-Storage Structure"></span><strong id="Storage Structure">Storage Structure</strong>
+	--&gt; CPU only loads instructions from memory, so all programs need to be loaded to mem
+		--&gt; most comps load programs from writeable mem (RAM) 
+		--&gt; main mem in semiconductors = dynamic random access memory (DRAM)
+	--&gt; all mem has array of bytes with own address 
+		--&gt; use "load" (move byte from main mem to CPU registers) and "store" (opposite load) to manipulate 
+		--&gt; CPU autmatcally laods isntructions from main mem 
+	--&gt; Intstruction execution cycle:
+</p>
+<ol>
+<li>
+fetch instruction from mem and store in instruction register
+
+<li>
+isntruction decoded + operands fetched and stored in internal register
+
+<li>
+execute instruction on operands
+
+<li>
+result stored back in memory 
+			--&gt; want everything stored permanent in main mem, but not possible (too small, volatile)
+			--&gt; solution: secondary storage (hard disk drives, NVM devices) 
+					--&gt; mostly everything store here b4 loaded into mem, but much slower 
+					--&gt; also have tertiary storag: blu ray, CD-ROM (outside storage) 
+
+</ol>
+		
+<p>
+		Volatile mem types: smallest to largest, fastest to slowest to access (all volatile)
+		<em>register &lt;--&gt; cache &lt;--&gt; main mem</em> 
+		**larger storage = slower usually 
+		**all semiconductor mem
+		**volatile storage = mem, other mem will be specific 
+</p>
+		
+<p>
+		NonVolatile mem types: small to large, fast to slow (NVS)
+		<em>nonvolatile mem &lt;--&gt; hard disk drive &lt;--&gt; optical disk &lt;--&gt; magnetic tapes</em>
+		**mechanical (HDD, optical disk, cheaper, larger) vs electrical=NVM (flash mem, fram, nram, ssd)
+</p>
+		
+<p>
+<span id="1.2 Computer-system organization-I/O Structure"></span><strong id="I/O Structure">I/O Structure</strong>
+	--&gt; use direct mem access (DMA) to move large data amt via I/O 
+		--&gt; I/O device gets a large chuck of data directly from main mem, or vice versa 
+		--&gt; only need 1 interrupt per block to tell dev driver that operation done 
+			--&gt; frees up CPU to do other stuff 
+	--&gt; some systems use switch arch vs bus arch (dont need to share like a bus, multiple components talk to each other at the same time)
+		--&gt; DMA works better here
+</p>
+			
+<p>
+Storage Definitions
+	bit, byte (8 bits), word (1+ bytes native to computer), kb &lt; gb &lt; tb &lt; petabyte (1024^5)
+</p>
+	
+
+<div id="1.3 Computer-system Architecture"><h5 id="1.3 Computer-system Architecture" class="header"><a href="#1.3 Computer-system Architecture">1.3 Computer-system Architecture</a></h5></div>
+<p>
+<span id="1.3 Computer-system Architecture-Single processor systems"></span><strong id="Single processor systems">Single processor systems</strong>
+	--&gt; b4: comp have 1 CPU + 1 processing core (executes instructions + has local registers) 
+</p>
+<pre><code>have special purpose processors too for peripherals (keyboard, monitor)
+--&gt; special purpose cannot run processes, have limited abilitird
+--&gt; sometimes CPU tells them tasks
+--&gt; sometimes s.p. processors run by selves 
+</code></pre>
+<p>
+<span id="1.3 Computer-system Architecture-Multiprocessor systems"></span><strong id="Multiprocessor systems">Multiprocessor systems</strong>
+	--&gt; 2+ processors, each w/ 1 core CPU; processors share mem over computer bus 
+		--&gt; has increased throughput (more work done in less time) 
+		--&gt; each processor has own registers and private cache
+	--&gt; symmetri multiprocessing (SMP) = eac CPU performs all tasks
+	--&gt; multiprocessor include multicore (many cores on one chip)
+		--&gt; each core has own regiser + local cache (level 1 cache = L1, level 2 cache = L2 shared by 2 cores)
+		--&gt; lower level caches (L1) faster than higher level shared caches 
+	--&gt; adding CPUs increases processing up to extent (eventually becomes bottleneck when sharing bus)
+		--&gt; alternatively: give each CPU local mem + bus (use shared system interconnect)
+		--&gt; non uniform mem access; scales well as more CPUs
+		--&gt; cons: latency when CPU accesses remote mem (if CPU 1 needs to access CPU 3) 
+	--&gt; blade servers = system with multiple processors, I/O boards, networking boards
+		--&gt; each blade processor board has own OS, some are multiproessors
+<span id="1.3 Computer-system Architecture-Vocab"></span><strong id="Vocab">Vocab</strong>
+	<em>CPU</em> = hardware that executes instructions
+	<em>processor</em> = physical chip containing 1+ CPUs
+	<em>core</em> = basic computation unit of CPU
+<span id="1.3 Computer-system Architecture-Clustered systems"></span><strong id="Clustered systems">Clustered systems</strong>
+	clustered system = gather multiple CPUs, connected via LAN 
+		--&gt; good for high availability service (works even if some of systems in cluster fail) 
+		--&gt; graceful degradation (provides value even as hardware degrades) 
+		--&gt; fault tolerant (suffer failure but still work)
+		--&gt; high performacne computing
+		--&gt; parallelization: divide program into separate components running in parallel on diff cores
+	assymmetric clustering: one machine in standby and monitoring, other runs apps
+</p>
+<pre><code>will switch over to standby if main fails
+</code></pre>
+<p>
+	symmetric clustering: 2+ hosts run apps and monitor eachother (most efficient) 
+	storage area networks = let many systems attach to 1 storage areas
+</p>
+<pre><code>allows for growth of cluster tech 
+</code></pre>
+
+
+<div id="1.4 OS operations"><h5 id="1.4 OS operations" class="header"><a href="#1.4 OS operations">1.4 OS operations</a></h5></div>
+<p>
+<span id="1.4 OS operations-Booting computer"></span><strong id="Booting computer">Booting computer</strong>
+	--&gt; need initial program to run: bootstrap program (stored in computer hardware/firmware)
+		--&gt; initialized CPU register + devControl + mem + OS kernel
+	--&gt; once kernel loaded, can provide service to system + users 
+	--&gt; system daemons: services outside of kernel (run whil kernel runs) 
+	--&gt; OS waits for stuff to do via traps (exceptions)
+		--&gt; type of interrupt from software (bc error or user request = system call)
+<span id="1.4 OS operations-Multiprogramming and multitasking"></span><strong id="Multiprogramming and multitasking">Multiprogramming and multitasking</strong>
+	--&gt; multiprogramming = use CPU more efficiently 
+		--&gt; OS keeps processes in mem at same time (process = program executing)
+		--&gt; OS picks one to do, if needs to wait for I/O stuff, then move on and come back 
+		--&gt; CPU never idle 
+	--&gt; multitasking = CPU does many processes at same time + switch b/w them quickly
+		--&gt; gives user faster response time 
+	--&gt; requires mem management + CPU scheduling 
+		--&gt; use virtual mem: execute process not completely in mem 
+			--&gt; user can run programs larger than physical mem
+			--&gt; separate logical mem fro physical mem 
+	--&gt; need file system on secondary storage + storage management + process synch + resource protection
+<span id="1.4 OS operations-Dual-mode and multimode operation"></span><strong id="Dual-mode and multimode operation">Dual-mode and multimode operation</strong>
+	--&gt; need to make sure bad program cant affect other parts of ssytem 
+	--&gt; solution: user mode vs kernel mode 
+		--&gt; mode bit = added to comp hardware (0 = kernel, 1 = user)
+		--&gt; know what task is performed for user vs os
+		--&gt; when user makes system call (request for os to do something), comp switch to kernel mode
+</p>
+	
+<p>
+	<em>switch b/w user and kernel mode</em>
+	<em>user mode:</em>	user process --&gt; user system call 					--&gt; user process executing
+<table class='center'>
+<tr>
+<td>
+&nbsp;
+</td>
+</tr>
+</table>
+	<em>kernel mode:</em>  	                     --&gt; execute system call
+</p>
+
+<p>
+	system boot --&gt; OS loaded in kernel mode --&gt; start user apps in user mode --&gt; if trap or interrupt, hardware switch to kernel mode
+</p>
+	
+<p>
+	--&gt; can have &gt;1 modes
+		--&gt; e.g. 4 protection rings (0 = kernel, 1&amp;2 for OS services, 3 = user)
+		--&gt; e.g. virtual machine manager can control the system 
+	--&gt; system calls invoked thru trap to location in interrupt vector 
+		--&gt; syscalls treated like software interrupts, go to kernel to see what needs to specifically be done 
+		--&gt; if there are errors in user space, hardware traps to OS so OS can end program 
+			--&gt; mem might be dumped into file so user sees whats wrong
+<span id="1.4 OS operations-Timer"></span><strong id="Timer">Timer</strong>
+	--&gt; OS needs control over OS
+	--&gt; timer can interrupt comp after some time 
+		--&gt; variable timer = will run with a counter that decrements, when counter=0 send interrupt
+</p>
+		
+		
+<div id="1.5 Resource management"><h5 id="1.5 Resource management" class="header"><a href="#1.5 Resource management">1.5 Resource management</a></h5></div>
+<p>
+<span id="1.5 Resource management-Process management"></span><strong id="Process management">Process management</strong>
+</p>
+
+</body>
+</html>
