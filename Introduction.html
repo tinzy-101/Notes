@@ -241,16 +241,12 @@ Storage Definitions
 </pre>
 <p>
 	<em>switch b/w user and kernel mode</em>
-	<em>user mode:</em>	user process --&gt; user system call 					--&gt; user process executing
-<table class='center'>
-<tr>
-<td>
-&nbsp;
-</td>
-</tr>
-</table>
-	<em>kernel mode:</em>  	                     --&gt; execute system call
 </p>
+<pre>
+	user mode:	user process --&gt; user system call 					--&gt; user process executing
+														|							|
+	kernel mode:  	                        --&gt; execute system call
+</pre>
 <pre>
 	system boot --&gt; OS loaded in kernel mode --&gt; start user apps in user mode --&gt; if trap or interrupt, hardware switch to kernel mode
 	
@@ -275,6 +271,264 @@ Storage Definitions
 <p>
 <span id="1.5 Resource management-Process management"></span><strong id="Process management">Process management</strong>
 </p>
+<pre>
+	--&gt; process cant do anything unless executed by CPU 
+		--&gt; process needs: CPU time, mem, files, i/o devices 
+		--&gt; program by itself is NOT a process 
+		--&gt; process = unit of work (system is made up of processes) 
+</pre>
+<p>
+<span id="1.5 Resource management-Memory management"></span><strong id="Memory management">Memory management</strong>
+</p>
+<pre>
+	--&gt; main mem = array of bytes, each with own address
+		--&gt; quickly accesses by CPU and i/o devs 
+		--&gt; CPU reads instructions from main mem directly and writes to it
+	--&gt; to improve CPU usage, modern computers store programs in mem, which is why we need memory management
+		--&gt; mem management scheme mostly depends on hardware 
+	--&gt; needs to:
+		--&gt; keep track which mem used by who
+		--&gt; allocate and deallocate mem
+		--&gt; decide which processes + data to move in/out mem 
+</pre>
+<p>
+<span id="1.5 Resource management-File-system management"></span><strong id="File-system management">File-system management</strong>
+</p>
+<pre>
+	--&gt; file = local storage unit that abstracts physical properties of storage devices 
+		--&gt; collection of related info defined by creator
+		--&gt; rep. programs + data 
+	--&gt; OS needs to:
+		--&gt; create/delete files + directories
+		--&gt; support primitive for manipulating files
+		--&gt; map files onto mass storage
+		--&gt; back up files
+</pre>
+<p>
+<span id="1.5 Resource management-Mass-storage management"></span><strong id="Mass-storage management">Mass-storage management</strong>
+</p>
+<pre>
+	--&gt; computer systems needs secondary storage to back up main mem (HDD or NVM)
+	--&gt; OS needs to:
+		--&gt; unmount and mount
+		--&gt; manage free space/storage
+		--&gt; sceudle disks
+		--&gt; partition
+		--&gt; protect
+	--&gt; most programs stored on secondary storage b4 loaded to mem 
+	--&gt; tertiary storage (old backed up date) also needs to be managed but not as crucial 
+</pre>
+<p>
+<span id="1.5 Resource management-Cache management"></span><strong id="Cache management">Cache management</strong>
+</p>
+<pre>
+	--&gt; cache = faster storage system for stuff to be put in temporarily from mem 
+		--&gt; when system needs something, check if its alrd in cache, if not load it in
+	--&gt; use internal programmable registers as cache for main mem
+		--&gt; use algos to decide which to keep in registers and which in main mem
+	--&gt; some caches built into hardware
+		--&gt; e.g. instruction cache 
+	--&gt; cache management very complicated with multiprocessing systems
+		--&gt; each CPU has local cache, so copy of a piece of data can exist in many caches
+		--&gt; need to worry about cache coherency, if 1 version is updated, all updated
+</pre>
+<p>
+<span id="1.5 Resource management-I/O System management"></span><strong id="I/O System management">I/O System management</strong>
+</p>
+<pre>
+	--&gt; I/O subsystem mostly hidden from user 
+	--&gt; I/O subsys:
+		--&gt; mem management (buffering, caching, spooling)
+		--&gt; general device driver interface
+		--&gt; drivers for some hardware 
+</pre>
+
+
+<div id="1.6 Security and protection"><h3 id="1.6 Security and protection" class="header"><a href="#1.6 Security and protection">1.6 Security and protection</a></h3></div>
+<p>
+<span id="1.6 Security and protection-Protection"></span><strong id="Protection">Protection</strong>
+</p>
+<pre>
+	--&gt; protection = any mech to controll access of processes/users to comp resurces 
+	--&gt; improveds reliability + less internal and external attaches 
+	--&gt; attacks:
+		--&gt; viruses and worms
+		--&gt; denial of service (use all sys resources)
+		--&gt; identity theft
+		--&gt; theft of service 
+	--&gt; most OSes uses uder identifiers for each user w/ authentification
+		--&gt; can also use group identifiers 
+		--&gt; user can escalate priviledges 
+</pre>
+
+
+<div id="1.7 Virtualization"><h3 id="1.7 Virtualization" class="header"><a href="#1.7 Virtualization">1.7 Virtualization</a></h3></div>
+<p>
+<span id="1.7 Virtualization-Virtualization"></span><strong id="Virtualization">Virtualization</strong>
+</p>
+<pre>
+	--&gt; virtualization = tech to abstract hardware of 1 computer into different execution environ
+		--&gt; allows OSes to run apps within other OSes
+		--&gt; OS native to CPU can run another OS also native to CPU 
+	--&gt; virtual machine lets u switch among diff OSes
+	--&gt; emulation = simulating computer hardware in software 
+		--&gt; virtualization is subset of this
+		--&gt; used when source CPU diff from target CPU
+		--&gt; emulated code can be very slow bc of diff systems 
+
+</pre>
+
+<div id="1.8 Distributed Systems"><h3 id="1.8 Distributed Systems" class="header"><a href="#1.8 Distributed Systems">1.8 Distributed Systems</a></h3></div>
+<pre>
+	--&gt; distributed system = collection of separate comp sys networked together to let user do stuff
+	--&gt; network = comm path b/w 2+ systems 
+		--&gt; local area network = connect comp within room/building/campus
+		--&gt; wide area network = building, cities countries
+	--&gt; connect networks w/ copper wires, fiber, and wireless transmissions
+	--&gt; network OS = OS that lets u share files across network
+</pre>
+
+<div id="1.9 Kernel Data structure"><h3 id="1.9 Kernel Data structure" class="header"><a href="#1.9 Kernel Data structure">1.9 Kernel Data structure</a></h3></div>
+<p>
+<span id="1.9 Kernel Data structure-Lists, stacks, and queues"></span><strong id="Lists, stacks, and queues">Lists, stacks, and queues</strong>
+</p>
+<pre>
+	--&gt; array = data structure where each element accessed directly 
+	--&gt; list = collection of data in a sequence
+		--&gt; linked list = data linked together
+			--&gt; singly linked list = each item points to next
+			--&gt; double linked list = each item points to next or before
+			--&gt; circularly linked list = last item points to first (not null)
+		--&gt; linked list make it easy to insert and delete elements
+	--&gt; stack = last in, first out
+		--&gt; last item put in is the first to be removed
+	--&gt; queue = sequential, first in first out
+</pre>
+<p>
+<span id="1.9 Kernel Data structure-Trees"></span><strong id="Trees">Trees</strong>
+</p>
+<pre>
+	--&gt; tree = hierarchical data
+		--&gt; parent child relationship b/w data
+		--&gt; general tree = parent have infinite children
+		--&gt; binary tree = parent have &lt;= 2 children (left child and right child)
+			--&gt; binary search tree = need ordering when leftChild &lt;= rightChild
+			--&gt; balanced binary search tree (?)
+</pre>
+<p>
+<span id="1.9 Kernel Data structure-Hash functions and maps"></span><strong id="Hash functions and maps">Hash functions and maps</strong>
+</p>
+<pre>
+	--&gt; hash function = take input data, perform numeric operation, and return numeric value
+		--&gt; return value can be used as index for table (usually array) 
+		--&gt; quicker to retrieve data from table
+		--&gt; problem:
+			--&gt; 2 unique inputs can have same output (has collision)
+			--&gt; solution: use linked list at table with all items with same hash value
+	--&gt; hash map = maps key:value pairs using has function
+		--&gt; e.g. storing username and passwd
+</pre>
+<p>
+<span id="1.9 Kernel Data structure-Bitmaps"></span><strong id="Bitmaps">Bitmaps</strong>
+</p>
+<pre>
+	--&gt; bitmap = string of binary digits to represent status of items 
+		--&gt; e.g. each item is a resource, 0 = available, 1 = unavailable 
+	--&gt; good to use when need to show availability of a lot of resources 
+		--&gt; e.g. disk drive separated into disk blocks 
+</pre>
+
+<div id="1.10 Computing environments"><h3 id="1.10 Computing environments" class="header"><a href="#1.10 Computing environments">1.10 Computing environments</a></h3></div>
+<p>
+<span id="1.10 Computing environments-Traditional computing"></span><strong id="Traditional computing">Traditional computing</strong>
+</p>
+<pre>
+	--&gt; networtk computers (terminals) used instead of trad workstations 
+	--&gt; mobiles and connect to wireless/cellular networks 
+	--&gt; we're much more efficient today
+</pre>
+<p>
+<span id="1.10 Computing environments-Mobile computing"></span><strong id="Mobile computing">Mobile computing</strong>
+</p>
+<pre>
+	--&gt; mobile computing = computing on smartphones/tablets 
+	--&gt; not much different from computers today bc very powerful
+	--&gt; apple IOS vs google android
+</pre>
+<p>
+<span id="1.10 Computing environments-Client-server computing"></span><strong id="Client-server computing">Client-server computing</strong>
+</p>
+<pre>
+	--&gt; compute-server system: interface when client sends request to server and server responds	
+		--&gt; e.g. server runs database
+	--&gt; file-server system: file sysetm interface, clients can create, update, read, delete files
+</pre>
+<p>
+<span id="1.10 Computing environments-Peer-to-peer computing"></span><strong id="Peer-to-peer computing">Peer-to-peer computing</strong>
+</p>
+<pre>
+	--&gt; clients and servers are the same, all can request and carry out requests as nodes 
+	--&gt; node joining the system is registered with central lookup service 
+	--&gt; node can also broadcast a request to all nodes, and available nodes will respond
+</pre>
+<p>
+<span id="1.10 Computing environments-Cloud computing"></span><strong id="Cloud computing">Cloud computing</strong>
+</p>
+<pre>
+	--&gt; cloud computing = deliver computing storage and apps across network
+	--&gt; extension of virtualization 
+	--&gt; public cloud = cloud available to anyone if they pay
+	--&gt; private cloud = only for company
+	--&gt; hybrid cloud = public AND private 
+</pre>
+<p>
+<span id="1.10 Computing environments-Real-time embedded systems"></span><strong id="Real-time embedded systems">Real-time embedded systems</strong>
+</p>
+<pre>
+	--&gt; embedded systems are everywhere, most prevalent form of computers
+	--&gt; very specific tasks, now/low user interface 
+	--&gt; mostly use real-time OS = there are strict time reqs on processor, so OS is dedicated to managing time 
+		--&gt; processing has to be done within constraints or else will fail 
+</pre>
+
+
+<div id="1.11 Free and open source OS"><h3 id="1.11 Free and open source OS" class="header"><a href="#1.11 Free and open source OS">1.11 Free and open source OS</a></h3></div>
+<pre>
+	--&gt; free software = source code available + liscensed for free use, redistribution, mods
+	--&gt; open source software = only source code shared
+	--&gt; e.g. microsoft completely closed source, apple has opens ource kernel but some proprietary
+</pre>
+<p>
+<span id="1.11 Free and open source OS-Free operating systems"></span><strong id="Free operating systems">Free operating systems</strong>
+</p>
+<pre>
+	--&gt; when software companies trying to limit use of their software, richard stallman in 1984 developed UNIX-liek OS called GNU
+		--&gt; "free" = freedom of use, not price 
+		--&gt; stallman formed Free Software Foundation to encourage use and dev of free software
+		--&gt; FSF uses copyleft, form of liscening that lets users do "free" stuff
+</pre>
+<p>
+<span id="1.11 Free and open source OS-GNU/linux"></span><strong id="GNU/linux">GNU/linux</strong>
+</p>
+<pre>
+	--&gt; 1991 GNU nearly complete, and linus torvals releasd the linux kernel, put together
+	--&gt; many distributions spawned
+</pre>
+<p>
+<span id="1.11 Free and open source OS-BSD unix"></span><strong id="BSD unix">BSD unix</strong>
+</p>
+<pre>
+	--&gt; started in 1978 as derivative of AT&amp;T's unix, fully functional and open source in 1994
+	--&gt; many distros of BSD unix 
+	--&gt; darwin (apples kernel) is based on bsd linux 
+</pre>
+<p>
+<span id="1.11 Free and open source OS-Solaris"></span><strong id="Solaris">Solaris</strong>
+</p>
+<pre>
+	--&gt; commerical unix-based OS from Sun Microsystems
+	--&gt; BASED ON at&amp;t UNIX 
+</pre>
 
 </body>
 </html>
