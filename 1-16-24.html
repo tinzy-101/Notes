@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>1-16-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<pre>
+multiprocessing = os can run multiple processes at the same time
+
+User Interfaces:
+1. command driven
+2. menu driven (mini computers)
+3. GUI
+
+user features are interacive (user involvement) and background (don't need user involvement) 
+
+Machine cycles of CPU:
+1. fetch instruction from memory
+2. execute instruction (finish b4 check for interrupts)
+3. check for interrupts (instructions themselves can be interrupt)
+4. check for DMA (dynamic memory access) for i/o devices 
+5. update the program counter
+
+Chapter 2: Looking at software side of computer system
+
+Operating system services:
+	--&gt; OS has a UI, UI has changed a lot (command line, gui, and batch=command line scripting language, not a real interface)
+	--&gt; OS needs to execute programs (need to fetch programs from mem) 
+	--&gt; OS needs to perform I/O, how OS gets to mem
+	--&gt; OS needs to maintain file system, communications (shared mem--&gt;not used much, message passing), error detection (user side, instruction error, etc), resource allocation (many resources are reusable: I/O devices, mem, CPU), accounting (keep track of users/resources), security
+	
+Command Line Interpreter:
+	--&gt; sometime implemented in kernel, sometimes by systems program
+	--&gt; multiple "flavors" = shell 
+		--&gt; bourne shell (bash)
+
+GUI:
+	--&gt; Gnose, KDE, XFCE, Deepin, LXQt, Pantheon
+	
+System calls:
+	-need some way to access services from OS
+	-high level programming languages use an API
+		--&gt; when print out contents of stdio.h:
+			see fopen API, which defines 
+		--&gt; API = feature that OS provides, e.g. to open a file, and there are params that need to be passed to that feature, and that feature performs a function
+		--&gt; API usually in pieces: 
+			1. set up
+			2. invoke OS
+			3. in OS, return info back to the program
+		--&gt; API is interface b/w user program and what OS supports
+		--&gt; e.g. c prograam invokes printf() library call, which calls write() system call
+
+3 ways to pass parameters to OS (in order to identify syscall, like fopen params in c)
+	1. pass params in registers
+		--&gt; most CPUs only 8-16 registers 
+	3. put params in block in mem, and pass address of block as param in register (very common)
+		--&gt; syscall 13 knows how to perform this request 
+	5. push onto stack by program and popped off stack by OS 
+		--&gt; unlimited params passed 
+		
+Types of system calls:
+	-have a ton for process control:
+		--&gt; create/end process
+		--&gt; end/abort/load/execute process
+		--&gt; get/set process attributes
+		--&gt; wait event, signal event
+		--&gt; allocate/free memory
+		--&gt; dump mem if error
+		--&gt; debugger
+		--&gt; attach/detach devices
+	-file management
+		--&gt; create/delete/open/close file
+		--&gt; read/write
+		--&gt; get/set file attributes
+	-device management
+		--&gt; req device, release
+		--&gt; read/write
+		--&gt; get/set attributes
+	-communications
+
+Multiprogramming tier: FreeBSD (called multitasking, unix thinks processes=task)
+1. process D
+2. free memory
+3. process c
+4. interpreter
+5. process B
+6. kernel
+
+system programs (environment for pogram dev and execution):
+1. file manipulation
+2. status info
+3. programming lanugage support (where APIs are)
+4. [MAIN] program loading and execution
+5. communications
+6. background services
+7. application program (zoom, everything on machine not part of OS)
+
+OS design and implementation:
+	-need to set up goals for system and user, write OS to optimize these goals
+		--&gt; user goals: convenient, easy, reliable, safe, fast
+		--&gt; sys goals: easy to design, implement, maintain, flexible, reliable, error free
+	-separate policy (what will e done) vs mechanism (how to do it) 
+	-lots of variation
+		-og in assembly, then sys languages like Algo PL/1, now c/c++
+		-today, mix in languages: lowest in assemly, mainly c, sys programs in c, scripting lanugages
+		-high level languages = easier to port
+	-how to structure:
+		-simple structure: MS-DOS (no multiprogramming)
+			--&gt; 1 app program running talk to resident system program talk to MS-DOS device driver talk to bios
+		-more complex - UNIX (multiprogramming)
+			--&gt; limited by hardware
+			--&gt; systems programs
+			--&gt; users --&gt; shells/compilers/sys libraries
+		-layered - an abstraction
+			--&gt; OS each built into different layers (layer 0 hardware, layer n = ui)
+		-microkernel sys structure (small precise kernel)
+			--&gt; make kernel small, go in, get done, get out
+			--&gt; increase efficiency of system
+			
+Modules
+	-modern OSes have loadable kernel modules
+
+Hybrid Systems:
+	-multiple approahes to address performance, security, usability
+	-e.g. take from linux and solaris
+
+Android:
+	-based on linux kernel but modified
+	-cant get to root bc dont know root passwd (cant do anything)
+	
+Operating-system debugging
+	-all OSes have logs for their bugs
+	-Dtrace = debug trace
+	
+Performance tuning
+
+SYSGEN = looking around to see what devices you have attached + setting up sys (date, time, etc)
+	--&gt; operating system generation
+</pre>
+
+</body>
+</html>
