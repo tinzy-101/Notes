@@ -178,5 +178,70 @@
 	--&gt; relocatable file = output of a compiler, contents can be loaded to anywhere in physical memory
 </pre>
 
+<div id="2.6 Why apps are OS-specific"><h3 id="2.6 Why apps are OS-specific" class="header"><a href="#2.6 Why apps are OS-specific">2.6 Why apps are OS-specific</a></h3></div>
+<pre>
+	--&gt; apps compiled on one OS not necessarily executable on another OS
+		--&gt; bc every OS has differen system calls 
+	--&gt; yet, many apps run across multiple OSes
+		1. app written in interpretted lang (python) that can be interpreted on many OSes
+			--&gt; call native OS system calls afer reading each line of program
+			--&gt; worse performance compared to native apps bc interpreter only has some syscalls
+		2. app written in lang w/ virtual machine that runs app
+			--&gt; e.g. java VM , java has run time environment to load java app into java VM
+			--&gt; RTE (run time envi) is ported for lots of OSes, app will work wherever RTE does
+		3. standard API/languge where compiler gens bins in machine/OS specific language
+			--&gt; app has to be ported onto each OS, basically need new version for each OS
+	--&gt; Challenges with porting apps across OSes
+		1. every OS has binary format for apps
+			--&gt; determines header, instructions, and variable layouts 
+		2. CPUs have differnt levels of instruction sets that apps need to comply with
+		3. OSes have different system calls (operands and operand orderings)
+	--&gt; addressing challenges:
+		--&gt; linux and unix adopt ELF format for binary executables, not tied to computer arch
+		--&gt; application binary interface defines how diff components of binary code can interface for OS on specific architecture
+			--&gt; specified for specific arch
+			--&gt; arch level equivalent to API
+</pre>
+
+<div id="2.7 OS design and implementation"><h3 id="2.7 OS design and implementation" class="header"><a href="#2.7 OS design and implementation">2.7 OS design and implementation</a></h3></div>
+<p>
+<span id="2.7 OS design and implementation-Design Goals"></span><strong id="Design Goals">Design Goals</strong>
+</p>
+<pre>
+	--&gt; highest level reqs = hardware + type of ystem (desktop/laptop, mobile, distributed, real time)
+	--&gt; 2nd highest level = user goals + system goals
+		--&gt; user wants easy to use/earn, reliable, safe, fast, system
+		--&gt; devs want system easy to design, create, maintain, operate, felixble, reliable, safe
+		--&gt; no one way to do it
+</pre>
+<p>
+<span id="2.7 OS design and implementation-Mechanisms and policies"></span><strong id="Mechanisms and policies">Mechanisms and policies</strong>
+</p>
+<pre>
+	--&gt; policy vs mechanism
+		--&gt; mechanism = how to do something
+		--&gt; policy = what will be done 
+	--&gt; need to be flexible 
+	--&gt; microkernel OSes separate mech and policy by creating primitive building blocks
+		--&gt; blocks have no policy, so can have more mechanisms and policies to be added by users/user programs 
+	--&gt; policy decisions important for resource allocation 
+		--&gt; make policy decision when deciding whether or no to use resource
+		--&gt; determine mechanism when asking "how"
+</pre>
+<p>
+<span id="2.7 OS design and implementation-Implementation"></span><strong id="Implementation">Implementation</strong>
+</p>
+<pre>
+	--&gt; early OS in assembly, now mostly in C/C++ with some assembly 
+		--&gt; e.g. android kernel written in C + some assembly, libraries in c/c++
+	--&gt; use high level langs bc quicker, compact, easier to understand, easy to port 
+	--&gt; disadvantages of high level lang: slower + more storage reqs 
+		--&gt; making use of computer's brain w/ high level, better than human brain writing assembly
+			--&gt; improve OS thru better data structures/algos
+			--&gt; don't improve thru better assembly 
+	--&gt; most important part of OS = interrupt handlers, I/O manager, mem manager, CPU scheduler
+		--&gt; once these work, worry about other bottlenecks later
+</pre>
+
 </body>
 </html>

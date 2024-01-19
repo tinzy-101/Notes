@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>1-18-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 2 Cont'd"><h3 id="Chapter 2 Cont'd" class="header"><a href="#Chapter 2 Cont'd">Chapter 2 Cont'd</a></h3></div>
+<pre>
+How does interrupt processing happen on CPUs? e.g. RCA1802 CPU
+	1. fetching instruction from mem:
+		--&gt; A register = program counter, but real program counter = 1/16 
+		--&gt; P 4-bit register = designates program counter tjat's sent to A register 
+		--&gt; X 4-bit register = points to which one is the data register 
+	2. interrupt comes in (everything happens in hardware, all at the same time)
+		--&gt; R1 always used as program counter when interrupt recieved (when build OS, need to set R1, so can function with interrupt service routine
+		--&gt; need to point to R1 to 
+		--&gt; hardware takes P and X registers and store in T (temp) register
+		--&gt; X and P set to new values:
+			--&gt; X = 0x2
+			--&gt; P = 0x1
+		--&gt; turn off interrupts so it can first service the current interrupt
+	3. start next fetch
+		--&gt; next fetch = whatever address is in R1
+		--&gt; need to save contents in T
+		--&gt; reset X and P from T
+		--&gt; enable interrupt flip flop
+R0 points to DMA (for I/O), R1 = interrupt hander, R2 = data stack for OS, R3 = where other programs start
+
+Example:
+A OS load time:
+	1. put interrupt handler @ address 6000
+	2. put stack space for X at 7000
+	3. set R1 to 6000 (bc interrupt address)
+	4. set R2 to 700 (bc where stack space is)
+	5. now, use only R3 and up
+Memory address programs: (these are the "P" addresses, and "X" addresses are not showed here)
+	A - 1000
+	B - 2000
+	C - 3000
+	D - 4000
+	E - 5000
+Program B executes:
+	R3 = 2044
+	R4 = 2A00
+	P = 3
+	X = 4
+Interrupt occurs:
+	1. X&amp;P stored in T (3 and 4)
+	2. x = 2, P = 1
+	3. disable interrupts
+	4. fetch isntruction at: P1 (6000) and P2 (7000)
+Start OS handler:
+	1. save T register
+	2. save all registers
+	3. process interrupt
+	4. 
+End of routine:
+	1. restore registers from R3 to R16
+	2. reset P1 = 6000 (want to repeat interrupt routine), don't reset 7000 yet
+	3. return and restart by loading T into X and P, and can start fetching again
+
+** Key Concept: interrupts only processed after finish execution and DMA **
+
+Test:
+	Ch1 and Ch2
+	5 T/F (3pt)
+	5 M/C (5pt)
+	5 essay (8pt)
+	**write everything in your words!!!
+
+General general format for processing interrupts 
+1. change registers
+2. stop interrupts
+3. load OS
+4. change to level 0 (kernel mode)
+
+Internal CPU Interrupts:
+Traps:
+	-request for service (e.g. INT 21 mechanism in DOS --&gt; software instruction that starts interrupt)
+	-execute cyce error (e.g. divide by zero flag set)
+Exceptions:
+	-invalid instruction (e.g. program changes process data)
+	-priviledged instruction error (e.g. in user mode trying to do stuff meant for kernel mode)
+	-during fetching an instruction/data not in program's mem (programming in C and changing ptrs)
+
+External CPU interrupts (from devices outside the CPU):
+	-Timer (update internal clock kept by OS, interrupt happens every x nanoseconds)
+	-I/O completion (an I/O device completed for a process, they run at diff speeds)
+	-Power failure (OS needs to shutdown property b4 all failure, so no issue when startup)
+	-Other devices need attention (keyboard, mouse, printer, USB)
+		--&gt; every time mouse is moved, theres an interrupt
+</pre>
+<p>
+___________________________________________________________________________________________________________________________________________________________________________________________________________
+</p>
+
+<div id="Chapter 3: Processes"><h3 id="Chapter 3: Processes" class="header"><a href="#Chapter 3: Processes">Chapter 3: Processes</a></h3></div>
+<p>
+<span id="Chapter 3: Processes-What Processes Are"></span><strong id="What Processes Are">What Processes Are</strong>
+</p>
+<pre>
+	--&gt; process = program in execution (many people say: task, program, process)
+	--&gt; OS executes many programs:
+		--&gt; batch system = jobs (many programs run in the background)
+		--&gt; time-shared system = user programs/tasks
+	--&gt; job: set it up and run &gt;1 program consecutively vs process: program in execution, if program doesn't branch or call to other functions, then is sequential
+	--&gt; parts of a process:
+		1. program code = text section
+		2. current activity: program counter (address of next instructionn to fetch), processor registers 
+		3. stack w/ temp data: func params return addresses, local vars
+		4. data section: global vars
+		5. heap: dynamically allocated mem during run time 
+	--&gt; program= passive on an executable vs process=active, program is executed
+	--&gt; start program w/ GUI or command line
+	--&gt; 1 program can be many processes 
+		--&gt; many users exec same program OR multiple processes exec same program
+</pre>
+<p>
+<span id="Chapter 3: Processes-Process in Memory"></span><strong id="Process in Memory">Process in Memory</strong>
+</p>
+<pre>
+	--&gt; stack --&gt; heap --&gt; data --&gt; text
+</pre>
+<p>
+<span id="Chapter 3: Processes-Process State"></span><strong id="Process State">Process State</strong>
+</p>
+<pre>
+	--&gt; process execute and it changes state (process state transition diagram**)
+		1. user wants to start new program --&gt; goto new state + master schedulers determines if the program becomes a real program to run (says that system has enough resources to run process)
+		2. new process admitted by scheduler and give enough resources to go to ready state
+			--&gt; inside ready state have ready queue, waiting for CPU 
+		3. short term dispatcher moves ready process to CPU, and in executing state now
+		4. Process executes until...
+			1. requests service (interrupt and OS comes in and puts process into block state + start service)
+				--&gt; I/O request is performed asynchronously, but at the same time as CPU 
+				--&gt; I/O completes, and there is I/O completion interrupt
+				--&gt; take from blocked state to ready state
+			2. normal exit: process times out from clock (OS comes in and places process in ready state)
+			3. abnormal exit: something bad happens in program (exception interrupt, and process put in terminated state) 
+		5. If the CPU is so overloaded:
+			1. process in ready state moved to suspended ready state
+				--&gt; when CPU gets better, process is moved by to ready state with a "resume"
+				--&gt; same thing can happen when in blocked state 
+					--&gt; when in blocked state, the process is still holding up resources, to move to a suspended blocked state to free up resources. when I/O finishes its thing and sends out an interrupt, process moved to suspended ready state like above CPU example
+		6. "held" state 
+</pre>
+
+</body>
+</html>
