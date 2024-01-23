@@ -103,7 +103,7 @@
 	--&gt; syscalls different dependin on computer, usually need parameters
 		--&gt; easiest is to pass paams in registers	
 			--&gt; if more params than registers, pass in table of memory 
-			--&gt; &lt;= 5 param use register, if not use tables 
+			--&gt; &lt;= 5 param [[use]] register, if not use tables 
 </pre>
 <p>
 <span id="2.3 System Calls-Types of system calls"></span><strong id="Types of system calls">Types of system calls</strong>
@@ -241,6 +241,204 @@
 			--&gt; don't improve thru better assembly 
 	--&gt; most important part of OS = interrupt handlers, I/O manager, mem manager, CPU scheduler
 		--&gt; once these work, worry about other bottlenecks later
+</pre>
+
+
+<div id="2.8 OS Structure"><h3 id="2.8 OS Structure" class="header"><a href="#2.8 OS Structure">2.8 OS Structure</a></h3></div>
+<pre>
+	--&gt; basic OS structure = partition into small modules, don't have 1 single system
+	--&gt; analogy: when programmed, not everything in main function, split into outside funcs
+</pre>
+<p>
+<span id="2.8 OS Structure-Monolithic structure"></span><strong id="Monolithic structure">Monolithic structure</strong>
+</p>
+<pre>
+	--&gt; simplest = no structure, entire kernel = single static binary file in 1 address
+	--&gt; e.g. og UNIX with only 2 separable parts
+		--&gt; kernel (interfaces + devdrives) + systems programs 
+		--&gt; kernel gives file system, CPU scheduling, mem management thru syscalls
+		--&gt; above kernel = shells, compilers interpreters, sys libraries and users
+		--&gt; below kernel = terminal controllers, terminals, devControllers, memControllers, phys mem
+	--&gt; linux has similar structure 
+		--&gt; apps use glibc to communicate with kernel thru syscall interface 
+		--&gt; runs entirely in kernel mode in single address space
+		--&gt; modular design so can be modified during run time 
+	--&gt; con: hard to implement and extend
+	--&gt; pro: little overhead in syscall interface, quick comm in kernel, efficient
+</pre>
+<p>
+<span id="2.8 OS Structure-Layered approach"></span><strong id="Layered approach">Layered approach</strong>
+</p>
+<pre>
+	--&gt; tighly coupled vs loosely
+		--&gt; monolithic: tightly coupled, one small change changes everything
+		--&gt; layered: loosely coupled, sys divided into separate components w/ specific and limited function
+	--&gt; OS id broken into levels (0 = hardware, highest N = UI)
+	--&gt; each higher layer can invoke operations on the lower layer 
+		--&gt; every higher layer implemented only with operations from lower layers 
+		--&gt; each layer abstracts data structures, operations, and hardware from higher ones
+	--&gt; can debug layer by layer starting on highest 
+	--&gt; use in:
+		--&gt; computer networks and web apps
+		--&gt; not many OSes use it bc hard to define functionality in each layer 
+			--&gt; poor performance bc user has to go thru each layer to get an OS service
+			--&gt; most OSes just have some layering
+</pre>
+<p>
+<span id="2.8 OS Structure-Microkernels"></span><strong id="Microkernels">Microkernels</strong>
+</p>
+<pre>
+	--&gt; remove all nonessential components of kernel, and implemen then in user programs in separate address spaces
+	--&gt; microkernels dont do much process and mem management
+	--&gt; main functions:
+		--&gt; comm b/w client program and other services in user space (message passin)
+		--&gt; extend OS easier, don't need to change kernel when changing user space
+		--&gt; easier to port to other OSes 
+		--&gt; more secure ad reliable bc most processes run as user
+	--&gt; e.g. Darmin = kernel for macOS an iOS
+	--&gt; e.g. QNX = real time OS for embedded systems 
+	--&gt; cons:
+		--&gt; lots of overhead bc all user stuff in separate address spaces
+</pre>
+<p>
+<span id="2.8 OS Structure-Modules"></span><strong id="Modules">Modules</strong>
+</p>
+<pre>
+	--&gt; loadable kernel modules = kernel has set of core components + link in more components thru modues (boot time or run time)
+		--&gt; link services dynamically 
+		--&gt; like layered system but more flexible
+		--&gt; modules can free call each other + dont need to invoke message passing
+	--&gt; best current design (UNIX, linux, windows, macos, solaris)
+	--&gt; e.g. linux uses LKMs for device drivers + file systems 
+</pre>
+<p>
+<span id="2.8 OS Structure-Hybrid systems"></span><strong id="Hybrid systems">Hybrid systems</strong>
+</p>
+<pre>
+	--&gt; most systems combine different structures 
+</pre>
+<p>
+<span id="2.8 OS Structure-macOS and iOS"></span><strong id="macOS and iOS">macOS and iOS</strong>
+</p>
+<pre>
+	--&gt; primarily layered system 
+		1. UX layer: how users interact with computing devices (trackpack, touch screen)
+		2. App frameworks layer: cocoa framework tht provide API for objective-C + swift lang
+		3. Core frameworks: frameworks to support graphics/media (quicktime, opengl)
+		4. Kernel environment: Darwin = mach microkernel + BSD unix kernel
+	--&gt; apps can use UX features built in OR directly interact w/ app framework or core framework OR only talk to kernel
+	--&gt; has 2 syscalls interfaces to kernel
+		1. mach syscalls (traps)
+			--&gt; mem management, CPU scheudlign, interprocess com (IPC), remote procedure calls (RPC)
+			--&gt; use kernel abstractions (tasks, threads, memm objects, ports)
+		2. BSD syscalls  
+		--&gt; networkig, security, programing lang support, more 
+	--&gt; kernel has I/O kit for device driver dev 
+</pre>
+<p>
+<span id="2.8 OS Structure-Android"></span><strong id="Android">Android</strong>
+</p>
+<pre>
+	--&gt; dev led by google, open source, layered stack w/ many frameworks (like ios)
+	--&gt; use java + ahead of time compilation, only compiled into native machine code when installed
+	--&gt; google abstracts the hardware, which makes software written for android more portable
+	--&gt; use Bionic standard c library for android (good for slower CPUs) 
+	--&gt; bottom of software stakc = linux kernel 
+</pre>
+
+
+<div id="2.9 Building and booting an OS"><h3 id="2.9 Building and booting an OS" class="header"><a href="#2.9 Building and booting an OS">2.9 Building and booting an OS</a></h3></div>
+<p>
+<span id="2.9 Building and booting an OS-OS generation"></span><strong id="OS generation">OS generation</strong>
+</p>
+<pre>
+	1. write OS source code (or get someone elses)
+	2. configure OS for sys that itll run on
+		--&gt; figure out which features included 
+		--&gt; config file can be used to modify copy of OS source code, and sys completely compiled
+	3. compile OS
+	4. install OS
+	5. boot computer + new OS
+
+	Building linux system from scratch
+	1. download linux source code
+	2. configre kernel using "make menuconfig," which gens .config file
+	3. compile main kernel using "make"
+		--&gt; compiles kernel based on parameters in the .config file
+		--&gt; creates vimlinux file = kernel image
+	4. compile kernel modules using "make modules," depends on .config file
+	5. "make modules_install" to install kernel modules into vmlinuz
+	6. install new kernel on system using "make install"
+	
+	Using VM
+	1. donwload ISO image of OS
+	2. use ISO as bootable medium in VirtualBox
+	3. install
+</pre>
+<p>
+<span id="2.9 Building and booting an OS-System Boot"></span><strong id="System Boot">System Boot</strong>
+</p>
+<pre>
+	booting = starting a computer by loading kernel
+		1. bootstrap program / boot loader finds kernel
+			--&gt; BIOS (mini bootloader) loads another boot loader from the boot block 
+			--&gt; UEFI replaces BIOS (supports 64 bit sys + large disks better, not multistage like BIOS) 
+			--&gt; can initialize everything in sys (CPU registers, devControllers, main mem)
+			--&gt; GRUB = open source bootstrap for linux/UNIX
+				--&gt; boot parameters in GRUB config file
+				--&gt; flexible, can modify kernel params + select diff kernel at boot time 
+				--&gt; creates temp RAM file sys, initramfs, w/ drivers + kernel modules needed to support the real fs, then switch to mem location to boot real fs (android same except keep initramfs)
+				--&gt; linux creates systemd process (initial process) + start other processes so comp can run
+			--&gt; most bootloaders have recovery mode/single user mode to find hardware issues, corrupt FS, reinstall OS
+		3. kernel loaded into mem and started
+		4. kernel intializes hardware
+		5. root file system mounted 
+			--&gt; now system is running 
+			
+</pre>
+
+
+<div id="2.10 OS debugging"><h3 id="2.10 OS debugging" class="header"><a href="#2.10 OS debugging">2.10 OS debugging</a></h3></div>
+<p>
+<span id="2.10 OS debugging-Failure analysis"></span><strong id="Failure analysis">Failure analysis</strong>
+</p>
+<pre>
+	--&gt; debugging = performance tuning (remove bottlenecks)
+	--&gt; most OS write error to log file (tell sysadmin whats wrong) 
+		--&gt; OR coredump = capture of mem of the process + store in file 
+	--&gt; crash = kernel fail
+	--&gt; process debugging hard, OS debugging harder 
+		--&gt; technique for OS: save kernel mem state to designated section in disk 
+</pre>
+<p>
+<span id="2.10 OS debugging-Performance monitoring and tuning"></span><strong id="Performance monitoring and tuning">Performance monitoring and tuning</strong>
+</p>
+<pre>
+	--&gt; need tools for performance tuning (per process OR system wide) 
+	--&gt; counters = keep track of syscalls, num operations for network dev/disk
+		--&gt; per process: ps (report infor for 1+ processes)
+							  top: report real time stats for current processes
+		--&gt; system wide: vmstat (report mem usage)
+							  netstat (report stat for network interface)
+							  iostat (i/o usage for disks)
+		--&gt; on linux, counters read stats from /proc = psuedo file sys only in kernel mem
+			--&gt; /proc has stats for every process
+	--&gt; tracing = data for specific event, e.g. steps in syscall invocation
+		--&gt; per process: strace (trace syscalls invoked by process)
+							  gdb (source-level debugger)
+		--&gt; system wide: perf (linux performance tools)
+							  tcpdump (network packets)
+		
+</pre>
+<p>
+<span id="2.10 OS debugging-BCC"></span><strong id="BCC">BCC</strong>
+</p>
+<pre>
+	--&gt; BCC = tool for dynamically tracing in linux
+	--&gt; needs to be able to debug any area of sys + not affect sys reliabiliy
+	--&gt; extension of BPF, write instructions in C + dynamically inserted into linux sys + capture specific instructions 
+		--&gt; BCC = python bc easier 
+	--&gt; very powerful bc can be used on live sys without hurting it, good for sysadmins
 </pre>
 
 </body>

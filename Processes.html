@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Processes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="3.1 Process concept"><h3 id="3.1 Process concept" class="header"><a href="#3.1 Process concept">3.1 Process concept</a></h3></div>
+<p>
+<span id="3.1 Process concept-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; process = proram in execution that needs resources (CPU time, mem, files, i/o)
+		--&gt; OS process executes sys code, user process executes user code, all at once 
+		--&gt; modern processes have multiple threads of control 
+		--&gt; OS needs to schedule threads onto available processing cores
+			--&gt; programmers can design CPU schedulers 
+	--&gt; b4: 1 program execute at a time, use all resources 
+	--&gt; now: processs is unit of work of OS 
+		--&gt; system = collection of processes (user code + os code) 
+</pre>
+<p>
+<span id="3.1 Process concept-Process Concept"></span><strong id="Process Concept">Process Concept</strong>
+</p>
+<pre>
+	--&gt; b4: job, now use prcess 
+	--&gt; status of current activity of process = program counter + content inside processo registers
+	--&gt; mem layout of process:
+		--&gt; text section = executable code (same size) 
+		--&gt; data section = global vars (same size)
+		--&gt; heap section = dynamically allocated mem during program run time (change size)
+			--&gt; grow when mem dynamically allocated, shrink when give mem back 
+		--&gt; stack section = temp data storage when invoking funcs (change size)
+			--&gt; activation record (func params, local vars, etc) pushed onto stack when func called
+			--&gt; return from func, then activation record popped from stack 
+		--&gt; stack and heap grow towards eachother, cant overlap
+	--&gt; program --&gt; processs when exec loaded into mem
+	--&gt; process can be exec envir for other code (e.g. java virtual machine)
+</pre>
+<p>
+<span id="3.1 Process concept-Process state"></span><strong id="Process state">Process state</strong>
+</p>
+<pre>
+	--&gt; as process execs, change state
+		1. new: process created
+		2. running: instructions exec
+		3. waiting: process waiting for event (i/o compelte, recieve signal)
+		4. ready: process wait to be assigned to processor
+		5. terminated: process finish exec
+	--&gt; only ONE process can run on any processor core at any instance
+	--&gt; state change flow:
+			new --&gt; ready --&gt; running --&gt; terminated OR waiting 
+			waiting --&gt; ready (finish I/O) --&gt; running --&gt; terminated OR ready
+			running --&gt; ready (time out-inerrupt) --&gt; running --&gt; terminated
+</pre>
+<p>
+<span id="3.1 Process concept-Process Control Block (PCB)"></span><strong id="Process Control Block (PCB)">Process Control Block (PCB)</strong>
+</p>
+<pre>
+	--&gt; every process repped by process control block (task control block) in OS
+		1. process state (above)
+		2. program counter = address of new instruction for the process
+		3. CPU registers = holds state info when interrupt occurs, so process can be continued correctly (accumulators, index regs, stack pointers, general purpose regs)
+		4. CPU scheduling info = process priority, pointer to scheduling queue, etc
+		5. mem management info = base/limit reg values + page tables
+		6. acct info = CPU/real time used, time limits, acct num, job/process nums
+		7. i/o status info = i/o dev allocated to process, open files list
+</pre>
+<p>
+<span id="3.1 Process concept-Threads"></span><strong id="Threads">Threads</strong>
+</p>
+<pre>
+	--&gt; 1 thread of control = process can only do 1 task at a time
+	--&gt; most modern OS let process have multiple threads of exec = multiple tasks at once 
+		--&gt; good for multicore b/c many threads can run in parallel 
+</pre>
+<p>
+<span id="3.1 Process concept-Layout of Process in Mem"></span><strong id="Layout of Process in Mem">Layout of Process in Mem</strong>
+</p>
+<pre>
+stack
+	|
+	v
+	
+ 	^
+	|
+heap
+data
+text
+</pre>
+
+
+<div id="3.2 Process scheduling"><h3 id="3.2 Process scheduling" class="header"><a href="#3.2 Process scheduling">3.2 Process scheduling</a></h3></div>
+<pre>
+	--&gt; multiprogramming = have 1 process running at all times so CPU efficient 
+	--&gt; time sharing = CPU core switch among processes quickly so user can use all programs 
+		--&gt; process scheduler choose avail process for program exec on a core
+		--&gt; every core runs 1 process at a time
+		--&gt; degree of multiproramming = num of processes currently in mem
+	--&gt; i/o bound vs cpu bound
+		--&gt; i/o bound process = more time doing i/o than computations
+		--&gt; CPU bound process = most time computations
+</pre>
+<p>
+<span id="3.2 Process scheduling-Scheduling queues"></span><strong id="Scheduling queues">Scheduling queues</strong>
+</p>
+<pre>
+	1. processer enter sys, put on ready queue (linked list w/ pointers to first PCB in list, each PCB has pointer to next PCB in ready queue)
+	2. process leaves ready state when allocated CPU core 
+		--&gt; exec until terminate, interrupted, or waiting for event to finish (i/o) 
+		--&gt; wait queue = for processes waiting for event
+		--&gt; process can create new child process + in new wait queue for child to finish
+		--&gt; process can be forece removed from core: interrupt, time expire --&gt; back to ready
+	--&gt; queuing diagram shows types of queues present
+		--&gt; mostly ready queue + set of wait queues 
+</pre>
+<p>
+<span id="3.2 Process scheduling-CPU scheduling"></span><strong id="CPU scheduling">CPU scheduling</strong>
+</p>
+<pre>
+	--&gt; CPU scheduler chooses which process in ready queue to get CPU core 
+	--&gt; even tho CPU-bound process needs CPU for longer, usually doesnt get special treatment
+		--&gt; CPU switch processes every 100 millisecs, or more
+	--&gt; some CPUs use swapping
+		-- swapping = move process to disk from main mem to save status, move back when mem has space
+</pre>
+<p>
+<span id="3.2 Process scheduling-Context Switch"></span><strong id="Context Switch">Context Switch</strong>
+</p>
+<pre>
+	--&gt; when interrupt, sys needs to save current context of process on CPU core, so can restore context when core starts running the process again 
+		--&gt; state save &amp; state restore
+	--&gt; context repped by PCB (CPU regs, process state, mem management info)
+	--&gt; context switch time = overhead, microsecs
+</pre>
+
+
+<div id="3.3 Operations on processess"><h3 id="3.3 Operations on processess" class="header"><a href="#3.3 Operations on processess">3.3 Operations on processess</a></h3></div>
+<p>
+<span id="3.3 Operations on processess-Process creation"></span><strong id="Process creation">Process creation</strong>
+</p>
+<pre>
+	--&gt; can from a process tree when parents create children processes
+	--&gt; identify processes using processor identifier (pid) = int unique to every process in sys
+		--&gt; e.g. linux:
+			systemd (pid = 1)
+			
+</pre>
+
+</body>
+</html>

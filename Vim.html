@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Vim</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<pre>
+if getting errors with swap files:
+	-(Q) to quit session
+	-in terminal, kill &lt;process ID&gt;
+
+navigating file:
+	-shift g = end of file
+	-^/0 = start of line
+	-$ = end of line
+	-gg = start of file
+	-use percentages: 
+		--&gt; esc + 1% = start of file, 100% = end of file
+	-w = jump to next word
+		--&gt; shift + w = take to 1st char after space (ignore special chars)
+	-b = jump to previous word
+	
+	
+colorschemes:
+	-open vi
+	-[:colorscheme] to see assigned scheme
+	-[:colorscheme + space + ctrld] to see all schemes avail
+	-bonus: syntax highlighting [:syntax enable]
+
+line numbers: set nu
+relative line numbers: set relativenumber (rnu)(current line = line 0, good for copying lines below)
+							  --&gt; set norelativenumber (nornu)
+
+copying and pasting text:
+	-esc + yy = copy line of text
+	-esc + shift + p = put line of text above current line
+	-esc + p = put below current line
+	-esc + u = undo previous action
+	-esc + dd = delete current line + copy to mem
+copying multiple lines:
+	-esc + 3 + shift + y = copy current line and 2 lines below (3 total)
+
+deleting text:
+	-esc + 2 + shft + d = delete from where cursor is down 1 line (2 lines deleted)
+	-shift + d = delete everything from cursor to end of line
+	-d + shift + g = delete from cursor line to end of file
+	-d + 2 +  w = delete 2 word + space after
+	-esc + r + c = change char under cursor to c
+	-esc + x = delete char under cursor
+	-esc + ~ = change case of char under cursor
+	-ctrl + c = delete to end of line + insert mode
+	** Y --&gt; always yank entire line, D --&gt; only deletes from cursor to end of line **
+
+appending text:
+	-shift + A = jump to end of line + insert mode	
+	-a = enter insert mode following where curosr is 
+</pre>
+
+</body>
+</html>
