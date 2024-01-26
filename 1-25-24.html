@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>1-25-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+<span id="-History of Threads"></span><strong id="History of Threads">History of Threads</strong>
+</p>
+<pre>
+	--&gt; OS/2 operating sys, microsoft build for ibm, 1980s
+	--&gt; threads built into OS/2
+	--&gt; MS says Windows for desktop, OS/2 for servers
+	--&gt; dispute: MS gives OS/2 code to ibm, but kept programmers 
+	--&gt; windows/NT looks like OS/2
+</pre>
+
+<div id="Finishing Chapter 3:"><h3 id="Finishing Chapter 3:" class="header"><a href="#Finishing Chapter 3:">Finishing Chapter 3:</a></h3></div>
+<p>
+<span id="Finishing Chapter 3:-Operations on processes"></span><strong id="Operations on processes">Operations on processes</strong>
+</p>
+<pre>
+	--&gt; create and terminate
+	--&gt; parent + child 
+	--&gt; process tree (in linux under proc dir)
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Create Process"></span><strong id="Create Process">Create Process</strong>
+</p>
+<pre>
+	--&gt; address space is duplicate of parent
+	--&gt; in UNIX, fork(), use exec() syscall after fork() to replace sys mem
+	--&gt; if do fork() x3, then you end up with 8 processes (including parent process)
+		1. fork() = 1 child process + 1 parent
+		2. fork() = 2 child processes + 1 child process + 1 parent
+		3. fork() = 4 child processes + 2 child processes + 1 child + 1 parent
+			L1
+	  	  /  \
+		 L2  L2
+		 / \  / \
+		L3 L3 L3 L3
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Terminate Processes"></span><strong id="Terminate Processes">Terminate Processes</strong>
+</p>
+<pre>
+	--&gt; cascading termination = kill all children/grandchildren when parent killed 
+	--&gt; trade offs: fast != efficiency
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Interprocess Communication"></span><strong id="Interprocess Communication">Interprocess Communication</strong>
+</p>
+<pre>
+	--&gt; how it works + mechanism (for test)
+	--&gt; shared mem OR message passing
+	--&gt; shared mem:
+		--&gt; OS needs to support (solaris does)
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Cooperating processes"></span><strong id="Cooperating processes">Cooperating processes</strong>
+</p>
+<pre>
+	--&gt; independent process vs cooperating process (not big deal)
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Producer consumer problem"></span><strong id="Producer consumer problem">Producer consumer problem</strong>
+</p>
+<pre>
+	--&gt; important!!
+	--&gt; unbounded buffer = no limit
+	--&gt; fixed size = rotate around in buffer 
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Spoolers"></span><strong id="Spoolers">Spoolers</strong>
+</p>
+<pre>
+	--&gt; e.g. send data block to printer, in mem have buffer but consumer deal w/ 1 buffer at time only
+		--&gt; producer = OS writing to buffer on printer (1 line of printout)
+		--&gt; producer much faster (mem --&gt; I/O VERY FAST) than consumer
+		--&gt; consumer trying to take data off the queue
+		--&gt; need to watch vars so dont overrun buffer (e.g. buffer size=100)
+			--&gt; if consumer clears buffer 1, producer can move more data on to 1, but not onto 2 
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Direct Com"></span><strong id="Direct Com">Direct Com</strong>
+</p>
+<pre>
+	--&gt; send message + need to recieve after waiting for reply 
+	--&gt; think email
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Synchronization"></span><strong id="Synchronization">Synchronization</strong>
+</p>
+<pre>
+	--&gt; important!!
+	--&gt; sync vs async message sending?
+		--&gt; email is async, non-blocking 
+		--&gt; blocking send = sender block til message recieved
+		--&gt; blocking recieve = reciever blocked til recieve message 
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Com in Client-Server Systems"></span><strong id="Com in Client-Server Systems">Com in Client-Server Systems</strong>
+</p>
+<pre>
+	--&gt; sockets = how info communicated on machines
+	--&gt; not on test!!
+</pre>
+<p>
+<span id="Finishing Chapter 3:-Remote Procedure Calls"></span><strong id="Remote Procedure Calls">Remote Procedure Calls</strong>
+</p>
+<pre>
+	--&gt; know they exist
+	--&gt; use stubs = client proxy for actual proocedure on server
+	--&gt; problem: how to set it up?
+</pre>
+<div id="Finishing Chapter 3:-Test 2: Chapter 3"><h5 id="Test 2: Chapter 3" class="header"><a href="#Finishing Chapter 3:-Test 2: Chapter 3">Test 2: Chapter 3</a></h5></div>
+<pre>
+	--&gt; context switch, process state (transitions) --&gt; what part of OS does this
+	--&gt; what stuff in process control block (PCB)
+	--&gt; no thread states, only process states
+</pre>
+
+<div id="Chapter 4: Threads and Concurrency"><h3 id="Chapter 4: Threads and Concurrency" class="header"><a href="#Chapter 4: Threads and Concurrency">Chapter 4: Threads and Concurrency</a></h3></div>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Benefits"></span><strong id="Benefits">Benefits</strong>
+</p>
+<pre>
+	--&gt; responsiveness
+	--&gt; resource share
+	--&gt; economy (cheapter than making processes)
+	--&gt; scalability 
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Multicore programming"></span><strong id="Multicore programming">Multicore programming</strong>
+</p>
+<pre>
+	--&gt; in all processes today, dual core processes
+	--&gt; data parallelism = same data across multiple cores, same operation
+	--&gt; task parallelism = threads across multiple cores
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Concurrency vs parallelism"></span><strong id="Concurrency vs parallelism">Concurrency vs parallelism</strong>
+</p>
+<pre>
+	--&gt; concurrent = 1 CPU + multiprogramming (time slice CPU)
+	--&gt; parallelism = have multiple cores (multiple processes at same time)
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Single and Multithreaded Processes"></span><strong id="Single and Multithreaded Processes">Single and Multithreaded Processes</strong>
+</p>
+<pre>
+	--&gt; important!!
+	--&gt; single thread processes:
+		--&gt; top: program code, data, open files
+		--&gt; middle: registers, stack (track where program is, if many calls to other stuff)
+		--&gt; bottom: thread executing
+	--&gt; multi thread
+		--&gt; top: program code, data, open files (avail to all 3 threads)
+		--&gt; middle: 3 registers, 3 stacks (1 for each thread)
+		--&gt; bottom: 3 separate threads on running on different
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-User Threads and Kernel threads"></span><strong id="User Threads and Kernel threads">User Threads and Kernel threads</strong>
+</p>
+<pre>
+	--&gt; user threads = create by programmer on process, supported by kernel threads
+	--&gt; kernel threads = supported by kernel
+	--&gt; if user thread reqs mem (most likely), will be given by kerne 
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Multithreading models"></span><strong id="Multithreading models">Multithreading models</strong>
+</p>
+<pre>
+	--&gt; many to one
+		--&gt; many user threads supported by 1 kernel thread 
+		--&gt; simple to implement, not many sys use
+	--&gt; one to one
+		--&gt; 1 user thread gets 1 kernel thread
+		--&gt; windows, linux, solaris 9+
+		--&gt; more concurrency
+		--&gt; simple to implement, take more resources
+	--&gt; many to many
+		--&gt; many user threads supported by many kernel threads
+		--&gt; still 1:1, but can switch partners
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Two-level Model"></span><strong id="Two-level Model">Two-level Model</strong>
+</p>
+<pre>
+	--&gt; doesn't really matter, is hybrid multithreading model
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Pthreads"></span><strong id="Pthreads">Pthreads</strong>
+</p>
+<pre>
+	--&gt; maybe user level or kernel level
+	--&gt; POSIX standard
+	--&gt; specification, NOT implementation (different for each OS)
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Thread Pools"></span><strong id="Thread Pools">Thread Pools</strong>
+</p>
+<pre>
+	--&gt; pool threads to make more efficient, all waiting for work
+	--&gt; faster to request service 
+	--&gt; send a pool of threads down to a specific kernel thread (many to many)
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Threading Issues"></span><strong id="Threading Issues">Threading Issues</strong>
+</p>
+<pre>
+	--&gt; how to handle signals 
+		--&gt; if tell program "signal -9" = to end process; if have multiple threads, which thread gets signal?
+	--&gt; if cancel thread (async or deferred?)
+	--&gt; thread local storage
+	--&gt; how to activate thread on a schedule
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Semantics of fork() and exec()"></span><strong id="Semantics of fork() and exec()">Semantics of fork() and exec()</strong>
+</p>
+<pre>
+	--&gt; does fork() duplicate only calling thread or all threads?
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Signal Handling"></span><strong id="Signal Handling">Signal Handling</strong>
+</p>
+<pre>
+	--&gt; signals = tell process event has happened
+	--&gt; signal handler = proces signals
+		1. signal gen by event
+		2. signal deliver to process
+		3. signal handle by default OR user signal handler
+		4. where to deliver signal on multithread 
+			--&gt; thread where signal applies
+			--&gt; every thread
+			--&gt; certian threads
+			--&gt; specific thread gets all
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Cancel Thread"></span><strong id="Cancel Thread">Cancel Thread</strong>
+</p>
+<pre>
+	1. async = immediately killed
+	2. defeered = thread periodically checks if should be cancelled
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Thread Local Storage"></span><strong id="Thread Local Storage">Thread Local Storage</strong>
+</p>
+<pre>
+	--&gt; every thread has local copy of data 
+	--&gt; good whne cant control thread creation process
+</pre>
+<p>
+<span id="Chapter 4: Threads and Concurrency-Scheduler Activations"></span><strong id="Scheduler Activations">Scheduler Activations</strong>
+</p>
+<pre>
+	--&gt; how to get link b/w kernel/users active?
+</pre>
+
+<div id="How Threads Work: not on test 2"><h3 id="How Threads Work: not on test 2" class="header"><a href="#How Threads Work: not on test 2">How Threads Work: not on test 2</a></h3></div>
+<pre>
+--&gt; goal: decrypt array of string, send array of string to decryption routine
+--&gt; how many array elements = how many threads (very quick!!)
+	1. create new name on working thread w/ 4 params: string to decrypt, id num (so right order in array when threads done), private key value, address its send to (callback)
+	2. new working thread = class w/ constructor, same 4 params 
+		--&gt; workingCallBackDelegate() = stub for thread + main program
+		--&gt; do_work() = one that decrypts string
+		--&gt; process decryption, get message if error
+	3. .Start() executes the thread 
+		--&gt; need to set action value = bar on user side to show how its wokring
+	4. continue sending threads till send all
+	5. check if any threads are still running, stay in loop til all threads done
+	6. thread comes back, sent thru ResultCallback()
+		--&gt; 3 things come back in any order 
+		--&gt; lock on main process (don't want all threads hitting ResultCallback() at all time)
+		--&gt; check if count is same as final num looping thru (then you're done, handle all threads!)
+			--&gt; stop looping of sending and recieving threads
+		--&gt; increment count
+--&gt; when running the program:
+	--&gt; CPU/cores all jump to close to 100% usage around the same time frame
+	--&gt; all CPU/cores take a few threads of the program to work on
+	--&gt; only take a few secs, would take a lot long w/o all these processers + threads
+
+System pointer --&gt;
+	process control blocks 1 --&gt; 2 --&gt; 3 --&gt; etc
+	PCB 1 --&gt; thread control block 1 --&gt; 2 --&gt; 3 --&gt; etc
+				 TCB 1 --&gt; TSTATE (Exec, ready, block)
+				 		 --&gt; TPTRS to sys stack
+</pre>
+
+<p>
+<span id="How Threads Work: not on test 2-Process State w/ multiple threads:"></span><strong id="Process State w/ multiple threads:">Process State w/ multiple threads:</strong>
+</p>
+<pre>
+	--&gt; possible thread states: ready, execute, blocked, (maybe terminate, depends on OS)
+		--&gt; really substate of state of entire process
+	thread A + B executing, but thread C blocked
+	--&gt; Process state depends on what block means:
+		1. if thread block = waiting for service
+			--&gt; process state blocked OR executing OR both (depends on OS)
+	--&gt; threads exec until theyre complete
+		--&gt; suppose 1 processor, and every process creates 1 thread
+		--&gt; OS designer has to decide how to keep track of proccess state 
+		--&gt; good: process state in PCB includes threads exec, blocked
+		--&gt; OR: choose most restrictive one = block &gt; exec
+</pre>
+
+</body>
+</html>

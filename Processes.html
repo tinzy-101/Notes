@@ -148,7 +148,215 @@ text
 	--&gt; identify processes using processor identifier (pid) = int unique to every process in sys
 		--&gt; e.g. linux:
 			systemd (pid = 1)
-			
+			--&gt; logind (8415): manage clients logging into sys directly
+				--&gt; bash (8416)
+					--&gt; ps (9298)
+					--&gt; vim (9204)
+			--&gt; python (2808)
+			--&gt; sshd (3028): manage clients logging into sys thru ssh
+				--&gt; sshd (3610)
+					--&gt; tcsh (4005)
+	--&gt; parent creating children processes:
+		--&gt; parent processes need to share resources with children
+			--&gt; this way parent cant overload sys by creating too many children
+		1. parent needs to execute concurrently with childnre
+		2. parent waits til children finish 
+		--&gt; child can be a duplicate of parent OR have a new program loaded into it
+		--&gt; e.g. UNIX:
+			1. fork() sys call creates new process
+			2. return code for child process = 0, return code for parent = nonzero
+			3. both processes use exec() syscall to load bin file into mem to start executing 
+		--&gt; e.g. windows:
+			1. create new process w/ CreateProcess()
+			2. need to load specific program into address spae of child when child created 
+</pre>
+<p>
+<span id="3.3 Operations on processess-Process Termination"></span><strong id="Process Termination">Process Termination</strong>
+</p>
+<pre>
+	--&gt; process execs last statement + ask OS to delete using exit() syscall 
+		--&gt; OR one process uses syscall to terminate another process (usually parent to child)
+			1. bc child using too much resources
+			2. child no longer needed
+			3. parent exiting and os doesnt let child live (unless cascading termination)
+	--&gt; process returns status to waiting parent process (wait())
+	--&gt; all resources deallocated and returned to OS
+		1. still has entry in process table until parent calls wait() 
+			--&gt; zombie process = terminated but parent not called wait()
+			--&gt; orphan process = parent didnt invoke wait() and terminates 
+				--&gt; init process assigned as new parent (or systemd)	
+</pre>
+<p>
+<span id="3.3 Operations on processess-Android process hierarchy"></span><strong id="Android process hierarchy">Android process hierarchy</strong>
+</p>
+<pre>
+	--&gt; importance hierarchy of processes 
+		1. foreground process: visible on screen
+		2. visible process: not visible but has performance that foreground process refers to
+		3. service process: like bakground process but performs activity obvious to user (music)
+		4. background process: activity not obvious to user
+		5. empty process: no active components to do with any app
+	--&gt; first terminate empty process, then go up 
+</pre>
+
+
+<div id="3.4 Interprocess communication"><h3 id="3.4 Interprocess communication" class="header"><a href="#3.4 Interprocess communication">3.4 Interprocess communication</a></h3></div>
+<pre>
+	--&gt; processes going concurrently in OS can be:
+		1. independent = doesn't share data w/ other processes
+		2. cooperating = can affect or be affected by other processes
+			--&gt; info sharing
+			--&gt; computation speedup (task broken into subtasks that work together)
+			--&gt; modularity (sys divided into sep. processes/threads) 
+	--&gt; cooperating processes need interprocess communication(IPC)
+		1. shared mem 
+			--&gt; block of mem shared by 2 processes, read and write data to block 
+			--&gt; faster (only need syscalls to set up mem regions + don't need kernel) 
+		2. message passing 
+			--&gt; send messages between processes 
+			--&gt; good for small data + easier to configure 
+			--&gt; slower (uses syscalls + kernel)
+		--&gt; most sys use both 
+</pre>
+
+
+<div id="3.5 IPC in shared-mem systems"><h3 id="3.5 IPC in shared-mem systems" class="header"><a href="#3.5 IPC in shared-mem systems">3.5 IPC in shared-mem systems</a></h3></div>
+<pre>
+	--&gt; shared mem region is in address space of process that created it
+		--&gt; collaborating process needs to attach it to their address space also 
+	--&gt; producer and consumer processes
+		1. producer produces info consumed by consumer (compiler produced assembly code for assembler)
+		2. server = producers, client = consumer
+		3. solution: shared mem! 
+		--&gt; need buffer of items filled by producer and consumed by consumer
+			1. unbounded buffer: no practical limit on buffer size (producer can keep producing)
+			2. bounded buffer: fixed size (consumer waits if buffer empty, producer wait it buffer full) 
+				--&gt; buffer implemented in circular array w/ in/out pointers
+				--&gt; buffer empty if (in == out), full if ((in+1) % bufferSize) == out)
+				--&gt; can only have bufferSize-1 items in buffer at once 
+</pre>
+
+
+<div id="3.6 IPC in message-passing systems"><h3 id="3.6 IPC in message-passing systems" class="header"><a href="#3.6 IPC in message-passing systems">3.6 IPC in message-passing systems</a></h3></div>
+<pre>
+	--&gt; useful in distributed environment (process on diff computers) 
+	--&gt; need send(message) and recieve(message)
+	--&gt; difficult to implement sys with variable message sizes, easier with fixed size
+	--&gt; need communication link b/w processes b4 can send and recieve messages
+		1. physical link:
+			--&gt; shared mem, hardware bus, network
+		2. logical link 
+			--&gt; direct/indirect communication
+			--&gt; synch/asynch communication
+			--&gt; auto/explicit buffering
+</pre>
+<p>
+<span id="3.6 IPC in message-passing systems-Naming"></span><strong id="Naming">Naming</strong>
+</p>
+<pre>
+	--&gt; direct com vs indirect com
+		1. direct com: need to explicitly name recipient/sender 	
+			--&gt; send(P, message): send message to P
+			--&gt; recieve(Q, message): recieve message from Q
+			--&gt; link established automatically, processes only need to know their idnetities 
+			--&gt; only 1 link per 2 processes (symmetry)
+				--&gt; if asymmetric, recipient doesn't need to name sender
+			--&gt; con of symmetric and asymmetric: process defs not modular, hard coded
+		2. indirect com: message send/recieved from mailboxes/ports 
+			--&gt; send(A, message): send message to mailbox A
+			--&gt; recieve(A, message): recieve message from mailbox A
+			--&gt; properties:
+				1. link processes iff have shared mailbox
+				2. link can be for 2+ processes
+				3. 2 processes can have multiple links (1 for each mailbox)
+			--&gt; mailbox owned by process or OS 
+				1. process owns mailbox (mailbox in process address space)
+					--&gt; owner (only recieve) and user (only send) 
+					--&gt; syscalls can let owner start to send messages too
+				2. OS owns mailbox
+					--&gt; OS needs mech to let process create new mailbox, send/recieve, delete mailbox
+					
+</pre>
+<p>
+<span id="3.6 IPC in message-passing systems-Synchronization"></span><strong id="Synchronization">Synchronization</strong>
+</p>
+<pre>
+	--&gt; message passing is blocking/non-blocking (synch/asynch)
+		1. blocking send: sending process blocked until message recieved
+		2. nonblocking send: process sends message and does other stuff
+		3. blocking recieve: reciever blocks until message avail
+		4. nonblocking recieve: reciever retrieve valid message or null 
+	--&gt; rendezvous: both send and recieve are blocking 
+		--&gt; works well for client/server and consumer/producer problem 
+</pre>
+<p>
+<span id="3.6 IPC in message-passing systems-Buffering"></span><strong id="Buffering">Buffering</strong>
+</p>
+<pre>
+	1. zero capacity: link cannot have messages waiting (sender needs to block) (no buffering)
+	2. bounded capacity: only n messages can be in queue, if link full sender needs to block
+	3. unbounded capacity: queue potentiall infinite (automatic buffering)
+</pre>
+
+
+<div id="3.7 Examples of IPC systems"><h3 id="3.7 Examples of IPC systems" class="header"><a href="#3.7 Examples of IPC systems">3.7 Examples of IPC systems</a></h3></div>
+<p>
+<span id="3.7 Examples of IPC systems-POSIX shared mem"></span><strong id="POSIX shared mem">POSIX shared mem</strong>
+</p>
+<pre>
+	--&gt; POSIX has an API to use shared mem (can use message passing too tho)
+	--&gt; use mem-mapped files (shared mem regions associated with fileP
+		1. process creates shared mem object using syscall
+			--&gt; fd = shm_open(name, O_CREAT | O_RDWR, 0666)
+			--&gt; name = name of sared mem object
+			--&gt; O_CREAT = created shared-mem object if not yet created
+			--&gt; O_RDWR = object open for reading and writing
+			--&gt; 0666 = for file-access permissions of shared-mem obj 
+		2. configure size of obj 
+			--&gt; ftructrate(fd, 4096) = 4096 bytes
+		3. create mem mapped file w/ shared-mem obj + return poitner to mem-mapped file 
+			--&gt; mmap()
+</pre>
+<p>
+<span id="3.7 Examples of IPC systems-Mach message passing"></span><strong id="Mach message passing">Mach message passing</strong>
+</p>
+<pre>
+	--&gt; Mach OS used for distributed systems so use message passing 
+	--&gt; create tasks (like processes, but have multiple threads of control + less resource)
+	--&gt; send messages to ports (mailboxes w/ finite size + unidirectional)
+		--&gt; have different port to send and recieve
+		--&gt; every port has 1+ sender, only 1 reciever 
+	--&gt; use kernel abstractions to represent resources 
+	--&gt; port rights = capabilities needed for task to interact with port 
+		--&gt; e.g. task needs MACH_PORT_RIGHT_RECIEVE for a created port 
+		--&gt; rights = name of port (int)
+	--&gt; when task created, Task Self + Notify port created
+		--&gt; Task Self lets task send messages to kernel
+		--&gt; Notify lets kernel send notification of even occurrences 
+		--&gt; bootstrap port = task can register port it creates with bootstrap server 
+	--&gt; mach_port_allocate() creates new port + give it space for message queue
+	--&gt; queue for eac port is finite + empty
+		--&gt; all messages same prioties, FIFO
+		--&gt; fixed size message header (size + source/destination ports)
+		--&gt; has body with data
+	--&gt; simple vs complex messages
+		1. simple = user data, not interpreted by kernel
+		2. complex = pointers to mem w/ data (good for lots of data), transfter port rights 
+	--&gt; mach_msg() = api used to send and recieved messages 
+		--&gt; if queue full:
+		1. wait indefinitely
+		2. wait til n millisecs
+		3. return immediately
+		4. temp cache message (For server tasks)
+</pre>
+<p>
+<span id="3.7 Examples of IPC systems-Windows"></span><strong id="Windows">Windows</strong>
+</p>
+<pre>
+	--&gt; usually modularity + subsystems (many operating environs)
+	--&gt; advanced local procedure call (APLC) = communicate for 2 processes in same machine
+	--&gt; connection ports + communication ports
+	--&gt; 
 </pre>
 
 </body>

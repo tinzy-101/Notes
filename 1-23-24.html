@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>1-23-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Test 1 Corrections"><h5 id="Test 1 Corrections" class="header"><a href="#Test 1 Corrections">Test 1 Corrections</a></h5></div>
+<p>
+<span id="Test 1 Corrections-Q14 D: When an interrupt occurs, the invoked OS handler would perform the follow steps:"></span><strong id="Q14 D: When an interrupt occurs, the invoked OS handler would perform the follow steps:">Q14 D: When an interrupt occurs, the invoked OS handler would perform the follow steps:</strong>
+</p>
+<pre>
+	1. save current state of CPU + other relevant sys info
+	2. determine source of interrupt + action to take
+	3. perform action
+	4. restore the previous state of the CPU + other relevant sys info
+	5. return control to the interrupted pocess/task
+</pre>
+
+<div id="Chapter 3:"><h3 id="Chapter 3:" class="header"><a href="#Chapter 3:">Chapter 3:</a></h3></div>
+<p>
+<span id="Chapter 3:-Process state transition diagram"></span><strong id="Process state transition diagram">Process state transition diagram</strong>
+</p>
+<pre>
+new --&gt; ready from long term/master scheduler (would execute if it had a cpu) 
+	--&gt; can go into suspended mem story w/ swapper/intermediate term scheduler
+dispatcher/short term scheduler picks process in ready list to run, then that process is in the executing state
+2 options when process is executing: 
+	1. external interupt that needs OS
+	2. goes into service request blocked state 
+		--&gt; back to ready list when service completed 
+		--&gt; can go into suspended blocked state from swapper
+		--&gt; then go into suspended ready, and finally ready to be executed 
+	3. terminates normally/abnormally (terminated state)
+</pre>
+
+<p>
+<span id="Chapter 3:-Process Control BLock"></span><strong id="Process Control BLock">Process Control BLock</strong>
+</p>
+<pre>
+	--&gt; created when new process is created 
+	from top to bottom:
+		process state --&gt; process num --&gt; program counter --&gt; registers --&gt; mem limits --&gt; list open files
+	how do PCBs fit in?
+		--&gt; system pointer lets u drop to anything in system table w/ PCB, which points to Thread control block (TCB)
+			--&gt; sys pointer also points to device controllers, OS queues, fixed address locations
+		--&gt; resident = never swapped out, always in main mem (abslute, relational (resident), virtual addresses)
+		--&gt; if vectored interrupt happens:
+			1. cpu save current PC in temp area
+			2. load address of interrupt handler
+				--&gt; timer interrupt handler
+				--&gt; 
+</pre>
+
+<p>
+<span id="Chapter 3:-CPU Switch from Process to Process"></span><strong id="CPU Switch from Process to Process">CPU Switch from Process to Process</strong>
+</p>
+<pre>
+	--&gt; multiprogramming, multiple programs at once
+	1. interrupt comes in, save state of program 1
+	2. reload state of program 1 
+</pre>
+
+<p>
+<span id="Chapter 3:-Process scheduling"></span><strong id="Process scheduling">Process scheduling</strong>
+</p>
+<pre>
+	--&gt; process scheduler selects among avail processes
+	--&gt; job queue
+	--&gt; device queues
+	--&gt; ready queues
+	--&gt; prof def: pointer to all processes (major pointer), with queues inside that talk about state of process
+</pre>
+
+<p>
+<span id="Chapter 3:-Schedulers"></span><strong id="Schedulers">Schedulers</strong>
+</p>
+<pre>
+	--&gt; short term/CPU scheduler/dispatcher = sometimes only one, very frequently used
+	--&gt; master/long term = handles multiprogramming, not very frequently used
+	--&gt; processes I/O bound (business programs) OR CPU bound (lots of math)
+		--&gt; 1 process can switch between bounds 
+</pre>
+
+<p>
+<span id="Chapter 3:-Multitasking in Mobile Systems"></span><strong id="Multitasking in Mobile Systems">Multitasking in Mobile Systems</strong>
+</p>
+<pre>
+	--&gt; foreground vs background processes (in any system) 
+</pre>
+
+<p>
+<span id="Chapter 3:-Context Switch"></span><strong id="Context Switch">Context Switch</strong>
+</p>
+<pre>
+	--&gt; CPU switches to another process, sys saves state of old process, load saved state of new process = context switch
+	--&gt; context of process is in the PCB
+	--&gt; context switching is overhead! sys not doing useful stuff while switching 
+	--&gt; time depends on hardware support
+		--&gt; 1 CPU = 1 counter = only run 1 program at a time
+</pre>
+
+<div id="Context Switch Activity:"><h3 id="Context Switch Activity:" class="header"><a href="#Context Switch Activity:">Context Switch Activity:</a></h3></div>
+<pre>
+	1. interrupt occurs (externel from timer / disk I/O, internal with trap)
+	2. hardware does this:
+			  1. save current program counter (absolute known address to hardware)
+			  2. save timer value 
+	3. if timer interrupt (software, wasting time for OS):
+			  1. vector 010 into CPU
+			  2. turn off interrupt
+			  3. execute timer handler
+			  4. go back to kernel dispatcher to find next process to execute 
+	4. process b chosen to run
+			  1. runs, then times out
+			  2. save PC + current time (zero time, none left)
+			  3. load timer handler, executes
+			  4. go back to dispatcher to pick another process to run 
+</pre>
+
+</body>
+</html>
