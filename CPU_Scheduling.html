@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>CPU_Scheduling</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="5.1 Basic Concepts"><h3 id="5.1 Basic Concepts" class="header"><a href="#5.1 Basic Concepts">5.1 Basic Concepts</a></h3></div>
+<p>
+<span id="5.1 Basic Concepts-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; CPU scheduling = base of multiprogramming
+	--&gt; switch CPU among processes to make sys more productive 
+	--&gt; modern OS: kernel threads (not processes) being scheduled by OS
+		--&gt; process and thread scheduling used inerchangeable
+		--&gt; in book: process = general scheduling, thread = thread-specific
+			+ run on CPU = run on core
+</pre>
+<p>
+<span id="5.1 Basic Concepts-Basic Concepts"></span><strong id="Basic Concepts">Basic Concepts</strong>
+</p>
+<pre>
+	--&gt; process exec until it has to wait, usuall for I/O
+	--&gt; w/ simple computer sys, CPU sits idle
+	--&gt; w/ multiprogramming, keep CPU busy by giving it another process to work on
+</pre>
+<p>
+<span id="5.1 Basic Concepts-CPU I/O burst cycle"></span><strong id="CPU I/O burst cycle">CPU I/O burst cycle</strong>
+</p>
+<pre>
+	--&gt; process exec = cycle of CPU exec + I/O wait
+	--&gt; process progress = CPU burst --&gt; I/O burst --&gt; CPU burst --&gt; sys request to end execution (w/ more cycles in between!)
+		--&gt; CPU burst time depends on process/comp, but usually exponential (duration vs frequency)
+</pre>
+<p>
+<span id="5.1 Basic Concepts-CPU Scheduler"></span><strong id="CPU Scheduler">CPU Scheduler</strong>
+</p>
+<pre>
+	--&gt; if CPU idle, CPU scheduler chooses ready process and allocates CPU to it 
+</pre>
+<p>
+<span id="5.1 Basic Concepts-Preemptive and nonpreemptive scheduling"></span><strong id="Preemptive and nonpreemptive scheduling">Preemptive and nonpreemptive scheduling</strong>
+</p>
+<pre>
+	--&gt; 4 circumstances for CPU scheduling
+		1. process from running to waiting (e.g. i/o req)
+		2. process from running to ready (e.g. interrupt)
+		3. process from waiting to ready (e.g. i/o finish)
+		4. process ends
+	--&gt; #1/#4 = no scheduling choice, need to choose new process to run (nonpreemptive/cooperative scheduling scheme)
+		--&gt; wait for syscall to do anything = simple kernel
+		--&gt; bad for real time computing
+	--&gt; #2/#3 = have scheduling choice (preempive)
+		--&gt; process will keep CPU until it terminates or waits
+		--&gt; kernels + data sharing needs to be carefully designed 
+		--&gt; used by most OSes in kernel mode
+</pre>
+<p>
+<span id="5.1 Basic Concepts-Dispatcher"></span><strong id="Dispatcher">Dispatcher</strong>
+</p>
+<pre>
+	--&gt; dispatcher = module that gives control of CPU's core to process selected by scheduler
+		1. switch context from 1 process to another
+		2. switch to user mode
+		3. jump to right place in user program to resume program 
+	--&gt; dispatch latency = time for dispatcher to stop process + start running another one
+	--&gt; how often is context switching?
+		--&gt; linux: vimstat (1st output = avg/sec, 2nd/3rd = num switched durin 1sec intervals)
+			--&gt; use /proc FS to find num switches for 1 process
+</pre>
+
+
+<div id="5.2 Scheduling Criteria"><h3 id="5.2 Scheduling Criteria" class="header"><a href="#5.2 Scheduling Criteria">5.2 Scheduling Criteria</a></h3></div>
+<pre>
+	--&gt; diff CPU scheduling algos give priority to diff processes 
+	--&gt; what are criteria for priority?
+		1. CPU utilization = keep CPU busy
+		2. throughput = num processes completed/time unit (want big)
+		3. turnaround time = how long to exec process  (want small)
+		4. waiting time = how long process wait in ready queu
+		5. response time = how long from request sent out to response produced
+</pre>
+
+
+<div id="5.3 Scheduling Algorithms"><h3 id="5.3 Scheduling Algorithms" class="header"><a href="#5.3 Scheduling Algorithms">5.3 Scheduling Algorithms</a></h3></div>
+<pre>
+	--&gt; algos described in context of 1 avail core + run 1 process at a time 
+	--&gt; can't know length of CPU burst in advance 
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-First come first serve (FCFS)"></span><strong id="First come first serve (FCFS)">First come first serve (FCFS)</strong>
+</p>
+<pre>
+	--&gt; most simple, use FIFO queue, OCB linked to tail of queu
+	--&gt; con: long waiting time on average
+		--&gt; use Gantt chart = bar chart for schedule (how long for each process)
+		--&gt; convoy effect: all processes have to wait for big process to finish (nonpreemptive)
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-Shortest job first (SJF)"></span><strong id="Shortest job first (SJF)">Shortest job first (SJF)</strong>
+</p>
+<pre>
+	--&gt; CPU assigned to process with the next smallest CPU burst 
+	--&gt; if 2 processes same burst, use FCFS
+	--&gt; less average waiting time 
+	--&gt; con: not realistic for CPU scheduling b/c can't know CPU burst length (can only approx)
+	--&gt; preemptive or nonpreemptive (decided when new process comes in, CPU will either end current process or finish current process)
+		--&gt; preemptive = shortes remaingin time first 
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-Round Robin (RR)"></span><strong id="Round Robin (RR)">Round Robin (RR)</strong>
+</p>
+<pre>
+	--&gt; similar to FCFS, except preemptive 
+	--&gt; define time slice (10-100 msec) + ready queue is circular
+	--&gt; scheduler goes around ready queue and gives them 1 CPU time slice 
+		--&gt; CPU either finishes the time slice and moves on, or process releases CPU by itself
+		--&gt; if run out of time, send interrupt to OS --&gt; context switch + process put at tail of queue
+	--&gt; long avg wait time + performance depends on time quantum size 
+		--&gt; large time quantum = FCFS
+		--&gt; small time quantum = lots of context siwtches (lots of wated time)
+		--&gt; time quantum should be large compared to context switch time, but not as large as FCFS
+			--&gt; 80% of CPU bursts should be shorter than quantum
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-Priority Scheduling"></span><strong id="Priority Scheduling">Priority Scheduling</strong>
+</p>
+<pre>
+	--&gt; SJF = special case of priotiy scheduling
+	--&gt; priority indicated using num range (low num = low or high priority, depends sys)
+	--&gt; define priorities internally (itme limit, mem, open files) or externally (set by OS, importance of process, funds for computer use, political factors)
+	--&gt; preemptive or nonpreemptive 
+		--&gt; pre: if new process has higher priority, it gets CPU
+		--&gt; non: if new process has higher priority than current, it only gets heads of queu
+	--&gt; con: indefinite blocking/starvation (for low priority processes)
+		--&gt; soltuion: aging = gradually increase priority of waiting processes
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-Multilevel queue scheduling"></span><strong id="Multilevel queue scheduling">Multilevel queue scheduling</strong>
+</p>
+<pre>
+	--&gt; easier to have separate queues with distinct prioity 
+	--&gt; schedule process in highest prioity queue
+	--&gt; use multilevel queues to separate foreground and background processes (hace diff response time reqs) 
+	--&gt; can also use time slices, each queue gets a time slice of CPU
+</pre>
+<p>
+<span id="5.3 Scheduling Algorithms-Multilevel feedback queue scheduling"></span><strong id="Multilevel feedback queue scheduling">Multilevel feedback queue scheduling</strong>
+</p>
+<pre>
+	--&gt; process can move between queues (separate based on CPU burst cahracteristics)
+	--&gt; type of aging
+	--&gt; process enters, put in queue 0, give quantum, if no finish in time, go to queue 1 tail
+		--&gt; if queue 0 empty, start at queue 1 head + 2 time quantums given, if no finish queue 2 tail etc
+	--&gt; highest priority to process w/ shortest CPU burst 
+	--&gt; parameters: num queues, scheduling algo for each queue, decide when to upgrade process to bettter/worse queue, which queue process enters when it needs service
+	--&gt; most general algo + most complex
+</pre>
+
+
+<div id="5.4 Thread Scheduling"><h3 id="5.4 Thread Scheduling" class="header"><a href="#5.4 Thread Scheduling">5.4 Thread Scheduling</a></h3></div>
+<pre>
+	--&gt; modern OS, kernel threads (not processes) being scheduled on OS
+	--&gt; user threads managed by thread lib + mapped to kernel thread using LWP
+</pre>
+<p>
+<span id="5.4 Thread Scheduling-Contention scope"></span><strong id="Contention scope">Contention scope</strong>
+</p>
+<pre>
+	--&gt; process contention scope (PCS)
+		--&gt; sys w/ many to one and many to many: thread lib schedulers user threads to run on avail LWP
+		--&gt; competition for CPU among threads from same process 
+	--&gt; sys contention scope (SCS)
+		--&gt; one to one: all thread in system fight for CPU
+</pre>
+
+
+<div id="5.5 Multiproccessor scheduling"><h3 id="5.5 Multiproccessor scheduling" class="header"><a href="#5.5 Multiproccessor scheduling">5.5 Multiproccessor scheduling</a></h3></div>
+<p>
+<span id="5.5 Multiproccessor scheduling-Approaches to multiple processr scheduling"></span><strong id="Approaches to multiple processr scheduling">Approaches to multiple processr scheduling</strong>
+</p>
+<pre>
+	1. 1 main processor handles all sceduling, other processors exec only user code 
+		--&gt; "asymmetric multiprocessing" 
+		--&gt; dont need data sharing
+		--&gt; could be big bottl neck tho
+	2. symmetric multiprocessing (SMP) 
+		--&gt; each process self scheduling
+		--&gt; more common
+		--&gt; stipulation: all threads in common ready queue + eahc processor has own private thread queue
+</pre>
+<p>
+<span id="5.5 Multiproccessor scheduling-Multicore processors"></span><strong id="Multicore processors">Multicore processors</strong>
+</p>
+<pre>
+	--&gt; multicore processor = multiple cores on 1 physical chip  (Fast =+ less power)
+	--&gt; prob: mem stall (processors fast than mem accessed)
+		--&gt; sol: 2+ hardware threads assigned to cores (hardware can switch to other thread if stall)
+			1. coarse grained = thread execs on core until mem stall + switch to new thread 
+			2. fine grained = switch threads at end of every instruction cycle (low cost when switching)
+	--&gt; levels of scheduling
+		1. OS decisions, which software thread runs on which hardware
+		2. core decisions, which hardware thread to run (RR, or dynamic urgency)
+		--&gt; not mutually exclusive!
+</pre>
+<p>
+<span id="5.5 Multiproccessor scheduling-Load balancing"></span><strong id="Load balancing">Load balancing</strong>
+</p>
+<pre>
+	--&gt; on SMP, need to balance work among processors for efficiency (use load balancing)
+	--&gt; only need load balancing when processors have their own private queues 
+	--&gt; push vs pull migration
+		--&gt; push migration = specific tasks periodically checks processor load + will redistribute if there is imbalance
+		--&gt; pull migration =  idle processor puls waiting task from busy processor
+		--&gt; both used in 1 sys
+</pre>
+<p>
+<span id="5.5 Multiproccessor scheduling-Processor affinity"></span><strong id="Processor affinity">Processor affinity</strong>
+</p>
+<pre>
+	--&gt; process has affinity for processor that it is currently running on
+	--&gt; when thread selected by processor, the processor cache is remade w/ new process 
+		--&gt; when pulling thread from private processing queue, the cache is alrd "warmed"
+	--&gt; soft affinity = OS tried to keep process on single processor, bur process can move
+	--&gt; hard affinity = process says only runs on some processors 
+	--&gt; main mem arch changes affinity
+		--&gt; arch w/ non uniform mem access (NUMA) w/ 2 physical chips + CPUs 
+		--&gt; if NUMA-aware, thread scheduled on 1 CPU can be allocated mem closest to said CPU, so thread gets faster mem access
+	--&gt; load balancing vs processor affinity
+		--&gt; good to keep thread running on same processor b/w good that data is in processor's cache mem
+		--&gt; balancing by moving thread outside removed benefit 
+</pre>
+<p>
+<span id="5.5 Multiproccessor scheduling-Heterogeneous multiprocessing"></span><strong id="Heterogeneous multiprocessing">Heterogeneous multiprocessing</strong>
+</p>
+<pre>
+	--&gt; heterogeneous multiprocessing (HMP) = processors on same sys have diff powers
+	--&gt; goal: manage power consumption (powerful core gets big task and vice versa)
+</pre>
+
+
+<div id="5.6 Real-time CPU scheduling"><h3 id="5.6 Real-time CPU scheduling" class="header"><a href="#5.6 Real-time CPU scheduling">5.6 Real-time CPU scheduling</a></h3></div>
+<pre>
+	--&gt; CPU scheduling applies to 2 types of sys: 
+		--&gt; soft real time = no guarantee when critical real time process scheduled (only guarantee priotiy)
+		--&gt; hard real time = task has to be servies by deadline, no point in service after deadline
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-Minimizing Latency"></span><strong id="Minimizing Latency">Minimizing Latency</strong>
+</p>
+<pre>
+	--&gt; event latency = time from when event occurs to when it's serviced again
+	--&gt; diff events = diff latency reqs 
+	--&gt; 2 types latencies affect real time performance:
+		1. interrupt latency 
+			--&gt; time when CPU gets interrupt to start of servicing
+			--&gt; b4 CPU can service, need to save state of current process (interrupt latency)
+			--&gt; interrupt latency needs to be bound + small for real timme 
+			--&gt; want interrupts to be disabled for short time only
+		2. dispatch latency 
+			--&gt; time for dispatcher to stop 1 event + start another
+			--&gt; give real time tasks + preemptive kernels = less latency
+			--&gt; hve conflict phase:
+				1. preemption of process on kernel
+				2. release low priotiy processes to give resources
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-Priority based scheduling"></span><strong id="Priority based scheduling">Priority based scheduling</strong>
+</p>
+<pre>
+	--&gt; most important for real time OS = respond to real time process as soon as it gets CPU
+	--&gt; scheduler needs to support priority + preemption 
+	--&gt; if not preemptive:
+		--&gt; only get soft real time functionality 
+	--&gt; important terms:
+		--&gt; processes are periodic = need CU at difference intervals
+		--&gt; t = fixed processing time
+		--&gt; d = deadline to be service by CPU
+		--&gt; p = period 
+		--&gt; 0 &lt;= t &lt;= d &lt;= p 
+		--&gt; rate of periodic task = 1/p
+	--&gt; admission control algorithm = scheduler admits new process or rejects it when a process announces its deadline reqs to scheduler
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-Rate monotonic scheduling"></span><strong id="Rate monotonic scheduling">Rate monotonic scheduling</strong>
+</p>
+<pre>
+	--&gt; rate monotonic algo = use static priority policy + preemption 
+		1. new higher priority process comes in, current low priority process is preempted
+		2. when new periodic task enters, gets priority inverse of its period 
+			--&gt; higher priority = need more CPU time 
+	--&gt; worse case CPU utilization: N(2^(1/N) - 1)
+		--&gt; N = num processes to be scheduled 
+		--&gt; 100% to 69% CPU utilization (1 process)
+		--&gt; 83% utilization (2 process) 
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-Earliest deadline first scheduling (EDF)"></span><strong id="Earliest deadline first scheduling (EDF)">Earliest deadline first scheduling (EDF)</strong>
+</p>
+<pre>
+	--&gt; dynamicall schedule priotities based on deadline
+	--&gt; closer deadline = hiher prioity 
+	--&gt; when process runnable, has to announce deadline to OS 
+	--&gt; doesn't require processes be periodic + each process doesn't get same CPU time per burst 
+	--&gt; pro: theoretically, very good, but in practice, big cost in cotext switching + interrupts
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-Proportional share scheduling"></span><strong id="Proportional share scheduling">Proportional share scheduling</strong>
+</p>
+<pre>
+	--&gt; allocate T sahres among all apps
+	--&gt; 1 app can get N sahres of time, so app gets N/T of totla processor time 
+	--&gt; need to work with admission control policy 
+</pre>
+<p>
+<span id="5.6 Real-time CPU scheduling-POSIX real time scheduling"></span><strong id="POSIX real time scheduling">POSIX real time scheduling</strong>
+</p>
+<pre>
+	--&gt; 2 scheduling classes for real time threads:
+		--&gt; FIFO (queue, until CPU blocks)
+</pre>
+
+
+<div id="5.7 OS examples"><h3 id="5.7 OS examples" class="header"><a href="#5.7 OS examples">5.7 OS examples</a></h3></div>
+<p>
+<span id="5.7 OS examples-Linux"></span><strong id="Linux">Linux</strong>
+</p>
+<pre>
+	--&gt; everything based on scheduling classes
+		--&gt; every class has specific priority + can use diff scheduling algos 
+		--&gt; use nice value to assign relative priority 
+	--&gt; Linux also uses POSIX scheduling, load balancing while being NUMA aware, 
+</pre>
+<p>
+<em>Skipped Windows + Solaris</em>
+</p>
+
+<div id="5.8 Algorithm evaluation"><h3 id="5.8 Algorithm evaluation" class="header"><a href="#5.8 Algorithm evaluation">5.8 Algorithm evaluation</a></h3></div>
+<pre>
+	--&gt; how to choose scheduling algo?
+	--&gt; criteria for selecting algo: CPU use, response time, throughput (find relative importance)
+</pre>
+<p>
+<span id="5.8 Algorithm evaluation-Deterministic modeling"></span><strong id="Deterministic modeling">Deterministic modeling</strong>
+</p>
+<pre>
+	--&gt; analytic evluation = use given algo + sys workload to create formula/num 
+		--&gt; deterministic modeling = type of analytic (takes predetermined workload + define performance of each algo)
+			--&gt; fast and simple
+			--&gt; exact nums to compare algos 
+			--&gt; can find trends
+</pre>
+<p>
+<span id="5.8 Algorithm evaluation-Queuing models"></span><strong id="Queuing models">Queuing models</strong>
+</p>
+<pre>
+	--&gt; difficult to use deterministic modeling on real systems bc there are diff processes runnin everyday
+	--&gt; but, can find distribution of CPU + I/O bursts (measured or approximated) 
+		--&gt; queuing network analysis: if know arrival rates + service rates, can find utilizations, avg queue length, wait time, etc
+	--&gt; Littles formula:
+		n = gamma x W
+		--&gt; n = avg long term queue length
+		--&gt; gamma = avg arrival rate of new processes in queue
+		--&gt; W = time process waits 
+	--&gt; limits: cant handle many classes of algos + ard to define arrival/service distributions (many assumptions)
+</pre>
+<p>
+<span id="5.8 Algorithm evaluation-Simulations"></span><strong id="Simulations">Simulations</strong>
+</p>
+<pre>
+	--&gt; need a model of computer sys to run a simulation w/ a clock 
+	--&gt; gen data from: random num generator, CPU burst times, arrivals, departures 
+		--&gt; can be inaccurate
+		--&gt; so use trace files (monitor use system)
+	--&gt; con: really expensive + lots of computer time
+</pre>
+<p>
+<span id="5.8 Algorithm evaluation-Implementation"></span><strong id="Implementation">Implementation</strong>
+</p>
+<pre>
+	--&gt; only entirely accurate way to evaluate scheduling algo = code + put in OS
+	--&gt; con:
+		--&gt; large cost on OS + need to do lots of regression testing (scheduler hasnt changed things for the worse)
+		--&gt; needs to adapt to a constantly changing sys environment (fine tuned for specific apps)
+		
+</pre>
+
+</body>
+</html>

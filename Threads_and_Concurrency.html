@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Threads_and_Concurrency</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="4.1 Overview"><h3 id="4.1 Overview" class="header"><a href="#4.1 Overview">4.1 Overview</a></h3></div>
+<p>
+<span id="4.1 Overview-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; most OSes have multiple threads of control for processes, need parallelism
+	--&gt; thread = basic unit of CPU use = thread ID, program counter (PC), register set, stack
+		--&gt; threads for same process share: code, data, OS resources (files/signals) 
+</pre>
+<p>
+<span id="4.1 Overview-Motivation"></span><strong id="Motivation">Motivation</strong>
+</p>
+<pre>
+	--&gt; most apps are multithreaded 
+	--&gt; if app needs to do many similar tasks, useful for OS to use threads 
+		--&gt; b4 threads, had to create new processes for each similar task (time + resource use bad)
+		--&gt; better to use 1 process with multiple threads for each task
+	--&gt; most kernels multithreaded
+		--&gt; during boot time, several threads created (mem manage, device manage, interrupt handling)
+</pre>
+<p>
+<span id="4.1 Overview-Benefits"></span><strong id="Benefits">Benefits</strong>
+</p>
+<pre>
+	1. responsiveness: app can keep running if 1 thread blocked, good for UI
+	2. resource sharing: threads can be default share resources, unlike processes (explicitly done by programmer)
+	3. economy: allocating mem/resources for proccesses costly, better to context switch threads
+	4. scalability: easier to manage in multiprocessor architecture 
+		--&gt; single-threaded proccess can only run on 1 processor (threads can be split up among cores)
+</pre>
+
+
+<div id="4.2 Multicore Programming"><h3 id="4.2 Multicore Programming" class="header"><a href="#4.2 Multicore Programming">4.2 Multicore Programming</a></h3></div>
+<pre>
+	--&gt; multicore = multiple computing cores one 1 processing cip, OS thinks each core is 1 CPU
+	--&gt; multithreaded = easier to use multicore sys 
+	--&gt; concurrency vs parallelism
+		--&gt; concurrency = all tasks can make progress in a system 
+		--&gt; parallelism = can perform 1+ task simultaneously 
+</pre>
+<p>
+<span id="4.2 Multicore Programming-Programming challenges"></span><strong id="Programming challenges">Programming challenges</strong>
+</p>
+<pre>
+	--&gt; OS devs need to write scheduling algos w/ multiple processing cores so parallel execution
+	1. identifying tasks: which apps can be divided into tasks to runk in parallel
+	2. balance: tasks identified need to do equal work value (dont want whole core for useless task)
+	3. data splitting: data data needs to split like tasks
+	4. data dependency: make sure divided tasks dont have data dependencies
+	5. testing and debugging: hard to debug concurrent programs
+	--&gt; ahmdahl's law: relationship b/w more cores + increased performance
+		--&gt; speedup &lt;= 1 / (S + (1-S) / N) 
+		--&gt; S = portion of app that must be performed serially on sys
+		--&gt; N = num processing cores
+</pre>
+<p>
+<span id="4.2 Multicore Programming-Types of Parallelism"></span><strong id="Types of Parallelism">Types of Parallelism</strong>
+</p>
+<pre>
+	--&gt; data parallelism = distribute susbsets of same data across multiple cores
+	--&gt; task parallelism = distribute tasks (threads) across multple cores
+		--&gt; diff threads can operate on same data 
+</pre>
+
+
+<div id="4.3 Multithreading models"><h3 id="4.3 Multithreading models" class="header"><a href="#4.3 Multithreading models">4.3 Multithreading models</a></h3></div>
+<pre>
+	--&gt; can have user threads of kernel threads 
+		--&gt; user threads supported above kernel, don't need kernel help 
+		--&gt; kernel threads managed directly by OS
+</pre>
+<p>
+<span id="4.3 Multithreading models-Many to one model"></span><strong id="Many to one model">Many to one model</strong>
+</p>
+<pre>
+	--&gt; many user threads to one kernel thread 
+	--&gt; entire process blocks if thread makes blocking syscall 
+</pre>
+<p>
+<span id="4.3 Multithreading models-One to one model"></span><strong id="One to one model">One to one model</strong>
+</p>
+<pre>
+	--&gt; each user thread gets 1 kernel thread 
+	--&gt; more concurrency than many to one, but needs many kernel threads and US resources 
+	--&gt; linux + windows
+</pre>
+<p>
+<span id="4.3 Multithreading models-Many to many model"></span><strong id="Many to many model">Many to many model</strong>
+</p>
+<pre>
+	--&gt; multiplex many user thread to &lt;= kernel threads
+	--&gt; num kernel depends on machine or app (app gets more threads if sys has more cores)
+	--&gt; pro: appdev creates as many threads as it wants + threads can run in parallel 
+		--&gt; two level model: many to many BUT user can be bound to kernel thread
+	--&gt; con: hard to implement, not limited by small num kernel threads now bc bigger cores, most OSes use one to one
+</pre>
+
+
+<div id="4.4 Thread Libraries"><h3 id="4.4 Thread Libraries" class="header"><a href="#4.4 Thread Libraries">4.4 Thread Libraries</a></h3></div>
+<pre>
+	--&gt; thread library = API to create/manage threads
+	--&gt; how to implement:
+		1. make lib in user space (no kernel support, no syscalls)
+		2. kernel level lib supported by OS (syscalls)
+	--&gt; libs used today:
+		1. POSIX Pthreads 
+			--&gt; user or kernel level
+		2. windows 
+			--&gt; kernel level
+		3. java 
+			--&gt; create threads directly in java programs 
+	--&gt; asynch threading: parent creates child, parent + child executes same time, no data sharing
+	--&gt; sync threading: parent creates 1+ child, parent waits for child to finish to exec, data sharing
+</pre>
+<p>
+<span id="4.4 Thread Libraries-Pthreads"></span><strong id="Pthreads">Pthreads</strong>
+</p>
+<pre>
+	--&gt; Pthread = POSIX API for managing threads (specification for Linux/unix)
+</pre>
+<p>
+<span id="4.4 Thread Libraries-Windows threads"></span><strong id="Windows threads">Windows threads</strong>
+</p>
+<pre>
+	--&gt; similar to Pthreads, start with parent + create summation child
+</pre>
+
+
+<div id="4.5 Implicit Threading"><h3 id="4.5 Implicit Threading" class="header"><a href="#4.5 Implicit Threading">4.5 Implicit Threading</a></h3></div>
+<pre>
+	--&gt; problem: apps have too many threads + hard to manage
+	--&gt; solution: dont make devs handle threads, tell libraries + compiliers to do it (implicit threading)
+		--&gt; still need devs to find "tasks" that cna run in parallel (task usually = function, which lib will assign to thread)
+</pre>
+<p>
+<span id="4.5 Implicit Threading-Thread Pools"></span><strong id="Thread Pools">Thread Pools</strong>
+</p>
+<pre>
+	--&gt; problem: creating a new thread everytime have new request = time cost + unlimited threads take CPU time/mem
+	--&gt; solution: thread pool = creat initial threads as buffer to wait for work, requests are sent to the pool + avail thread takes the job
+	--&gt; pro:
+		1. quicker
+		2. limits num threads created
+		3. task to be performed vs creating task separated 
+</pre>
+<p>
+<span id="4.5 Implicit Threading-Fork Join"></span><strong id="Fork Join">Fork Join</strong>
+</p>
+<pre>
+	--&gt; main parent creates forks of 1+ child thread and waits for children to terminate + join parent
+	--&gt; sync + explicit thread creation (also works well for implicit! create parallel tasks instead of threads during fork stage)
+	
+</pre>
+<p>
+<span id="4.5 Implicit Threading-OpenMP"></span><strong id="OpenMP">OpenMP</strong>
+</p>
+<pre>
+	--&gt; API/directives that supports parallel programming when in shared mem
+	--&gt; parallel regions = blocks of code that can run in parallel, and devs have to insert compiler directions into their code at parallel regions
+	--&gt; e.g. #pragma omp parallel
+		--&gt; tells OpenMP to create as many threads as processing cores on sys 
+</pre>
+<p>
+<span id="4.5 Implicit Threading-Grand Central Dispatch"></span><strong id="Grand Central Dispatch">Grand Central Dispatch</strong>
+</p>
+<pre>
+	--&gt; macOS/iOS run time lib + API + language extensions to help dev run code in parallel
+	--&gt; manages threading details like openmp
+	--&gt; tasks on FIFO queue + task must be completed when removed from queue b4 another task can be removed
+		--&gt; every process has own queue (main queue) but can have queue witin queue
+</pre>
+<p>
+<span id="4.5 Implicit Threading-Intel thread building blocks (TBB)"></span><strong id="Intel thread building blocks (TBB)">Intel thread building blocks (TBB)</strong>
+</p>
+<pre>
+	--&gt; template lib to design parallel apps in cpp
+	--&gt; dev specifies tasks to run in parallel + TBB maps tasks onto underlying threads
+		--&gt; tasks scheduler is load balancing + cache aware --&gt; knows how to give precedenec
+</pre>
+
+
+<div id="4.6 Threading Issues"><h3 id="4.6 Threading Issues" class="header"><a href="#4.6 Threading Issues">4.6 Threading Issues</a></h3></div>
+<p>
+<span id="4.6 Threading Issues-fork() and exec() syscalls"></span><strong id="fork() and exec() syscalls">fork() and exec() syscalls</strong>
+</p>
+<pre>
+	--&gt; problem: 1 thread calls fork() --&gt; does new process duplicate all threads, or is new process single threaded (UNIX has 2 versions)
+		--&gt; thread invokes exec(), program specified in params will replace whole process + threads
+</pre>
+<p>
+<span id="4.6 Threading Issues-Signal Handling"></span><strong id="Signal Handling">Signal Handling</strong>
+</p>
+<pre>
+	--&gt; signal = tell process event happened (unix)
+	--&gt; sync or async
+		1. signal gen by event
+		2. signal deliver to process
+		3. signal handled by process 
+	--&gt; e.g. illegal mem access + 0 div = signal 
+	--&gt; signal handling:
+		1. default signal handler (kernel)
+		2. user defined signal handler (override kernel)
+	--&gt; easy to manage in single threaded, but hard in multithreaded
+		--&gt; who to send signal to?
+		1. thread that is relevant to signal
+		2. every thread
+		3. certain threads
+		4. 1 thread recieves for all 
+		--&gt; depends on type of signal
+</pre>
+<p>
+<span id="4.6 Threading Issues-Thread cancellation"></span><strong id="Thread cancellation">Thread cancellation</strong>
+</p>
+<pre>
+	--&gt; thread cancellation = ending thread (aka target thread) b4 it finishes 
+	--&gt; problem: other threads accidentally deleted 
+		1. asyn cancellation: one thread ends the target thread 
+			--&gt; OS collects some resources from cancelled thread but not all
+		2. deferred cancellation: target threads checks periodically should cancel, then ends itself 
+</pre>
+<p>
+<span id="4.6 Threading Issues-Thread local storage (TLS)"></span><strong id="Thread local storage (TLS)">Thread local storage (TLS)</strong>
+</p>
+<pre>
+	--&gt; thread local storage = each thread's personal copy of data 
+	--&gt; diff from local vars (only visible for 1 function invocation) vs TLS (visible for all func invokations, like static data)
+	--&gt; supported by most thread libs + compilers
+</pre>
+<p>
+<span id="4.6 Threading Issues-Scheduler activations"></span><strong id="Scheduler activations">Scheduler activations</strong>
+</p>
+<pre>
+	--&gt; problem: com b/w kernel + thread library 
+	--&gt; solution: light weight processor (LWP) = connecting structure b/w user/kernel threads
+		--&gt; each attached to kernel thread, if kernel thread blocks LWP blocks + user thread
+		--&gt; app can request many LWPs, if only 1 processor and 1 thread at a time, use 1 LWP
+	--&gt; scheduler activation = scheme for com
+		--&gt; kernel gives app set of LWPs + app can schdule user threads onto virtual processor (LWP)
+			--&gt; upcall = kernel tells user thread abt events (e.g. app thread about to block)
+</pre>
+
+
+<div id="4.7 OS examples"><h3 id="4.7 OS examples" class="header"><a href="#4.7 OS examples">4.7 OS examples</a></h3></div>
+<p>
+<span id="4.7 OS examples-Windows threads"></span><strong id="Windows threads">Windows threads</strong>
+</p>
+<pre>
+	--&gt; thread ID, reg set for processor state, PC, user stack, kernel stack, private storage area
+	--&gt; context = reg set + stacks + private storage
+</pre>
+<p>
+<span id="4.7 OS examples-Linux Thread"></span><strong id="Linux Thread">Linux Thread</strong>
+</p>
+<pre>
+	--&gt; linux doesn't separate process + threads (use tasks instead)
+	--&gt; use fork() + tasks
+		--&gt; when fork() invoked, new task created + copy of all associated data structures
+		--&gt; when clone() invoked, new tasks created + point to data structures (no copy)
+</pre>
+
+</body>
+</html>

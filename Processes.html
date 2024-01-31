@@ -355,8 +355,66 @@ text
 <pre>
 	--&gt; usually modularity + subsystems (many operating environs)
 	--&gt; advanced local procedure call (APLC) = communicate for 2 processes in same machine
-	--&gt; connection ports + communication ports
-	--&gt; 
+	--&gt; connection ports + communication ports 
+</pre>
+<p>
+<span id="3.7 Examples of IPC systems-Pipes"></span><strong id="Pipes">Pipes</strong>
+</p>
+<pre>
+	--&gt; pipe = conduit for 2 processes to com, early IPC mech, special file type 
+	--&gt; issues:
+		1. bidirectional or uni?
+		2. if bi: half duplex (data travel 1 way at a time) or full duplex?
+		3. need relationship b/w processes? (parent/child e.g.)
+		4. com over network or need to be in same comp
+	--&gt; ordinary pipes = com b/w producers and consumer
+		--&gt; write end and read end
+		--&gt; unidirectional
+		--&gt; can't be used outside process that created it 
+		--&gt; child inherits pipe from parents
+		--&gt; "anonymous pipes" on windows 
+		--&gt; gone once 2 processes done talking
+</pre>
+<p>
+<span id="3.7 Examples of IPC systems-Named pipes"></span><strong id="Named pipes">Named pipes</strong>
+</p>
+<pre>
+	--&gt; bidirectional, no relationship, many processes used
+	--&gt; FIFOs in UNIX
+	--&gt; exist til deleted from filesys
+</pre>
+
+
+<div id="3.8 Communication in client-server systems"><h3 id="3.8 Communication in client-server systems" class="header"><a href="#3.8 Communication in client-server systems">3.8 Communication in client-server systems</a></h3></div>
+<p>
+<span id="3.8 Communication in client-server systems-Sockets"></span><strong id="Sockets">Sockets</strong>
+</p>
+<pre>
+	--&gt; socket = endpoint for com
+	--&gt; com over network = each process needs a socket 
+	--&gt; socket has IP address + port num
+	--&gt; server waits for client request by listenin on port, then accept connection from client socket to fulfil request
+	--&gt; servers w/ specific purposes have well-known ports (e.g. SSH server listens to port 22)
+	--&gt; when client makes request for connection, assigned port by host comp, num &gt;1024
+	--&gt; TCP = connection oriented socket
+	--&gt; UDP = connectionless socket 
+	--&gt; sockets = low level com
+</pre>
+<p>
+<span id="3.8 Communication in client-server systems-Remote Procedure Calls"></span><strong id="Remote Procedure Calls">Remote Procedure Calls</strong>
+</p>
+<pre>
+	--&gt; common form of remot service, similar to IPC
+	--&gt; used when processes on diff sys + use messages 
+	--&gt; well structured data (unlike IPC)
+	--&gt; port = num included at start of message packet
+	--&gt; a systems has 1 network address, but has many ports within address to show that the sys supports many network services
+	--&gt; RPCs can fail + be duplicated b/c of network errors 
+		--&gt; need to make sure messages acted on ONLY ONCE	
+	--&gt; problem: server/client com, neither sys knows port num of the other
+		--&gt; solution: 1. predetermine binding info (need fixed ports for each RPC)
+						  2. dynamic binding (need matchmaker daemon from OS)
+	--&gt; RPC good for distributed file sys --&gt; use set of RPC daemons + clinets
 </pre>
 
 </body>

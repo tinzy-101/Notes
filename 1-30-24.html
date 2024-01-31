@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>1-30-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Special Programming Project"><h4 id="Special Programming Project" class="header"><a href="#Special Programming Project">Special Programming Project</a></h4></div>
+<pre>
+	it exists! check zip file
+	goal: create simple OS to check efficiency dependent on different parameters
+</pre>
+
+<p>
+Sample multilevel FBQ on test!!
+</p>
+
+<div id="Chapter 5: CPU scheduling"><h3 id="Chapter 5: CPU scheduling" class="header"><a href="#Chapter 5: CPU scheduling">Chapter 5: CPU scheduling</a></h3></div>
+<pre>
+	goal: pick most effective use of CPU, can't do anything without it
+	--&gt; need multiprogramming to get max CPU use 
+	--&gt; CPU processes are CPU bound or I/O bound (burst of CPU then I/O, cycle)
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-CPU Scheduler"></span><strong id="CPU Scheduler">CPU Scheduler</strong>
+</p>
+<pre>
+	--&gt; short term scheduler = dispatcer
+	--&gt; queue can be ordered + different scheduling decisions
+		1. process running to waiting (blocked)
+		2. running to ready (timed out)
+		3. waiting to ready
+		4. terminate
+	--&gt; preemptive vs nonpreemptive
+		1 &amp; 4 nonpreemptive: give process processor until its finished (can handle interrupts, but always goes back to o.g. process)
+		2 &amp; 3 (and all other scheduling) preemptive: timeout, higher priority process enters ready queue,  
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Dispatcher"></span><strong id="Dispatcher">Dispatcher</strong>
+</p>
+<pre>
+	-&gt; dispatcher gives control of CPU to process selected
+		1. switch context
+		2. switch to user mode
+		3. jump to right place in user program to restart
+	--&gt; dispatcher latency: takes time to stop 1 process and start another (not always in this order tho)
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling Criteria"></span><strong id="Scheduling Criteria">Scheduling Criteria</strong>
+</p>
+<pre>
+	1. CPU as busy as possible --&gt; max 
+	2. throughput as high as possible (based on num processes completed) --&gt; max
+	3. turnaround = time to exec 1 specific process --&gt; min
+	4. wait time = amt time process in ready queue (NOT blocked state, when process just waiting) --&gt; min
+	5. response time = amt time request submitted to first response produced --&gt; min
+</pre>
+
+<div id="Chapter 5: CPU scheduling-Scheduling mechs"><h4 id="Scheduling mechs" class="header"><a href="#Chapter 5: CPU scheduling-Scheduling mechs">Scheduling mechs</a></h4></div>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-First come first served (FCFS)"></span><strong id="First come first served (FCFS)">First come first served (FCFS)</strong>
+</p>
+<pre>
+	e.g. P1 needs 24 burst time, P2 needs 3, P3 needs 3
+	**NONPREEMPTIEVE!! --&gt; no time quantum that will bump process from CPU resources
+		wait time:
+			--&gt; P1 = 0, P2 = 24, P3 = 27
+			--&gt; average waiting time = (0 + 24 + 27) / 3 **ON TEST**
+	--&gt; what if change order:
+		P2, P3, P1 --&gt; wait time: P1 = 6, P2 = 3, P3 = 3 (AVG wait time = 3)
+		--&gt; convoy effect: short process behind long process 
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Shortest job first (SJF)"></span><strong id="Shortest job first (SJF)">Shortest job first (SJF)</strong>
+</p>
+<pre>
+	--&gt; associate each process with length of next CPU burst
+	--&gt; pro: minimum avg wait time for process set 
+	--&gt; con: hard to know length next CPU address 
+				--&gt; could ask user (but how would they know??) 
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-You cannot predict runtime characteristics of any process!!"></span><strong id="You cannot predict runtime characteristics of any process!!">You cannot predict runtime characteristics of any process!!</strong> 
+</p>
+<pre>
+	--&gt; e.g. SJF: P1 = 6 burst time, P2 = 8, P3 = 7, P4 = 3
+		--&gt; avg wait time = 7 
+	--&gt; nonpreemptive!
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Determining Length of Next CPU Burst"></span><strong id="Determining Length of Next CPU Burst">Determining Length of Next CPU Burst</strong>
+</p>
+<pre>
+	--&gt; can only estimate length, based on exponential averaging and previous CPU bursts
+	--&gt; takes long time for 
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Priority Scheduling"></span><strong id="Priority Scheduling">Priority Scheduling</strong>
+</p>
+<pre>
+	--&gt; each process gets priority num
+	--&gt; CPU gets process with highest priority (usually, smaller num = higher priority, depends on OS)
+	--&gt; SJF is a specific type of priority scheduling (priority if inverse of prediced next CPU burst time)
+	--&gt; problem: starvation
+		--&gt; some low priority processes may never execute 
+		solution: age the process, overtime in ready state, boost the priority
+			--&gt; if time out, cna choose whether to go back to o.g. priority or go to new priority
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Round Robin"></span><strong id="Round Robin">Round Robin</strong>
+</p>
+<pre>
+	--&gt; everyone uses it for something
+	--&gt; time quantum for each process, slice of CPU time (10-100ms)
+	--&gt; when time is up, process is preempted + added to end of ready queue
+	--&gt; (n-1)q max time units for process wait
+		--&gt; n = num processes
+		--&gt; q = time quantum
+	--&gt; timer interrupts every quantum to schedule next process
+	--&gt; performance:
+		1. queue large --&gt; FIFO
+		2. q small --&gt; q has to be large compared to context switch, or else too high overhead (context switching too much)
+	--&gt; e.g. RR w/ time quantum=4: P1 = 24 burst time, P2 = 3, P3 = 3
+		--&gt; P1 --&gt; P2 --&gt; P3 --&gt; P1 --&gt; P1 (etc until P1 finished) 
+		--&gt; don't need context switch or change to ready list when get to continuously running P1, just stay in execute state (dispatcher will look ahead and see nothing in ready queue)
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Multilevel Queue --&gt; ON TEST"></span><strong id="Multilevel Queue --&gt; ON TEST">Multilevel Queue --&gt; ON TEST</strong>
+</p>
+<pre>
+	--&gt; ready queue can be partitioned into separate queues:
+		--&gt; foreground (interactive)
+		--&gt; background (batch)
+	--&gt; process permanently in given queue
+	--&gt; each queue has own scheduling algo
+		--&gt; foreground (RR), background (FCFS) 
+	--&gt; need to schedule b/w the queues 
+</pre>
+<p>
+<span id="Chapter 5: CPU scheduling-Scheduling mechs-Multilevel Feedback Queue --&gt; ON TEST"></span><strong id="Multilevel Feedback Queue --&gt; ON TEST">Multilevel Feedback Queue --&gt; ON TEST</strong>
+</p>
+<pre>
+	--&gt; processes can move b/w various queues + implement aging
+	--&gt; defined by parameters:
+		1. num queues
+		2. scheduling algo per queue
+		3. method to decide to upgrade/demote process from one queue to another
+		4. method to decide which queue process enters when it needs the CPU
+</pre>
+
+<div id="Chapter 5: CPU scheduling-Example: multilevel feedback queue"><h4 id="Example: multilevel feedback queue" class="header"><a href="#Chapter 5: CPU scheduling-Example: multilevel feedback queue">Example: multilevel feedback queue</a></h4></div>
+<pre>
+		--&gt; queues go left to right 
+		--&gt; L1 - L3 = differet level queues
+			--&gt; L1 = 2 units timeout quantum (FCFS)
+			--&gt; L2 = 3 quantum timeout (FCFS
+			--&gt; L3 = 4 units
+		--&gt; no CPU units registered during process transition (ignore OS) 
+		--&gt; processes need CPU units: A = 4, B = 2, C = 1, D = 7
+			1. process A enters running state (from L1 ready queue to processor) 
+			2. D is at level 1, first in line
+			3. B level 2, first in line
+			4. C level 3, first in line
+			5. proess E enters level 1 after 7 CPU units, needing 1 unit 
+		--&gt; when process times out of unit, it gets placed on next lower queue in ready list
+			--&gt; e.g. A times out after 2 units, go to level 2 (FCFS)
+				--&gt; if A times out level 2, go to end of level 3 (Round robin) 
+				--&gt; A will round robin until terminate or request service
+					--&gt; if request service, go back to level 1 and start whole mechanism again
+		--&gt; handles both I/o bound and CPu bound processes well 
+		Time 1: constant
+		Time 2: constant
+		Time 3: A times out, D bumped into processor, A bumped behind B in L2
+		Time 4: Same, D needs 4, and it gets 2 from L1 (2 is cap on L1)
+		Time 5: D times out, gets bumped to L2, B starts exec
+		Time 6: same, L3 give u 3 units, but B only needs 2 so this is its last time in chart
+		Time 7: B terminates and leaves, A bumps in and executes for 1 time 
+		Time 8: E enters L1 and preempts A, gets processor, A is bumped back to first in line at L2
+				--&gt; write A2 instead of A, bc A was preempted! show that A only gets 2 more time slots out of the 3 time slots avail on L2 (but remember A only needs 1 more! alrd executed 3 times)
+		Time 9: E terminates (only needs 1 unit), A2 gets CPU, D moves up in queue, C cst
+		Time 10: A2 terminates, D moved onto queue, still has 3 possible units (but needs 5)
+		Time 11: same, D still gets 2 more units
+		Time 12: same, D still gets 2 more units
+		Time 13: D times out, gets bumped to L3, C gets the CPU now
+		Time 14: C only needed 1 time quantum, so terminates, and D moves back in
+</pre>
+
+<div id="Chapter 5 cont'd"><h3 id="Chapter 5 cont'd" class="header"><a href="#Chapter 5 cont'd">Chapter 5 cont'd</a></h3></div>
+<p>
+<span id="Chapter 5 cont'd-Thread Scheduling"></span><strong id="Thread Scheduling">Thread Scheduling</strong>
+</p>
+<pre>
+	--&gt; only 3 states: ready, blocked, 
+</pre>
+<p>
+<span id="Chapter 5 cont'd-Multiple Processor scheduling - load balancing"></span><strong id="Multiple Processor scheduling - load balancing">Multiple Processor scheduling - load balancing</strong>
+</p>
+<pre>
+	--&gt; make sure not 1 process doing all the work
+</pre>
+<p>
+<span id="Chapter 5 cont'd-Windows Priorities"></span><strong id="Windows Priorities">Windows Priorities</strong>
+</p>
+<pre>
+	--&gt; 31 queues in windows, within queues are 6 priorities 
+</pre>
+
+</body>
+</html>
