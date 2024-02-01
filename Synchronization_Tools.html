@@ -10,6 +10,82 @@
 <body>
 
 <div id="6.1 Background"><h3 id="6.1 Background" class="header"><a href="#6.1 Background">6.1 Background</a></h3></div>
+<p>
+<span id="6.1 Background-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; cooperating process = can affect + be affected by other processes in system 
+		--&gt; can share address space (code+data) or only share data (mem sharing / message pass)
+	--&gt; if 2 processes using same mem, can mean inconsistencies 
+</pre>
+<p>
+<span id="6.1 Background-Background"></span><strong id="Background">Background</strong>
+</p>
+<pre>
+	--&gt; problem: bc of context switching, processes can be cut off when executing
+		--&gt; concurrent + parallel execution means problems for data integrity
+		--&gt; e.g. bounded buffer to share mem for processes
+			--&gt; o.g. solution: only have BUFFER_SIZE-1 items in the buffer 
+			--&gt; issue: producer and client operating on same mem, and try to change value of variable at the same time 
+			--&gt; race condition = several processes try to manipulate same data same time 
+			--&gt; solution: process synchronization + coordination among cooperating processes 
+</pre>
+
+
+<div id="6.2 The critical section problem"><h3 id="6.2 The critical section problem" class="header"><a href="#6.2 The critical section problem">6.2 The critical section problem</a></h3></div>
+<pre>
+	--&gt; every process in a system has a segment of code = critical selection 
+		--&gt; used to update/access data shared w/ other processes 
+	--&gt; if one process operating in its critical section, other processes can't touch it 
+	--&gt; processes need to request access to enter (entry section + remainder section + exit section in critical section)
+	--&gt; solution to critical selection problem:
+		1. mutual exclusion = no processes can execute in their critical sections if 1 process is
+		2. progress = if no process executing in critical section + some processes want to enter critical sections, then only processes not executing in their remainder sections can be selected to enter their critical section next
+		3. bounded waiting = there is a bound on num times other processes can enter critical sections after process has made a request + request is granted 
+	--&gt; assume every process running at nonzero speed 
+	--&gt; kernel processes especially suceptible to race conditions w/ critical sections in OSes 
+		--&gt; nonpreemptive kernel: only 1 process active in kernel at a time
+		--&gt; preemptive kernel: need to be designed carefully so that no race conditions
+			--&gt; pro: more responsive, b/c less risk that kernel mod process runs a long tim
+						--&gt; good for real time process
+</pre>
+
+
+<div id="6.3 Peterson's Solution"><h3 id="6.3 Peterson's Solution" class="header"><a href="#6.3 Peterson's Solution">6.3 Peterson's Solution</a></h3></div>
+<pre>
+	--&gt; doesn't necessarily work for modern computer sys b/c have reordered instructions, but is a good algorithmic way to tackle crtical section problem
+	--&gt; params: 2 processes that alternate exec b/w their critical and remainder sections, processes share 2 data items, turn variable to let process access critical sec (turn==1 means process 1)
+	--&gt; solution: 
+					1. P1 sets flag1 as true and sets "turn" to value 2
+					2. shows other processes that they can enter critical section (After)
+					3. if 2 processes try to set "turn" var, then 1 will be overwritten 
+	--&gt; why solution correct:
+		1. mutual exclusion
+		2. progress requirement satisfied
+		3. bounded waiting requirement satisfied 
+</pre>
+
+
+<div id="6.4 Hardware support for synchronization"><h3 id="6.4 Hardware support for synchronization" class="header"><a href="#6.4 Hardware support for synchronization">6.4 Hardware support for synchronization</a></h3></div>
+<pre>
+	--&gt; peterson's solution = software based b/v no special support from OS or hardware instructions
+		--&gt; not guaranteed for modern sys, so need other primitive solutions
+</pre>
+<p>
+<span id="6.4 Hardware support for synchronization-Memory Barriers"></span><strong id="Memory Barriers">Memory Barriers</strong>
+</p>
+<pre>
+	--&gt; mem model = how a comp arch determines what mem guarantees it will give to app
+		1. strongly ordered = mod mem on 1 processor, shows all others
+		2. weakly ordered = mod mem on 1 processor, not immediately visible to other processors
+	--&gt; mem barriers = b/c all processors have diff mem model, use these to force mem mods to be vibile to all threads on other processors (works even w/ reordered instructions)
+</pre>
+<p>
+<span id="6.4 Hardware support for synchronization-Hardware instructions"></span><strong id="Hardware instructions">Hardware instructions</strong>
+</p>
+<pre>
+	
+</pre>
 
 </body>
 </html>

@@ -43,7 +43,154 @@
 
 <div id="1.3 Thermal Expansion"><h3 id="1.3 Thermal Expansion" class="header"><a href="#1.3 Thermal Expansion">1.3 Thermal Expansion</a></h3></div>
 <pre>
-	--&gt; as air heated, expands + rises 
+	--&gt; as air heated, expands + rises (same for liquids, gases, and solids)
+	--&gt; increase temp = increase KE = increase avg distance b/w molecules
+	--&gt; linear thermal expansion: dL/dT = alpha * L
+		--&gt; dL/dT = instantaneous change in length per temp 
+		--&gt; L = length
+		--&gt; alpha = coefficient of linear expansion (1/degrees c or 1/kelvin), different for each solid
+</pre>
+<p>
+<span id="1.3 Thermal Expansion-Thermal Expansion in 2 and 3 Dimensions"></span><strong id="Thermal Expansion in 2 and 3 Dimensions">Thermal Expansion in 2 and 3 Dimensions</strong>
+</p>
+<pre>
+	--&gt; things expand proportionally
+		--&gt; delta(A) = 2*alpha*A*delta(T)
+			--&gt; A= area, alpha = coefficient of linear expansion, T = temp 
+		--&gt; delta(V) = beta*V*delta(T)
+			--&gt; beta = coefficient of volume expansion
+	--&gt; generally: increase temp, expand (water opposite)
+</pre>
+<p>
+<span id="1.3 Thermal Expansion-Thermal Stress"></span><strong id="Thermal Stress">Thermal Stress</strong>
+</p>
+<pre>
+	--&gt; thermal stress = stress from temp change 
+	--&gt; engineer things that can flex (steel good)
+	--&gt; 
+</pre>
+
+
+<div id="1.4 Heat transfer, Specific Heat. and Calorimetry"><h3 id="1.4 Heat transfer, Specific Heat. and Calorimetry" class="header"><a href="#1.4 Heat transfer, Specific Heat. and Calorimetry">1.4 Heat transfer, Specific Heat. and Calorimetry</a></h3></div>
+<pre>
+	--&gt; heat = energy transfer due to temp difference + changes temp of an object
+	--&gt; internal energy can be increased/decrease by heat transfer
+</pre>
+<p>
+<span id="1.4 Heat transfer, Specific Heat. and Calorimetry-Internal Energy and Heat"></span><strong id="Internal Energy and Heat">Internal Energy and Heat</strong>
+</p>
+<pre>
+	--&gt; thermal system has internal energy = sum of microscopic energies of system
+	--&gt; heat unit = J or cal (amt to change temp of 1.00 gram of water by 1.00 degree C)
+</pre>
+<p>
+<span id="1.4 Heat transfer, Specific Heat. and Calorimetry-Mechanical Equivalent of Heat"></span><strong id="Mechanical Equivalent of Heat">Mechanical Equivalent of Heat</strong>
+</p>
+<pre>
+	--&gt; can also change temp by doing work (transfer heat in/out of sys) 
+	--&gt; 1.000 kcal = 4186 J
+	--&gt; sys has well-defined internal nrg, but can't say it has heat/work content 
+		--&gt; heat and work not state variables 
+	--&gt; increase internal nrg doesn't necessarily mean increase temp
+</pre>
+<p>
+<span id="1.4 Heat transfer, Specific Heat. and Calorimetry-Temperature Change and Heat Capacity"></span><strong id="Temperature Change and Heat Capacity">Temperature Change and Heat Capacity</strong>
+</p>
+<pre>
+	--&gt; heat transfer directly proportional to change in temp + mas of sys 
+	--&gt; Q = m*c*delta(T)
+	--&gt; need to measure specific heat, can't approximate
+	--&gt; calorimeter = container that prevents heat transfer
+		--&gt; calorimetry = use calorimeter to make measurements 
+		--&gt; calorimetry problem = problem where objects are thermally isolated from surroundings
+			--&gt; Q_cold + Q_hot = 0!!!
+</pre>
+
+
+<div id="1.5 Phase Changes"><h3 id="1.5 Phase Changes" class="header"><a href="#1.5 Phase Changes">1.5 Phase Changes</a></h3></div>
+<pre>
+	--&gt; high pressure raises melting + boiling pt
+</pre>
+<p>
+<span id="1.5 Phase Changes-Phase Diagrams"></span><strong id="Phase Diagrams">Phase Diagrams</strong>
+</p>
+<pre>
+	--&gt; phase depends on temp and pressure 
+	--&gt; boiling point curve ends at critical point = above where gas and liquid stages same (supercritical fluid)
+	--&gt; pressures below triple point = no liquid, only gas or solid 
+</pre>
+<p>
+<span id="1.5 Phase Changes-Equilibrium"></span><strong id="Equilibrium">Equilibrium</strong>
+</p>
+<pre>
+	--&gt; melting temp = solid and liquid phases in equilibrium
+	--&gt; vapor pressure equilibrium 
+		--&gt; if VP of liquid &gt; total ambient pressure, liquid evaporates (boils)
+		--&gt; boiling point of liquid at given pressure = temp when VP = ambient pressure
+</pre>
+<p>
+<span id="1.5 Phase Changes-Phase Change and Latent Heat"></span><strong id="Phase Change and Latent Heat">Phase Change and Latent Heat</strong>
+</p>
+<pre>
+	--&gt; add heat during melting and boiling, but temp doesn't change bc need energy to melt solid (break bonds)
+	--&gt; heat of fusion = energy req to change solid to liquid (or released)
+		--&gt; Q = m*L_f --&gt; L_f (latent heat fusion, cst)
+	--&gt; heat of vaporization = nrg for liquid to vapor
+		--&gt; Q = m*L_v --&gt; L_v (latent heat of vaporization, cst)
+	--&gt; phase changes can help stabilize temperatures when they're not near melting and boiling points 
+</pre>
+
+<div id="1.6 Mechanisms of Heat Transfer"><h3 id="1.6 Mechanisms of Heat Transfer" class="header"><a href="#1.6 Mechanisms of Heat Transfer">1.6 Mechanisms of Heat Transfer</a></h3></div>
+<pre>
+	--&gt; conduction = heat transfer through physical contact 
+	--&gt; convection = heat transfer throuh macroscopic fluid movement
+	--&gt; radiation = microwaves, IR, visible, or other EMR emitted/absorbed 
+</pre>
+<p>
+<span id="1.6 Mechanisms of Heat Transfer-Conduction"></span><strong id="Conduction">Conduction</strong>
+</p>
+<pre>
+	--&gt; 2 bodies, 1 hot and 1 cold
+	--&gt; hot has higher KE, so when they collide, cold recieves some of its KE and hot gives some away 
+	--&gt; change in temp = temp hot - temp codl 
+		--&gt; +heat transfer proportional to cross sectional area 
+		--&gt; +material that heat is transferring through affects conduction rate
+	--&gt; rate of conductive heat transfer: P = dQ/dt - [k(A(T_h - T_c)]/d
+		--&gt; P = power / rate of heat transfer (watts, Kcal per sec)
+		--&gt; A = surface area
+		--&gt; d = thickness 
+		--&gt; k = thermal conductivity of the material heat travelling thru 
+	--&gt; for insulation: small k, big d = good
+		--&gt; d/k = R factor = large for good insulator 
+		--&gt; rate of conductive heat transfer inversely proportional to R 
+	--&gt; conduction cased by random motion of atoms + molecules 
+		--&gt; ineffecive for macroscopic distances + short times 
+</pre>
+<p>
+<span id="1.6 Mechanisms of Heat Transfer-Convection"></span><strong id="Convection">Convection</strong>
+</p>
+<pre>
+	--&gt; convection = for large scale matter flow
+		--&gt; forced convection = flow driven by fans/pumps 
+		--&gt; free/natural convection = flow driven by buoyant forces (hot rise, cold sink)
+			--&gt; ocean, atmospheric ciculations
+	--&gt; more complicated than conduction
+		--&gt; convection rate about proportional to temp difference 
+	--&gt; rate of convection determined by amount of free air space 
+	--&gt; usually faster than conduction
+</pre>
+<p>
+<span id="1.6 Mechanisms of Heat Transfer-Radiation"></span><strong id="Radiation">Radiation</strong>
+</p>
+<pre>
+	--&gt; don't need medium for EM waves to propogate 
+	--&gt; energy depends on wavelength (shorter wavelength/higher frequency = higher nrg)
+	--&gt; rate of ehat transfer depends on color:
+		--&gt; black most effective b/c absorbs better (ideal absorber)
+	--&gt; rate of heat transfer by emitted radiation: P = omega*A*e*T^4
+		--&gt; omega = 5.68x10^-8
+		--&gt; proportional to 4th power of absolute temp 
+		--&gt; can find net by subtracting 4th powers of temp 1 and temp 2
 </pre>
 
 </body>
