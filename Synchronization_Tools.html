@@ -84,7 +84,70 @@
 <span id="6.4 Hardware support for synchronization-Hardware instructions"></span><strong id="Hardware instructions">Hardware instructions</strong>
 </p>
 <pre>
-	
+	--&gt; can have special hardware instructions to test/modify content of words 
+		--&gt; use these instructions to solve critical section problem 
+</pre>
+<p>
+<span id="6.4 Hardware support for synchronization-Atomic variables"></span><strong id="Atomic variables">Atomic variables</strong>
+</p>
+<pre>
+	--&gt; atomic variable = lets you make atomic operations on basic data types like ints and bools 
+	--&gt; help to ensure mutual exclusion with data race on 1 single variable (e.g. incrementing)
+	--&gt; most sys support atomic vars  + atomic data types + atomic functions 
+	--&gt; DO NOT SOLVE data race problem, only helps to mitigate it 
+</pre>
+
+
+<div id="6.5 Mutex Locks"><h3 id="6.5 Mutex Locks" class="header"><a href="#6.5 Mutex Locks">6.5 Mutex Locks</a></h3></div>
+<pre>
+	--&gt; hardware solution to critical section problem usually very complicated + hard for app devs to implement
+	--&gt; instead: use higher level software tools
+	--&gt; mutex lock = simple tool to protext critical section + prevent race conditions 
+		--&gt; proccess needs to get lock b4 entering ciritcal section + release lock when exit critical section (acquire() and release())
+	--&gt; use bool var "available," if available=true, then acquire() call succeeds 
+	--&gt; order for using mutex locks:
+		1. acquire()
+		2. enter critical section
+		3. release()
+		4. back to remainder section 
+	--&gt; lock contention
+		1. contended = thread blocks while trying to acquire lock
+		2. uncontended = thread getes the lock 
+			--&gt; high contention (many threads want) and low contention
+	--&gt; use spin locks if lock is held for less time than 2 context switches 
+	--&gt; con: busy waiting (if lock is used, then processes waiting for lock have to keep calling acquire(), wasting CPU cycles)
+		--&gt; spinlock: process is "spinning" while waiting for lock to be available 
+			--&gt; pro: don't need context switch for process to wait on the spinlock + best used on multicore sys + short duration
+</pre>
+
+
+<div id="6.6 Semaphores"><h3 id="6.6 Semaphores" class="header"><a href="#6.6 Semaphores">6.6 Semaphores</a></h3></div>
+<pre>
+	--&gt; semaphore = integer variable accessed thru only 2 standard atomic operations
+		--&gt; wait() and signal() as atomic operations 
+	--&gt; all mods to integer values of the sempahore in wait() + signal() operations needs to be executed atomically
+		--&gt; means only 1 process can operate on the semaphore value at once
+</pre>
+<p>
+<span id="6.6 Semaphores-Semaphore usage"></span><strong id="Semaphore usage">Semaphore usage</strong>
+</p>
+<pre>
+	--&gt; counting vs binary semaphores 
+		--&gt; counting = unrestricted domain, control access to 1 resource w/ finite instances 
+			--&gt; initialize to num of avail resources 
+			--&gt; if process wants to use resource, it makes wait() operation on sempahore (Decrement count) 
+			--&gt; when proess release resource, performs signal() --&gt; increment count
+			--&gt; if count for semaphore = 0, all resources used 
+		--&gt; binary = 0 or 1 (like mutex locks, used often instead of mutex locks)
+	--&gt; solves sync problems
+</pre>
+<p>
+<span id="6.6 Semaphores-Semaphore implementation"></span><strong id="Semaphore implementation">Semaphore implementation</strong>
+</p>
+<pre>
+	--&gt; problem: processes busy waiting for lock to free up
+	--&gt; solution: process suspend themselves while waiting for lock to open up
+		--&gt; restart when another process executes "signal()"
 </pre>
 
 </body>

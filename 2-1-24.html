@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-1-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+preempted vs non preempted OS:
+</p>
+<ol>
+<li>
+nonpreemptive: process gets to run until timeout, service request, or gives CPU back willingly
+
+<li>
+preemptive: timeout + context switch to another process 
+
+</ol>
+<p>
+context switch:
+</p>
+<ol>
+<li>
+time out OR terminate and another process gets CPU
+
+<li>
+1 process gets preempted 
+
+</ol>
+<div id="Chapter 5: CPU Algorithms"><h3 id="Chapter 5: CPU Algorithms" class="header"><a href="#Chapter 5: CPU Algorithms">Chapter 5: CPU Algorithms</a></h3></div>
+<pre>
+	1. FCFS: first come first server, not very efficient
+	2. SJF: optimal, but not possible to determine
+	3. Priority: user places priority (issue = starvation, program might never be scheduled)
+		--&gt; solution: aging
+	4. roun robin - each process gets time quantum, then preempted and placed at back of queue
+</pre>
+
+<div id="Chapter 5: CPU Algorithms-Held Process State"><h4 id="Held Process State" class="header"><a href="#Chapter 5: CPU Algorithms-Held Process State">Held Process State</a></h4></div>
+<pre>
+	1. D is exec, and interrupt comes in. NOT service request or timeout. Could be clock interrupt, processor saves the state, but no context switch
+	2. D is held, but there is no state change to "held"
+	3. D still gets the CPU b/c it has not ran out of time quantums + D has not terminated
+	4. Don't need to do anything except save registers + restart from where it's saved
+	5. if do context switch, need to set up new mem pointers, but don't need to do that w/ a held state
+	6. Always first priority when in held state to get CPU next
+</pre>
+
+<div id="Chapter 6: Synchronization Tools"><h3 id="Chapter 6: Synchronization Tools" class="header"><a href="#Chapter 6: Synchronization Tools">Chapter 6: Synchronization Tools</a></h3></div>
+<pre>
+	--&gt; sync has to do w/ data structures in OS
+	--&gt; processes can execute concurrently (can be interrupted at any time)
+		--&gt; if both accecssing shared data, maybe data inconsistency 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Race Condition"></span><strong id="Race Condition">Race Condition</strong>
+</p>
+<pre>
+	--&gt; counter++
+		1. register1 = counter
+		2. register1 = register1 + 1
+		3. counter = register1 
+	--&gt; same for counter--
+	--&gt; in a producer/consumer situation, counter++ and counter-- constantly happening
+		--&gt; producer add to queue, consumer take from queue
+	--&gt; can't predict exec time!
+	--&gt; e.g. issue:	
+		0. counter = 1
+		1. producer grabs counter into register1 and increments reg1
+		2. consumer grabes counter into reg2 and decrements reg2
+		3. producer sets counter to reg1 contents (counter = 2)
+		4. consumer sets counter to reg2 contetns (counter = 0) 
+			--&gt; inconsistent data!!
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Critical Section Problem"></span><strong id="Critical Section Problem">Critical Section Problem</strong>
+</p>
+<pre>
+	--&gt; consider system of n processes
+	--&gt; each process has critical section of code
+	--&gt; PCB + TCB + exec queues + wait queue + kernel threads + dispatcher + I/O completion handler + OS modules all shared among processes
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Critical Section"></span><strong id="Critical Section">Critical Section</strong>
+</p>
+<pre>
+	--&gt; general structure of process:
+		do {
+		*entry section*
+			critical section
+		*exit section*
+			remainder section
+		}	while(true);
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Solution to Critical Section Problem"></span><strong id="Solution to Critical Section Problem">Solution to Critical Section Problem</strong>
+</p>
+<pre>
+	1. Mutual Exclusion: only 1 process can execute in their critical sections at the same time
+	2. Progress: if no process in their critical section, then need to choose next process to run in their critical sections (can't postpone this indefinitely!)
+	3. Bounded waiting: set up bound on num times that other processes can enter their critical sections after the process has made request to enter their critical section
+		--&gt; could potentially cause starvation + dead locks
+		--&gt; can't assume about the relative speeds of the processes (b/c interrupt driven environment)
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Critical section handling in OS"></span><strong id="Critical section handling in OS">Critical section handling in OS</strong>
+</p>
+<pre>
+	1. preemptive: lets preemption of process when in kernel mode
+	2. non preemptive: run until exit kernel mode / block / volunteers CPU 
+		--&gt; in kernel mode pretty much no race conditions
+		--&gt; does NOT apply to user threads, could run into race conditions
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Peterson's Solution"></span><strong id="Peterson's Solution">Peterson's Solution</strong>
+</p>
+<pre>
+	--&gt; all processes run the same code:
+		1. set flag of process running to "true"
+		2. set "turn" to other process
+		3. while flag and "turn" is equal to other process, go into critical section
+		4. turn off flag
+		5. go into remainder section 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Sync Hardware"></span><strong id="Sync Hardware">Sync Hardware</strong>
+</p>
+<pre>
+	--&gt; need hardware mech to do critical section
+		--&gt; doing thru software + mem vars not good, need better (sync hardware)
+	--&gt; all solutions based on locking to protect critical sections 
+		--&gt; if 1 processor, COULD disable all interrupts (too inefficient on multiprocessors)
+	--&gt; most comps have atomic hardware instructions
+		--&gt; atomic = non interruptible 
+		--&gt; 2 types of instructions: test mem and set value + swapping 2 memory words
+			--&gt; goes to mem, brings into register, and immediately sets mem variable
+			--&gt; HELPPPPP brings "True" into CPU mem, returns to program in 
+			--&gt; e.g. swap 2 mem words 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-test_and_set instruction"></span><strong id="test_and_set instruction">test_and_set instruction</strong>
+</p>
+<pre>
+	--&gt; do test_and_set on target variable in mem
+		1. fetch mem of target var and stores in 
+		2.	sets target in mem to true
+		3.	returns what is read from o.g. target value 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-solution using test_and_set --&gt; ON TEST"></span><strong id="solution using test_and_set --&gt; ON TEST">solution using test_and_set --&gt; ON TEST</strong>
+</p>
+<pre>
+	--&gt; while test_and_set &amp;lock is true:
+		1. do nothing
+	--&gt; if test_and_Set &amp;lock becomes false:
+		1. new process can 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-compare_and_swap --&gt; ON TEST"></span><strong id="compare_and_swap --&gt; ON TEST">compare_and_swap --&gt; ON TEST</strong>
+</p>
+<pre>
+	--&gt; returns int + has int coming in 
+	--&gt; params: incoming int, expected int, new_value potentially set
+		1. set temp variable as incoming int
+		2. if the int variable is equal to expected, put a new_value in for incoming int
+		3. return the temp var (o.g. incoming valuable) 
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-using compare_and_swap as a lock"></span><strong id="using compare_and_swap as a lock">using compare_and_swap as a lock</strong>
+</p>
+<pre>
+	--&gt; param: lock = incoming int, 0 = expected, 1 = new_value)
+	--&gt; while compare_and_Swap not equal to zero
+		--&gt; drop in, do critical section, change to 0
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Mutex Locks"></span><strong id="Mutex Locks">Mutex Locks</strong>
+</p>
+<pre>
+	--&gt; mutex = mutually exclusive locks 
+	--&gt; protect critical section by first aquire() lock then release() lock 
+	--&gt; aquire() + release() are atomic calls
+		--&gt; implemented in hardware usually 
+	--&gt; this solutions needs: busy waiting --&gt; spin lock!
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-aquire() and release() --&gt; ON TEST"></span><strong id="aquire() and release() --&gt; ON TEST">aquire() and release() --&gt; ON TEST</strong>
+</p>
+<pre>
+	--&gt; while(!available) --&gt; process spins until lock is available
+	--&gt; when current process done, set available to false
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Semaphore"></span><strong id="Semaphore">Semaphore</strong>
+</p>
+<pre>
+	--&gt; use integer as semaphore action item
+	--&gt; 2 actions: wait(), signal()
+		--&gt; wait() if semaphore int &lt;= 0
+		--&gt; signal() increments semaphore int
+	--&gt; useful when allocating resources. wait() before allocating to see if resources are free
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Semaphore usage"></span><strong id="Semaphore usage">Semaphore usage</strong>
+</p>
+<pre>
+	--&gt; counting semaphore and binary semaphore (similar to test_and_set)
+	--&gt; p1 and p2 require s1 to happen before s2
+	--&gt; create semaphore synch initialize to 0
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Deadlock and starvation"></span><strong id="Deadlock and starvation">Deadlock and starvation</strong>
+</p>
+<pre>
+	--&gt; 2+ processes waiting indefinitely for an event that only be caused by the processes themselves
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Problems w/ sempahores"></span><strong id="Problems w/ sempahores">Problems w/ sempahores</strong>
+</p>
+<pre>
+	1. signal --&gt; wait
+	2. wait --&gt; wait
+	3. omitting one or both commands
+</pre>
+<p>
+<span id="Chapter 6: Synchronization Tools-Monitors"></span><strong id="Monitors">Monitors</strong>
+</p>
+<pre>
+	--&gt; only 1 program inside monitor at a time, until time out, request service, or ends
+	--&gt; makes sure that shared data isnt manipulated by diff pieces of the OS
+	--&gt; Condition Vars
+</pre>
+
+<div id="Chapter 6: Synchronization Tools-Important! Set and Wait"><h4 id="Important! Set and Wait" class="header"><a href="#Chapter 6: Synchronization Tools-Important! Set and Wait">Important! Set and Wait</a></h4></div>
+<pre>
+If A in critical section, B cannot enter its CS --&gt; mutual exclusion 
+	--&gt; B will keep completing checks to see if locks are free
+	--&gt; A sets check to false, then in B's next check, it's false, so B can now enter the critical section
+	--&gt; B will set check (which is the lock) equal to false, so other processes can access CS if they want to
+</pre>
+
+<div id="Chapter 6: Synchronization Tools-Important! Semaphores"><h4 id="Important! Semaphores" class="header"><a href="#Chapter 6: Synchronization Tools-Important! Semaphores">Important! Semaphores</a></h4></div>
+<pre>
+	--&gt; want to keep track of 3 CD devices
+	--&gt; allocate 1 CD. if CD#&lt;=0, then put the process on the wait queue for a CD
+	--&gt; else, CD# &gt; -, decrement the CD# and give one of the CDs to the process
+		--&gt; OS calls this routine when user wants CD written to
+	--&gt; one of the held CDs is being released, so after it's released, it signals that CD is available
+	--&gt; when signal call, then check if any process is on the wait queue. if there are processes on wait queues, give them the CD
+	--&gt; if no one on the wait queue, increment CD# to show that another CD available
+		--&gt; OS calls this routine when a CD is deallocated 
+</pre>
+
+<div id="Chapter 6: Synchronization Tools-Important! Monitors"><h4 id="Important! Monitors" class="header"><a href="#Chapter 6: Synchronization Tools-Important! Monitors">Important! Monitors</a></h4></div>
+<pre>
+	--&gt; #PTRs = number of printers avail
+	1. allocate 1 of 4 PTRs to process when process enters thru entry point E1
+	2. check #PTRs. if &lt;=0, cant allocated printer (all are allocated)
+		--&gt; put process at end of waiting printer list, at C1
+	4. if  #PTR&gt;=0, allocate printer + decrement #PTRs
+	5. deallocated one of printers when proess enters thru entry point E2 (programmer knows these entry points)
+		--&gt; increment #PTRs
+		--&gt; end by sinalling condiiton C1
+	6. after process serviced, immediately leave monitor
+	7. when condition C1 signalled
+		--&gt; if process in waiting PTR list, then it enters monitor, and recieves avail PTR
+	8. monitor always services E2 b4 E1 
+		--&gt; if did E1 first: process B comes in, no PTR availble, place in C1
+		--&gt; E2 = where PTR comes back, E1 = where PTR given out
+		--&gt; ofc want to service E2 first so we'll always make sure it's possible to give PTR if avail
+		--&gt; to deallocate + provide printer makes more sense than to bring a process in where there are none avail + need to put process in waiting queue (Waste of resources)
+	
+	1. If A enters thru C1
+		1. 1 printer avail b/c only time C1 gets called is if PTR comes in thru E2 and signals that new PTR avail 
+			--&gt; A enters thru C1, recieves a PTR, decrement #PTRS(0), leaves 
+		2. After A leaves, C enters thru E2 (want to service E2 next), releases PTR, increment #PTRs(1)
+			--&gt; signal C1 to show that a printer is released
+		3. After C1 signal, D will enter thru C1, and it recieves a printer; dec #PTR(0), leaves once services
+		4. Check E2, nothing there. Check E1, and B enters thru E1, requests printer, but none avail. Placed at C1. 
+	2. Reset situation, and say A enters thru E1. 
+		1. A enters thru E1. E1 wants a PTR, but none available (know this b/c there is D waiting in C1), so placed at back of C1
+			--&gt; if no process in C1, then don't know if there are PTR avail or not.
+		2. C enters through E2, release PTR, incr #PTRs(1), signal to C1
+		3. D enters thru C1, recieves a printer, decr #PTRs(0), leaves
+		4. B enters thru E1, reset printer, none available, placed at end of C1 
+	3. Reset situation, A enters thru E2
+		1. A enters thru E2, release printer, incr #PTR(1), signal C1
+		2. D enters thru C1, recieves a printer, decr #PTRs(0), leaves
+		3. Check E2, C enters thru E2, release printer, incr #PTR(1), leaves
+		4. Check C1, nothing in queue. Check E1, B enters thru E1, request printer, 1 avail, printer assigned, dec #PTR(0), leaves 
+			
+			__________________________________________
+			B --&gt; E1
+			________              A
+			                                  C1 &lt;-- D
+														 ________
+			________
+			C --&gt; E2
+			___________________________________________
+	
+</pre>
+
+<p>
+<span id="Chapter 6: Synchronization Tools-Important! Monitors-How to work thru these problem types:"></span><strong id="How to work thru these problem types:">How to work thru these problem types:</strong>
+</p>
+<pre>
+1. read rules
+2. determine num init printers
+3. work thru each printer: where they come, what req, num printer, leave, signal, placed on C1
+</pre>
+
+</body>
+</html>
