@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "restricted area"
+AuthUserFile /home/tina/vimwiki_html/pass
+require valid-user 
