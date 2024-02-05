@@ -148,6 +148,103 @@
 	--&gt; problem: processes busy waiting for lock to free up
 	--&gt; solution: process suspend themselves while waiting for lock to open up
 		--&gt; restart when another process executes "signal()"
+	--&gt; every semaphore has int value + list of processes waiting or the semaphore 
+		--&gt; signal() removes 1 process from list 
+	--&gt; semaphore values can be negative, magnitude = num processes waiting 
+	--&gt; important!! no 2 processes can exec wait() and signal() at the same time 
+		--&gt; in multicore, need to disable interrupts on every processing core
+	--&gt; still some busy waiting even with waiting queues, like mutex locks 
+</pre>
+
+
+<div id="6.7 Monitors"><h3 id="6.7 Monitors" class="header"><a href="#6.7 Monitors">6.7 Monitors</a></h3></div>
+<pre>
+	--&gt; semaphore pro: convenient, effective
+	--&gt; semaphore con: used wrong = timing errors, ahrd to find errors
+	--&gt; summary of semaphore solution:	
+		1. all processes share binary semaphore var "mutex"
+		2. "mutex" init to 1
+		3. every process needs to exec [wait(mutex)] before enter critical section
+		4. need to exec[signal(mutex)] when leave critical section 
+	--&gt; semaphore problem:
+		1. if accidentally do [signal] b4 [wait], many processes can be in critical section
+		2. if replace [signal] with [wait], proces execs [wait] b4 and after critical section 
+			--&gt; process permanently blocks on 2nd [wait] call 
+		3. if no [signal] or no [wait], consequence of 1 or 2, or both
+</pre>
+<p>
+<span id="6.7 Monitors-Monitor Usage"></span><strong id="Monitor Usage">Monitor Usage</strong>
+</p>
+<pre>
+	--&gt; abstract data type (ADT) = encapsulate data + functions to operate on data 
+	--&gt; monitor type ADT w/ programmer-defined operations to create mutual exclusion in monitor 
+	--&gt; processes cant directly use monitor syntax, need to use funcs from monitor
+		--&gt; func defined in monitor can only use vars declared in monitors
+	--&gt; only 1 process active in monitor at a time
+	--&gt; possibilities: (for active p1 and suspended p2)	
+		1. signal and wait: p1 waits til p2 leave monitor or waits for another condition (like i/o)
+		2. signal and continue: p2 waits til p1 leaves monitor or waits for another condition
+		
+</pre>
+<p>
+<span id="6.7 Monitors-Implementing monitor using semaphores"></span><strong id="Implementing monitor using semaphores">Implementing monitor using semaphores</strong>
+</p>
+<pre>
+	--&gt; every monitor has bin sema init to 1, process needs to exec [wait(mutex)] b4 enter monitor + [signal(mutex)] when leave
+	--&gt; init another sema "next" to 0 
+		--&gt; signalling process uses "next" to suspend themselves 
+</pre>
+<p>
+<span id="6.7 Monitors-Resuming processes within a monitor"></span><strong id="Resuming processes within a monitor">Resuming processes within a monitor</strong>
+</p>
+<pre>
+	--&gt; which suspended process should be resumed next? 
+	--&gt; can use conditional-wait
+		--&gt; each process gets priority num when suspended, resume process with smallest num 
+	--&gt; monitor problems (same as sema):
+		1. process gets resource b4 permission
+		2. process never release resource
+		3. process tries to release resource it enver got
+		4. process request same resource x 
+	--&gt; possible solution:
+		--&gt; have built-in monitor scheduling program handling resource access, not programmer
+		--&gt; hard to inspect that every process is doing correct resource access
+</pre>
+
+
+<div id="6.8 Liveness"><h3 id="6.8 Liveness" class="header"><a href="#6.8 Liveness">6.8 Liveness</a></h3></div>
+<pre>
+	--&gt; problem: using sync tools for access to critical sections = process might wait to enter section forever
+		--&gt; indefinite waiting violates progress + bounded waiting criteria for solving critical section problem
+	--&gt; liveness = properties sys needs t satisfy to make sure processes make progress 
+</pre>
+<p>
+<span id="6.8 Liveness-Deadlock"></span><strong id="Deadlock">Deadlock</strong>
+</p>
+<pre>
+	--&gt; 2+ processes wait indefinitely for an event that can only be done by one of the 2 waiting processes
+	--&gt; e.g. event = getting/releasing resources like mutex locks + semas
+</pre>
+<p>
+<span id="6.8 Liveness-Priority Inversion"></span><strong id="Priority Inversion">Priority Inversion</strong>
+</p>
+<pre>
+	--&gt; problem: higher priority process needs kernel data but low priority is using already, but lok in kernel data 
+	--&gt; solution-ish: create priority inheritance protocol
+		--&gt; processes using resources needed by higher priority processes will inherit the higher priotiy until they are finished, then priorities revert 
+</pre>
+
+
+<div id="6.9 Evaluation"><h3 id="6.9 Evaluation" class="header"><a href="#6.9 Evaluation">6.9 Evaluation</a></h3></div>
+<pre>
+	--&gt; how to know when to use which sync tool?
+	1. hardware solutions
+		--&gt; very low level, used as foundation for making other sync tools 
+		--&gt; recently, trying to use lock-free algos = less overhead from locking (hard to make tho)
+			--&gt; faster protection + but doesn't work well with highly contended loads 
+	2. higher level tools
+		--&gt; monitors + condition vars ver simple and easy to use
+		--&gt; con: high overhead + doesn't scale well in highly contended situations
 </pre>
 
 </body>
