@@ -12,6 +12,10 @@
 
 <div id="Misc"><h3 id="Misc" class="header"><a href="#Misc">Misc</a></h3></div>
 <pre>
+	Adding user to sudoer file:
+	1. go to /etc/sudoer (need to be root to write)
+	2. username ALL=(ALL:ALL) ALL
+
 	Blocking websites:
 	1. go to /etc/hosts
 	2. 127.0.1.1 www.facebook.com
@@ -50,6 +54,14 @@
 
 <div id="File Stuff"><h3 id="File Stuff" class="header"><a href="#File Stuff">File Stuff</a></h3></div>
 <pre>
+Compiling from source
+	1. install source package and unzip 
+	2. navigate to unzipped directory 
+	3. mkdir build
+	4. cd build
+	5. cmake ..
+	6. make
+
 Downloading software from a tar.gz
 	1. tar xf software-name.tar.gz (to extract file)
 	2. switch into extracted directory/file

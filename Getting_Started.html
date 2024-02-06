@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Getting_Started</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Creating a Window"><h3 id="Creating a Window" class="header"><a href="#Creating a Window">Creating a Window</a></h3></div>
+<pre>
+	1. need to create an opengl context + app window to draw in 
+		--&gt; specific to OS, but thre are libraries that can abstract OS specific stuff
+		--&gt; e.g. GLUT, SDL, SFML, *GLFW*
+	2. GLFW = library w/ basic necessities to start rendering things to screen 
+		--&gt; create opengl context, define window params, handle user input
+		--&gt; download and compile from source (see "Linux")
+			--&gt; https://www.glfw.org/download.html
+	3. set up GLAD = mapping opengl functions to OS graphics functions (abstraction to make life easier)
+		--&gt; https://glad.dav1d.de
+		--&gt; language = C++, API = any versions &gt;= 3.3, profile = core, select generate a loader
+		--&gt; download zip file, unzip (won't give you new dir, just loose dirs) 
+		--&gt; cd src --&gt; mv glad.c ~/path/to/folder/with/main.c (~/Desktop/graphics)
+		--&gt; cp -r include ~/path/to.folder/with/main.c
+			--&gt; need to move the "include" folder to folder w/ main.c so the glad header file can be accessed 
+		--&gt; sudo apt-get install libopengl-dev libglfw3-dev 
+			--&gt; need for linkers during compilation to work 
+		--&gt; #include "include/glad/glad.h"
+			--&gt; use exact path based on folder your main.c file is in
+			--&gt; o.g. "glad/glad.h," but in our case, the glad.h file is in the include folder we copied
+	4. need to link the GLFW lib to our opengl project 
+		--&gt; use glfw headers + link when compiling
+		--&gt; #include &lt;GFLW/glfw3.h&gt;
+	5. gcc main.c -lGL -lglfw
+	
+</pre>
+
+<div id="Hello Window"><h3 id="Hello Window" class="header"><a href="#Hello Window">Hello Window</a></h3></div>
+<pre>
+</pre>
+
+</body>
+</html>
