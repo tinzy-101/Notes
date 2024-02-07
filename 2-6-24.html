@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-6-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+Main points:
+</p>
+<ol>
+<li>
+can't predict when processes are going to need resources and when they will release them
+
+<li>
+solution: synchronization, only 1 process can access resources at a time 
+
+</ol>
+<p>
+On test:
+</p>
+<ol>
+<li>
+test, set, swap
+
+<li>
+mutext locks, semaphores, monitors
+
+</ol>
+<p>
+__________________________________________________________________________________________________________________________________________________________
+</p>
+
+<div id="Chapter 7: Synchronization Examples"><h3 id="Chapter 7: Synchronization Examples" class="header"><a href="#Chapter 7: Synchronization Examples">Chapter 7: Synchronization Examples</a></h3></div>
+<pre>
+	Classical problems to test new sync schemes:
+	1. bounded buffer
+	2. readers and writers 
+		--&gt; databases mostly, also reading and writing to filesystem
+	3. dining philosophers
+</pre>
+<p>
+<span id="Chapter 7: Synchronization Examples-Bounded Buffer"></span><strong id="Bounded Buffer">Bounded Buffer</strong>
+</p>
+<pre>
+	n number of buffers, each can hold 1 item
+	1. semaphore "mutex" init to 1
+	2. semaphore "full" init to 0
+
+Server side:
+add to buffer, signal done adding (singl(mutex))
+
+Client side:
+wait buffer full
+wait lock on records --&gt; wait(mutex)
+grab off buffer
+signal lock opened --&gt; signal(mutex)
+signal done emptying buffer --&gt; signal(empty)
+</pre>
+<p>
+<span id="Chapter 7: Synchronization Examples-Readers writers"></span><strong id="Readers writers">Readers writers</strong>
+</p>
+<pre>
+	writer: 
+	wait til have read-write mutex
+	perform writing
+	signal done with mutex
+	
+	reader:
+	have counter to check if equal to 1, then wait on mutex being set
+	signal that have mutex lock
+	start reading
+	decrement read count
+	if count if back to 0
+	signal done
+	signal releasing mutex so writer can continue 
+</pre>
+<p>
+<span id="Chapter 7: Synchronization Examples-Readers writers problem variations"></span><strong id="Readers writers problem variations">Readers writers problem variations</strong>
+</p>
+<pre>
+	1. no reader kept waiting unless writer has permission to use shared object 
+		--&gt; optimistic lock or pessmistic lock
+</pre>
+<p>
+<span id="Chapter 7: Synchronization Examples-Dining Philosophers Problem"></span><strong id="Dining Philosophers Problem">Dining Philosophers Problem</strong>
+</p>
+<pre>
+	deadlock b/c every philosopher waiting for other philosopher to put down their chopsticks 
+	don't need to know for test
+</pre>
+<p>
+<span id="Chapter 7: Synchronization Examples-Synchronzation Examples"></span><strong id="Synchronzation Examples">Synchronzation Examples</strong>
+</p>
+<pre>
+	--&gt; just be aware of it 
+</pre>
+
+<p>
+__________________________________________________________________________________________________________________________________________________
+</p>
+
+<div id="Chapter 8: Deadlocks"><h3 id="Chapter 8: Deadlocks" class="header"><a href="#Chapter 8: Deadlocks">Chapter 8: Deadlocks</a></h3></div>
+<p>
+<span id="Chapter 8: Deadlocks-System Model"></span><strong id="System Model">System Model</strong>
+</p>
+<pre>
+	--&gt; system consists of resources
+	--&gt; can't shared updatable mem w/ another process (only share read-only mem) 
+		--&gt; use reentrance code to share read-only 
+	--&gt; serial reusable resources
+	--&gt; each process uses a resource as follows:
+		1. request
+		2. use
+		3. release
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Deadlock Characterization: ON TEST"></span><strong id="Deadlock Characterization: ON TEST">Deadlock Characterization: ON TEST</strong>
+</p>
+<pre>
+	--&gt; deadlock can arise if 4 condiitons exist simultaneously
+	1. mutual exclusion 
+		--&gt; only 1 process can use resource at a time 
+	2. hold and wait 
+		--&gt; a process holding at least 1 resource is waiting to acquire resources held by other processes
+	3. no preemption 
+		--&gt; a resource can only be released voluntarily by process holding it, after process done
+	4. circular wait 
+		--&gt; p0 wait for p1's resource, p1 waits for p2' resource, ... , pn waiting for p0's resource
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Deadlock with Mutext Locks"></span><strong id="Deadlock with Mutext Locks">Deadlock with Mutext Locks</strong>
+</p>
+<pre>
+	--&gt; deadlocks can occur w/ syscalls, locking, etc
+	--&gt; semaphores are waiting for events, but some may never happen 
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Resource Allocation Graph"></span><strong id="Resource Allocation Graph">Resource Allocation Graph</strong>
+</p>
+<pre>
+	--&gt; resource R_i is allocated to process P_i 
+	--&gt; INSERT RESOURCE ALLOCATION GRAPH
+	--&gt; P1 wants R1 + P2 wants R3 and P3 owns R3 --&gt; deadlock or not?
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Resource Allocation Graph with a Deadlock"></span><strong id="Resource Allocation Graph with a Deadlock">Resource Allocation Graph with a Deadlock</strong>
+</p>
+<pre>
+	--&gt; P1 has R2, wants R1, P2 has R1 and R2, 
+	1. mutual exclusion: R2 owned by P1 and P2
+	2. hold and wait: P3 holds and wait until R2 avail, P1 wait til R1 avail
+	3. circular list
+	4. not preempting any of these processes 
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Graph With A Cycle But No Deadlock"></span><strong id="Graph With A Cycle But No Deadlock">Graph With A Cycle But No Deadlock</strong>
+</p>
+<pre>
+	--&gt; P2 doesn't need any resource at this time, so it will release R1 at some point
+	--&gt; then, P1 will get R1 and release R2
+	--&gt; then, P4 can get R2 and finish
+	OR
+	--&gt; P4 finish first, release R2 that P1 can grab 
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Basic Facts"></span><strong id="Basic Facts">Basic Facts</strong>
+</p>
+<pre>
+	--&gt; if grap has no cycles: no deadlock
+	--&gt; if graph has cycle:
+		1. if only  FINISHHHH
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Methods for Handling Deadlocks"></span><strong id="Methods for Handling Deadlocks">Methods for Handling Deadlocks</strong>
+</p>
+<pre>
+	--&gt; prevention, avoidance, recover
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Deadlock Prevention"></span><strong id="Deadlock Prevention">Deadlock Prevention</strong>
+</p>
+<pre>
+	--&gt; mutual exclusion: not req for sharable resources, must hold for nonsharable resources
+	--&gt; hold and wait: must guarantee tat whenever process requests a resource, doesn't hold any other resources
+		--&gt; starvation possible! 
+	--&gt; no preemption: 
+		--&gt; preempt everything w/ a counter
+		--&gt; restarting processes (very hard)
+	--&gt; circular wait
+		--&gt; number associated w/ resources 
+	--&gt; isn't gonna work! modern sys don't use
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Deadlock Avoidance"></span><strong id="Deadlock Avoidance">Deadlock Avoidance</strong>
+</p>
+<pre>
+	--&gt; simplest and most useful model: declare max num resources a process needs when it runs + keep track of how many process really has at each time 
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Safe State"></span><strong id="Safe State">Safe State</strong>
+</p>
+<pre>
+	--&gt; at any time, all processes will eventually get resources they need and complete
+	--&gt; if sys in safe state, guaranteed no deadlock 
+	--&gt; if sys in unsafe state, possible deadlock
+		--&gt; CANT predict runtime characteristics of any process! dont enter unsafe state!
+	--&gt; avoidance, make sure sys never in unsafe state
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Data Structures for the Banker's Algorithm"></span><strong id="Data Structures for the Banker's Algorithm">Data Structures for the Banker's Algorithm</strong>
+</p>
+<pre>
+	-- n = num processes, m = num resource types
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-TEST PROBLEM: Which State is UNSAFE?"></span><strong id="TEST PROBLEM: Which State is UNSAFE?">TEST PROBLEM: Which State is UNSAFE?</strong>
+</p>
+<pre>
+	--&gt; total num resources is 12 in each case
+	--&gt; if all processes can finish, SAFE STATE
+	A. process 1 finish, now have 2 avail. can't give 2 avail to process 3/4 b/c not enough to finish, so give to process 2, finish, give 6 to process 3, process 3 finish, give ..., all finish, state
+	B. give 2 to p2, p2 finish, 4 avail, give 4 to p1, 
+	C. give 1 to p1, p1 finish, 4 avail, give 4 to p4, p4 finish, give 5 to p2, p2 finish, give 5 to p3 --&gt; safe state! all finished
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Deadlock Reduction"></span><strong id="Deadlock Reduction">Deadlock Reduction</strong>
+</p>
+<pre>
+	Rules
+	1. if a process has all of its resources, reduce it
+	2. if you have a process that can be given a resource that wants it, give the resource 
+	
+	Following steps w/ diagram: 
+	1. currently, no process has all needed resources
+	2. give 1 R4 to P3
+	3. reduce P3 --&gt; give up one of R4, R2, R1
+	4. give 1 R2 to P4
+	5. reduce P4 --&gt; give up 2 R2, 1 R3
+	6. give 1 R1 to P1
+	7. reduce P1 --&gt; 1 R1 and 1 R2
+	8. give P2 1 R3
+	9. reduce P2 --&gt; give up 1 R1, 1 R3, 1 R4
+	10. give P5 1 R1
+	11. reduce P5 --&gt; give up 1 R1 and " "
+	
+	*If no lines left, no deadlock
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Detection Algo Usage"></span><strong id="Detection Algo Usage">Detection Algo Usage</strong>
+</p>
+<pre>
+	--&gt; when and how often to invoke algo to know if there is deadlock?
+	--&gt; run algo when process is blocked for certain amount of time OR just run any n seconds
+	--&gt; most likely that OS process is deadlocked, less likely that it will be user program deadlocked
+		--&gt; b/c all requests go thru kernel
+	--&gt; 
+</pre>
+<p>
+<span id="Chapter 8: Deadlocks-Recovery from Deadlock"></span><strong id="Recovery from Deadlock">Recovery from Deadlock</strong>
+</p>
+<pre>
+	1. abort all deadlocked processes
+	2. abort 1 process at a time until deadlock ends --&gt; what order to choose?
+		1. prority of process
+		2. how long its been running, how much longer to completion
+		3. resources process has used
+		4. resources process needs to complete
+		5. how many processes will need to be terminated
+		6. is process interactive or batch? 
+		--&gt; still not solved well b/c nonpreemption!
+	3. selecting a victim: minimize cost
+	4. rollback: roll back to safe state 
+	5. choose process as victim of starvation
+</pre>
+
+<p>
+_________________________________________________________________________________________________________________________________________________________
+</p>
+
+<p>
+<span id="Chapter 8: Deadlocks-Logical Transactions"></span><strong id="Logical Transactions">Logical Transactions</strong>
+</p>
+<pre>
+	--&gt; have sessions ID + timestamp of sessions
+	--&gt; do begin transaction on database (supported by programming lang) 
+	--&gt; each process updates, deletes, adds records
+	
+	After restart of DB: read log reverse by time (if error in database)
+	restore bfore image, delete location, add saved image, restore before image, restore commit end (each done by diff process) 
+	
+	e.g. ATM:
+	1. want to take out money
+	2. DB will give u money and record every step
+	3. if transaction failed, back out of the steps and give the money back to your account 
+</pre>
+
+</body>
+</html>

@@ -10,6 +10,199 @@
 <body>
 
 <div id="7.1 Classic problems of synchronization"><h3 id="7.1 Classic problems of synchronization" class="header"><a href="#7.1 Classic problems of synchronization">7.1 Classic problems of synchronization</a></h3></div>
+<p>
+<span id="7.1 Classic problems of synchronization-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; review: critical section solution
+		1. low level hardware: mem barriers + compare-and-swap operation
+		2. higher level: mutex --&gt; semaphores --&gt; comintors 
+</pre>
+<p>
+<span id="7.1 Classic problems of synchronization-Bounded buffer problem"></span><strong id="Bounded buffer problem">Bounded buffer problem</strong>
+</p>
+<pre>
+	--&gt; e.g. producer and consuemr processes share:
+		--&gt; int N buffers
+		--&gt; semaphore mutex = 1
+		--&gt; semapore empty = N
+		--&gt; sempahore full = 0
+	--&gt; pool has N buffers that cna hold  item
+	--&gt; "mutex" gives mutual exclusion to accessing buffer pool
+	--&gt; "empty" + "full" count num buffers 
+	--&gt; producer makes full buffers for consumer + consumer produce empty buffers for producer
+</pre>
+<p>
+<span id="7.1 Classic problems of synchronization-The readers-writers problem"></span><strong id="The readers-writers problem">The readers-writers problem</strong>
+</p>
+<pre>
+	--&gt; reader and writer processes share a database 
+	--&gt; dont want writer + other process to access db at same time 
+	--&gt; solutions
+		1. npo reader should wait for other readers to finish only b/c a writer is waiting
+		2. once writer ready, writer needs to write asap
+			--&gt; no readers can start reading if writer is waiting 
+		--&gt; both solutions can cause starvation 
+		--&gt; general solution: provide reader-writer locks on some systems 
+			--&gt; specify mode of lock: read or write 
+</pre>
+<p>
+<span id="7.1 Classic problems of synchronization-The dining-philosophers problem"></span><strong id="The dining-philosophers problem">The dining-philosophers problem</strong>
+</p>
+<pre>
+	--&gt; 5 philosophers + 5 single chopsticks. don't interact with other, but need 2 chopsticks to eat 
+		--&gt; hungry: reach for left and right chopstick 
+		--&gt; adjacent philosophers can't both eat at the same time (contenfor resources)
+		--&gt; if all hungry: all grab chopstick to left, but none can eat --&gt; deadlock 
+	--&gt; sema solutions: 
+		--&gt; represent each chopstick w sema + grab chopstick w/ wait() operation, release with signal()	
+		--&gt; problem: still causes a deadlock 
+	--&gt; other solutions:	
+		1. &lt;= 4 ppl at table at once
+		2. can only pickyp chopstick if both chopsticks avail (pick up in critical section
+		3. odd num ppl pick up left chopstick first, even num ppl pick up right chopstick first (assymetric)
+	--&gt; monitor solution
+		--&gt; 3 states for ppl: thinking, hungry eating 
+		--&gt; can only set state as eating if 2 neighbos NOT eating 
+		--&gt; need to delay self when hungry but can't have chopsticks 
+		--&gt; invoke pickup() b4 starting to eat, putdown() when done 
+</pre>
+
+
+<div id="7.2 Synchronization within the Kernel"><h3 id="7.2 Synchronization within the Kernel" class="header"><a href="#7.2 Synchronization within the Kernel">7.2 Synchronization within the Kernel</a></h3></div>
+<p>
+*Synchronization in windows===
+</p>
+<pre>
+	--&gt; inside kernel: use spinlocks + make sure no thread is preempted when holdin spinlock
+	--&gt; outside kernel: use dispatcher objects to allow threads to syncronize based on mutex locks, semas, events, timers 
+		--&gt; dispatcher object = signaled state (avail) or nonsignaled state 
+		--&gt; critical sectionobject = user mode mutex (used w/o kernel intervention) 
+</pre>
+<p>
+<span id="7.2 Synchronization within the Kernel-Synchronization in linux"></span><strong id="Synchronization in linux">Synchronization in linux</strong>
+</p>
+<pre>
+	--&gt; linux kernel fully preemptive 
+	--&gt; atomic integer --&gt; perform math w/o interruption 
+	--&gt; mutex locks to protect critical sections in kernel 
+	--&gt; spinlocks + semas to lock in kernel  (nonrecursive, cannot get same lock x2 if it hasnt released the lock) 
+</pre>
+
+
+<div id="7.3 POSIX synchronization"><h3 id="7.3 POSIX synchronization" class="header"><a href="#7.3 POSIX synchronization">7.3 POSIX synchronization</a></h3></div>
+<pre>
+	--&gt; 7.2 talks only about synchronization in the kernel, but POSIX API available for users and not specific to OS
+	--&gt; no monitors in POSIX!
+</pre>
+<p>
+<span id="7.3 POSIX synchronization-POSIX mutex locks"></span><strong id="POSIX mutex locks">POSIX mutex locks</strong>
+</p>
+<pre>
+	--&gt; mutex = fundamental sync technique used with Pthreads 
+	--&gt; protect critical sections of code 
+	--&gt; all mutex functions retun 0 w/ correct oepration 
+</pre>
+<p>
+<span id="7.3 POSIX synchronization-POSIX semaphores"></span><strong id="POSIX semaphores">POSIX semaphores</strong>
+</p>
+<pre>
+	--&gt; sys that implemente Pthreads usually also implement semas (not part of POSIX standard tho)
+	--&gt; unamed vs named semas 
+	--&gt; named:
+		--&gt; many unrelated processes can use this common sema for sync
+	--&gt; unnamed:
+		--&gt; sema can only be share by threads belonging to the process that created the sea 
+</pre>
+<p>
+<span id="7.3 POSIX synchronization-POSIX condition vars"></span><strong id="POSIX condition vars">POSIX condition vars</strong>
+</p>
+<pre>
+	--&gt; mutex lock associated w/ a condition var needs to be locked b4 wait() ca be called, when lock acquired, thread can check condition 
+</pre>
+
+
+<div id="7.4 Synchronization in java"><h3 id="7.4 Synchronization in java" class="header"><a href="#7.4 Synchronization in java">7.4 Synchronization in java</a></h3></div>
+<pre>
+	--&gt; monitors = og. sync in java 
+	--&gt; reentract locks, semas, condition vars = newer 
+</pre>
+<p>
+<span id="7.4 Synchronization in java-Java monitors"></span><strong id="Java monitors">Java monitors</strong>
+</p>
+<pre>
+	--&gt; every object associated w/ 1 lock
+	--&gt; when func = synchronized, you need the lock to enter the func 
+		--&gt; if lock already owneed, thread is placed in entry set for object's lock 
+	--&gt; every object also has wait set 
+		--&gt; wait set = o.g. empty 
+	--&gt; key mechs: syncrhonized, wait(), notify()
+</pre>
+<p>
+<span id="7.4 Synchronization in java-Reentrant locks"></span><strong id="Reentrant locks">Reentrant locks</strong>
+</p>
+<pre>
+	--&gt; reentrant lock = simplest locking mech in jva 
+	--&gt; 1 thread owns 1 reentrant lock + helps give mutually exclusive access to shared resource 
+	--&gt; faireness param: thread waiting longest gets lock 
+	--&gt; too conservative of solution if many threads only reading data
+</pre>
+<p>
+<span id="7.4 Synchronization in java-Semaphores"></span><strong id="Semaphores">Semaphores</strong>
+</p>
+<pre>
+	--&gt; counting sema 
+</pre>
+<p>
+<span id="7.4 Synchronization in java-Condition vars"></span><strong id="Condition vars">Condition vars</strong>
+</p>
+<pre>
+	--&gt; condition vars lik wait() and notify() methods
+	--&gt; condition var associated w/ reentrant lock 
+</pre>
+
+
+<div id="7.5 Alternative Approaches"><h3 id="7.5 Alternative Approaches" class="header"><a href="#7.5 Alternative Approaches">7.5 Alternative Approaches</a></h3></div>
+<pre>
+	--&gt; more processing cores = want to dev more concurrent apps
+		--&gt; createshigher risk for deadlock
+	--&gt; hard to use mutex locks, semas, and monitors to handle more complex sync problems
+	--&gt; need features in programming langs + hardware to create thread-safe concurrent apps
+</pre>
+<p>
+<span id="7.5 Alternative Approaches-Transactional memory"></span><strong id="Transactional memory">Transactional memory</strong>
+</p>
+<pre>
+	--&gt; mem transaction = sequence of mem read-write operations that are atomic 
+	--&gt; if all operations in tranaction are done, mem transaction = commited
+		--&gt; else,operations baorted 
+	--&gt; use transactional mem thru programming lang features 
+		--&gt; eg. add atomic{s} construct = make sure operations in "s" exec as transaction 
+		--&gt; transactional mem is responsible ofr guaranteeing atomicity (not programmer)
+	--&gt; software transactional memory (STM) = isntrumentations code inside transaction blocks by compiler
+	--&gt; hardware transactional mem (HDM) = hardware cache heirarchies + cache coherency protocols to manage shared data in cache 
+		--&gt; need to modify o.g. hierarchies tho 
+	--&gt; transactional mem still not widespread 
+</pre>
+<p>
+<span id="7.5 Alternative Approaches-OpenMP"></span><strong id="OpenMP">OpenMP</strong>
+</p>
+<pre>
+	--&gt; support parallel programming in shared-mem environemnt: compiler directives + API
+	--&gt; thread creation + management handled by openMP library 
+	--&gt; con: still need to consider race conditions + deadlocks
+</pre>
+<p>
+<span id="7.5 Alternative Approaches-Functional programming languages"></span><strong id="Functional programming languages">Functional programming languages</strong>
+</p>
+<pre>
+	--&gt; c, c++, java, c+ are imperative/procedural languages
+		--&gt; implement algos state based 
+	--&gt; vs functional programming langauges =  do not maintain state (cannot change var once assigned)
+		--&gt; don't create problems with race conditions + deadlocks
+		--&gt; e.g. erland + scala 
+		--&gt; good for concurrency, apps that run on parallel systems 
+</pre>
 
 </body>
 </html>
