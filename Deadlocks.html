@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Deadlocks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="8.1 System Model"><h3 id="8.1 System Model" class="header"><a href="#8.1 System Model">8.1 System Model</a></h3></div>
+<p>
+<span id="8.1 System Model-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	--&gt; deadlock = waiting threads never change state b/c resources it needs held by other processes 
+	--&gt; OS usually doesn't have deadlock prevention, programmers need to take care 
+</pre>
+<p>
+<span id="8.1 System Model-System Model"></span><strong id="System Model">System Model</strong>
+</p>
+<pre>
+	--&gt; system = finite resources distributed among competing threads
+		--&gt; resource classes: CPU cycles, files, I/O devices 
+		--&gt; instances of resources: 4 CPUs = 4 instances (identical)
+	--&gt; mutex lock + sema = most common source of deadlock 
+		--&gt; each instane of lock gets 
+	--&gt; thread resource usage process:
+		1. request
+		2. use (operate on resource, e.g. w/ mutex lock can access critical section)
+		3. release 
+	--&gt; request and release sys calls:
+		1. device: request() and release()
+		2. file: open() and close()
+		3. mem sys calls: allocate() and free()
+		4. sema: wait() and signal()
+		5. mutex lock: acquire() and release() 
+	--&gt; most concerned about deadlocks with resource acquisition and release 	
+</pre>
+
+
+<div id="8.2 Deadlock in multithreaded apps"><h3 id="8.2 Deadlock in multithreaded apps" class="header"><a href="#8.2 Deadlock in multithreaded apps">8.2 Deadlock in multithreaded apps</a></h3></div>
+<pre>
+	--&gt; e.g. how POSIX mutex locks can cause deadlocks with Pthreads
+		1. 2 mutex locks created and init
+		2. 2 threads created, each get access to both locks
+		3. thread1: gets mutex1 then mutex 2
+		4. thread2: gets mutex2 then mutex1
+		5. causes deadlock, unless thread1 gets and releases mutex locks b4 thread2 tries to get them 
+</pre>
+<p>
+<span id="8.2 Deadlock in multithreaded apps-Livelock"></span><strong id="Livelock">Livelock</strong>
+</p>
+<pre>
+	--&gt; livelock = liveness failure, prevent 2+ threads from proceeding
+	--&gt; cause: 1 thread repeatedly attempts an action that fails 
+		--&gt; ppl moving left and right in a narrow hallway, both not making process (not blocked)
+</pre>
+
+
+<div id="8.3 Deadlock characterization"><h3 id="8.3 Deadlock characterization" class="header"><a href="#8.3 Deadlock characterization">8.3 Deadlock characterization</a></h3></div>
+<p>
+<span id="8.3 Deadlock characterization-Necessary Conditions"></span><strong id="Necessary Conditions">Necessary Conditions</strong>
+</p>
+<pre>
+	1. mutual exclusion: only 1 thread can use a resoruce at a time
+	2. hold and wait: thread must be holding &gt;= 1 resources + waiting to get more resources held by other processes
+	3. no preemption: resources can't be preempted, only released voluntarily
+	4. circular wait: p1 wait for p2, p2 wait for p3, p3 wait for p1 
+</pre>
+<p>
+<span id="8.3 Deadlock characterization-Resource allocation graph"></span><strong id="Resource allocation graph">Resource allocation graph</strong>
+</p>
+<pre>
+	--&gt; system resource allocation graph = use to describe deadlock precisely 
+		--&gt; vertices V (nodes T1-Tn) + edges E + all active threads in sys (R1-Rm)
+		--&gt; Ti-&gt;Rj = request edge
+		--&gt; Rj-&gt;Ti = assignment edge 
+		--&gt; plot Ti as circule, Rj as rectangule 
+	--&gt; if graph has no cycles, then no thread in sys is deadlocked
+		--&gt; if cycle, maybe deadlock 
+	--&gt; if each resource type has only 1 instance, then cycle = deadlock
+		--&gt; if several instances, not necessarily deadlock 
+</pre>
+
+
+<div id="8.4 Methods for handling deadlocks"><h3 id="8.4 Methods for handling deadlocks" class="header"><a href="#8.4 Methods for handling deadlocks">8.4 Methods for handling deadlocks</a></h3></div>
+<pre>
+	--&gt; ways to deal with deadlocks
+		1. ignore problem and pretend deadlocks never happen 
+			--&gt; linux + windows + most OS
+		2. se protocol to prevent / avoid deadlocks, make sure NEVER deadlock
+		3. let sys enter deadlock, detect, recover 
+</pre>
+<p>
+<span id="8.4 Methods for handling deadlocks-Deadlock prevention"></span><strong id="Deadlock prevention">Deadlock prevention</strong>
+</p>
+<pre>
+	--&gt; set of methods to make sure at least 1 of the necessary conditions doesn't hold 
+	--&gt; constraint on how requests for resources can be made
+</pre>
+<p>
+<span id="8.4 Methods for handling deadlocks-Deadlock avoidance"></span><strong id="Deadlock avoidance">Deadlock avoidance</strong>
+</p>
+<pre>
+	--&gt; OS needs to have info about which resources a thread will request + use 
+		--&gt; then OS can decide whether thread should wait or not
+</pre>
+<p>
+<span id="8.4 Methods for handling deadlocks-Deadlock recovery"></span><strong id="Deadlock recovery">Deadlock recovery</strong>
+</p>
+<pre>
+	--&gt; need algo to detect + recover from deadlock
+	--&gt; if don't detect deadlock, sys performanc go bad, and killed 
+	--&gt; can use methods for liveness recovery for deadlock recovery
+</pre>
+
+
+<div id="8.5 Deadlock Prevention"><h3 id="8.5 Deadlock Prevention" class="header"><a href="#8.5 Deadlock Prevention">8.5 Deadlock Prevention</a></h3></div>
+<p>
+<span id="8.5 Deadlock Prevention-Mutual Exclusion"></span><strong id="Mutual Exclusion">Mutual Exclusion</strong>
+</p>
+<pre>
+	--&gt; sharable resource can't cause deadlock, e.g. read nly file 
+	--&gt; generally cant prevent deadlocks by denying mutual exclusion tho (e.g. mutex locks)
+</pre>
+<p>
+<span id="8.5 Deadlock Prevention-Hold and wait"></span><strong id="Hold and wait">Hold and wait</strong>
+</p>
+<pre>
+	--&gt; guarantee that whenever thread requests resource, doesnt hold any other resources 
+	--&gt; e.g. each thread requests and allocated all resources b4 executions (impractical)
+	--&gt; e.g. thread only requests resources whn it has none 
+	--&gt; problems:
+		1. low resource utilization
+		2. starvation possible 
+</pre>
+<p>
+<span id="8.5 Deadlock Prevention-No preemption"></span><strong id="No preemption">No preemption</strong>
+</p>
+<pre>
+	--&gt; if thread has resource + requests another resource it cant have right now, then all resources thread currely has are preempted and added to list of resources thread is waiting for 
+		--&gt; thread can only restarted when it gets all resources in its list
+	--&gt; OR if thread requests resources, first check if available, then allocate
+		--&gt; if not avail, check if allocated to thread that is waiting for more resources, then preempt desired resources from waiting thread
+		--&gt; if not avail and not allocated to waiting thread, requesting thread waits + some resource preempted if another thread requests it
+	--&gt; these methods for resources whose states can be easily saved + restored (no good for mutex + sema)
+</pre>
+<p>
+<span id="8.5 Deadlock Prevention-Circular Wait"></span><strong id="Circular Wait">Circular Wait</strong>
+</p>
+<pre>
+	--&gt; most practical solution
+	--&gt; create ordering for all resource types + require that each thread requests resources in increasing order 
+	--&gt; programmers need to make sure their prorams follow the ordering on the OS
+	--&gt; hard to create lock ordering w/ thousands of locks
+		--&gt; w/ locks, hierarchy doesn't necessarily mean no deadlock if can get locks dynamically 
+</pre>
+
+
+<div id="8.6 Deadlock Avoidance"><h3 id="8.6 Deadlock Avoidance" class="header"><a href="#8.6 Deadlock Avoidance">8.6 Deadlock Avoidance</a></h3></div>
+<pre>
+	--&gt; limit how requests can be made OR require additional info about hwo resources are requested
+	--&gt; e.g. w/ R1 and R2, OS needs to know that thread p1 requests R1 then R2, while thread p2 will request R2 then R1
+		--&gt; if sys knows this info, then can decide whether or not to give resource or make the thread wait to prevent deadlock
+	--&gt; simplest algo:
+		--&gt; each thread declares max num of resource in each type that it will need
+		--&gt; OS can make algo to make sure circular wait condition never exists 
+</pre>
+<p>
+<span id="8.6 Deadlock Avoidance-Safe State"></span><strong id="Safe State">Safe State</strong>
+</p>
+<pre>
+	--&gt; safe state = sys can alloacte resources to each thread up to max in some order + still avoid deadlock 
+	--&gt; safe state != deadlocked state 
+		--&gt; unsafe state may lead to deadlock 
+</pre>
+<p>
+<span id="8.6 Deadlock Avoidance-Resource allocation graph algo"></span><strong id="Resource allocation graph algo">Resource allocation graph algo</strong>
+</p>
+<pre>
+	--&gt; used w/ sys that has only 1 instance of each resource type 
+	--&gt; see lecture
+</pre>
+<p>
+<span id="8.6 Deadlock Avoidance-Banker's Algorithm"></span><strong id="Banker's Algorithm">Banker's Algorithm</strong>
+</p>
+<pre>
+	--&gt; used w/ sys that has &gt;=1 instance of each resource type
+	--&gt; less efficient than resource allocation graph algo
+	--&gt; need various data structures + safety algo + resource request algo
+</pre>
+
+
+<div id="8.7 Deadlock detection"><h3 id="8.7 Deadlock detection" class="header"><a href="#8.7 Deadlock detection">8.7 Deadlock detection</a></h3></div>
+<pre>
+	--&gt; if OS doesnt have deadlock prevention or deadlock avoidance:
+		1. sys provides algo to examine state of system AND/OR
+		2. algo to recover from deadlock 
+	--&gt; detection + recovery has a lot of overhead
+</pre>
+<p>
+<span id="8.7 Deadlock detection-Single instance of each resource type"></span><strong id="Single instance of each resource type">Single instance of each resource type</strong>
+</p>
+<pre>
+	--&gt; if all resource have only 1 instance, define detection algo w/ a "wait for" raph
+	--&gt; no resource nodes, only thread nodes to show who is waiting for who's resources 
+</pre>
+<p>
+<span id="8.7 Deadlock detection-Several instances of a resource type"></span><strong id="Several instances of a resource type">Several instances of a resource type</strong>
+</p>
+<pre>
+	--&gt; "wait for" graph doesnt apply, use method similar to banker's algo
+	--&gt; need data structures: available (vector), allocation (matrix), request (matrix)
+</pre>
+<p>
+<span id="8.7 Deadlock detection-Deadlock algo usage"></span><strong id="Deadlock algo usage">Deadlock algo usage</strong>
+</p>
+<pre>
+	--&gt; when to invoke detection algo?
+		1. how often might deadlock occur? 
+			--&gt; if frequent, then use algos frequently 
+		2. how many thread affected by deadlock?
+	--&gt; can maybe invoke every time request made cannot be allocated immediately 
+		--&gt; very extreme, causes a lot fo verhead 
+		--&gt; less extreme and expensive: invoke algo at defined intervals 
+</pre>
+
+
+<div id="8.8 Recovery from deadlock"><h3 id="8.8 Recovery from deadlock" class="header"><a href="#8.8 Recovery from deadlock">8.8 Recovery from deadlock</a></h3></div>
+<pre>
+	--&gt; options after deadlock detected
+		1. let operator know there is deadlock and let them deal with it
+		2. help sys recover from deadlock 
+			--&gt; abort 1+ threads
+			--&gt; preempt resources from 1+ threads
+</pre>
+<p>
+<span id="8.8 Recovery from deadlock-Process and thread termination"></span><strong id="Process and thread termination">Process and thread termination</strong>
+</p>
+<pre>
+	1. abort all deadlocked processes 
+		--&gt; will break deadlock but high cost
+	2. abort one at time til deadlock end 
+		--&gt; high overhead, b/c need to run detection algo each time process is aborted 
+		--&gt; need policy to decide which order to abort (minimum cst)
+			1. priority
+			2. how long its been working + how much longers
+			3. how many + types of resources used by the process
+			4. how many more resources needed
+			5. how many process need to be aborted 
+</pre>
+<p>
+<span id="8.8 Recovery from deadlock-Resource preemption"></span><strong id="Resource preemption">Resource preemption</strong>
+</p>
+<pre>
+	--&gt; issues to address when using preemption:
+		1. selecting a victim 
+			--&gt; who to be preempted (minimize cost)
+		2. rollback 
+			--&gt; what to do w/ process once resources are preempted?
+			--&gt; need to roll it back to safe state (hard to tell safe state, so usually roll back to beginning and restart)
+		3. starvation 
+			--&gt; how to make sure process doesn't starve?
+			--&gt; how to make sure resources aren't always preempted from same process?
+			--&gt; include num rollbacks in cost factor 
+</pre>
+
+</body>
+</html>
