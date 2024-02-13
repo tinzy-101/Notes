@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Multithreading_And_Parallel_Programming</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="32.1 Introduction"><h3 id="32.1 Introduction" class="header"><a href="#32.1 Introduction">32.1 Introduction</a></h3></div>
+<pre>
+	--&gt; java has built in support for multithreading 
+</pre>
+<div id="32.2 Thread Concepts"><h3 id="32.2 Thread Concepts" class="header"><a href="#32.2 Thread Concepts">32.2 Thread Concepts</a></h3></div>
+<pre>
+	--&gt; thread = mech for running a task + launch multiple threads from program concurrently
+	--&gt; single processor: threads shared CPU time (OS needs to schedule)
+	--&gt; multithreading: good for making program more interactive + better performance 
+	--&gt; Java: each task = instance of "runnable object"
+		--&gt; thread = object that facilitates exec of task
+</pre>
+<div id="32.3 Creating Tasks and Threads"><h3 id="32.3 Creating Tasks and Threads" class="header"><a href="#32.3 Creating Tasks and Threads">32.3 Creating Tasks and Threads</a></h3></div>
+<pre>
+	--&gt; tasks = objects, so need to define a class for tasks
+	--&gt; class implements "runnable" interface 
+		--&gt; "runnable" interface only has "run()" method
+		--&gt; need to implement run() method to tell sys how thread runs
+	
+	//custom task class
+	public class TaskClass implements Runnable {
+		public TaskClass(...) {
+			...
+		}
+		
+		//implement run method in Runnable
+		public void run() {
+			//how to run custom thread
+		}
+	}
+	
+	//client class
+	public class Client() {
+		public void someMethod() {
+			//create instance of task class
+			TaskClass task = new TaskClass(...);
+			
+			//create thread
+			Thread thread = new Thread(task);
+			
+			//start thread
+			thread.start();
+		}
+	}
+	
+	--&gt; JVM executes task by invoking task's run() method 
+</pre>
+
+</body>
+</html>

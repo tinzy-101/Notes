@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Java_Help</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Downloading Java:"><h5 id="Downloading Java:" class="header"><a href="#Downloading Java:">Downloading Java:</a></h5></div>
+<pre>
+	1. sudo apt update
+	2. sudo apt install default-jdk
+	3. java --version  
+		--&gt; check java has been downloaded
+</pre>
+
+<div id="Compiling and Running Java:"><h5 id="Compiling and Running Java:" class="header"><a href="#Compiling and Running Java:">Compiling and Running Java:</a></h5></div>
+<pre>
+	1. pubic class name has to be same as name as the .java file
+	2. javac className.java 
+		--&gt; creates main.class 
+	3. java className 
+		--&gt; runs class file
+</pre>
+
+<div id="File Structure"><h5 id="File Structure" class="header"><a href="#File Structure">File Structure</a></h5></div>
+<pre>
+	1. main class w/ main function: 
+		public class main {
+			public static void main(String[] args) {
+				//test other classes and do main stuff
+			}
+		}
+	2. additional classes (can be put below main class)
+		class Circle {
+			int radius;
+			
+			Circle() {
+				radius = 1; 
+			}
+			
+			void setRadius() {
+				////
+			}
+		}
+</pre>
+
+<div id="Input:"><h5 id="Input:" class="header"><a href="#Input:">Input:</a></h5></div>
+<pre>
+	1. import java.util.Scanner
+	2. Scanner scanner = new Scanner(System.in)
+	3. String userName = scanner.nextLine() 
+		--&gt; nextBoolean()
+		--&gt; nextByte()
+		--&gt; nextDouble()
+		--&gt; nextFloat()
+		--&gt; nextInt()
+		--&gt; nextLong()
+		--&gt; nextShort()
+</pre>
+
+</body>
+</html>
