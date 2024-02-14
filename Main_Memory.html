@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Main_Memory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="9.1 Background"><h3 id="9.1 Background" class="header"><a href="#9.1 Background">9.1 Background</a></h3></div>
+<pre>
+	--&gt; for OS to exec programs, programs + data need to be partially in main mem during exec 
+	--&gt; using CPU scheduling, can increase performance (but also need to share mem by putting lots of processes in mem) 
+	--&gt; need to talk about how to manage mem (hardware alogs to complex software ones) 
+		--&gt; depends mostly on hardware design
+</pre>
+
+<p>
+<span id="9.1 Background-Background"></span><strong id="Background">Background</strong>
+</p>
+<pre>
+	--&gt; mem = array of bytes each w/ address
+	--&gt; instruction exec cycle
+		1. CPU fetch instruction from mem based on program counter
+		2. instruction decoded + maybe fetch operands from mem
+		3. execute on operands
+		4. return results to mem  
+	--&gt; mem will only see stream of mem addresses (NOT how mem addresses generated + what they're for)
+	--&gt; issues to deal with to manage mem
+		--&gt; basic hardware, binding of virtual mem addresses to physics, logical vs physical addresses
+</pre>
+<p>
+<span id="9.1 Background-Basic Hardware"></span><strong id="Basic Hardware">Basic Hardware</strong>
+</p>
+<pre>
+	--&gt; main mem + registers in each core = only general purpose storage CPU can access directly 
+		--&gt; data used in instructions need to be stored in one of these storages
+	--&gt; register in core = 1 CPU cycle to access 
+	--&gt; main mem (access thru bus) = many CPU cycles to access 
+		--&gt; processor has to stall, but cache solves this problem 
+		--&gt; cache managed thru hardware speeding up mem access (software doesn't do anything)
+	--&gt; each process needs separate space in mem (protection) 
+		--&gt; 2 registers:
+			1. base register = smallest legal physical mem address
+			2. limit register = size of range of pysical mem addresses 
+				--&gt; e.g. base register = 300040, limit reg = 120900, then program can legally access addresses 300040-(30040+120900 -1) = 300040-420939
+				--&gt; only kernel can load registers 
+		--&gt; CPU hardware compares every mem address in user mod ew/ registers
+			--&gt; if mismatch, user is out of bounds + fatal error 
+			--&gt; user can change code/data structres of OS or other users 
+	--&gt; kernal can access + modify user and OS mem, esp useful for context switches
+</pre>
+<p>
+<span id="9.1 Background-Address Binding"></span><strong id="Address Binding">Address Binding</strong>
+</p>
+<pre>
+	--&gt; program is on disk as binary executable file, needs to be brough into mem + put in context of process to run (when CPU is avail)
+		--&gt; mem reclaimed from process when it stops exec
+	--&gt; user process = any part of physical mem usually 
+	--&gt; steps b4 user process can exec (some optional)
+		1. compiler binds symbolic addreses of soure program to relocatable addresses (e.g. 14 bytes from beginning of this module)
+		2. linker / loader binds relocatable addresses to absolute addresses (74014) 
+	--&gt; binding instructions + data to mem addresses done at any step:
+		1. compile time
+			--&gt; if know where process will be in mem, then can generate absolute code
+		2. load time 
+			--&gt; if don't know where process will be during compile time, then compiler makes relocatable code
+			--&gt; finish binding in load time 
+		3. execution time 
+			--&gt; if process can 
+</pre>
+
+<div id="Explanation of Paging doc"><h3 id="Explanation of Paging doc" class="header"><a href="#Explanation of Paging doc">Explanation of Paging doc</a></h3></div>
+
+</body>
+</html>
