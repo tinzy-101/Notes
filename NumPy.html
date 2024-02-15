@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>NumPy</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Background"><h3 id="Background" class="header"><a href="#Background">Background</a></h3></div>
+<pre>
+	Numpy is a Python library for scientific computing, centered around creating arrays. 
+	Contains linear algebra, Fourier transform, random numbers. 
+	
+	NOTE:
+	We want to use separation of development environments when working with Python libraries like numpy.
+	For example, if we are are using a newer version of numpy for a current project, then need to use an older version, it's easier to have separate environments to run both versions.	
+	Also useful when messing with different packages in one project, cause you don't want that to screw up future projects. 
+	Overall, keeps a clean development environment.
+	
+	2 main options for dev environment separation: 
+		1. venv --&gt; containers built into python3, invoke to create new virtual environment for a project
+		2. anaconda --&gt; larger, Jupyter built in, easier to manage packages
+</pre>
+
+<div id="Download"><h3 id="Download" class="header"><a href="#Download">Download</a></h3></div>
+<pre>
+	1. sudo apt install python3-pip 
+		--&gt; installer for numpy
+	2. pip3 install numpy 
+		--&gt; Error: This environment is externally managed
+	
+	INSTEAD:
+	1. sudo apt install pipx 
+		--&gt; can run python apps in isolated environments
+	2. pipx ensurepath 
+		--&gt; change shell config so ~/.local/bn/ is in PATH
+	3. pipx install numpy
+		
+</pre>
+
+<div id="Startup"><h3 id="Startup" class="header"><a href="#Startup">Startup</a></h3></div>
+<pre>
+	1. import numpy as np
+		--&gt; to top of python program 
+	2. np.zeros(5)
+		--&gt; create array w/ 5 zeros
+	3. np.zeros((3,4)) 
+		--&gt; 2D array, row x column 
+	4. Vocabulary: 
+			axis = name of each dimension 
+				--&gt; a.shape
+			rank = number of axes (rank 2 = 2D)
+			shape = list of axis lengths (e.g. (3,4))
+				--&gt; a.ndim
+			size = total number of elements (e.g. 3 * 4 = 12)
+				--&gt; a.size
+	5. Creating N-dimensional arrays 
+			np.zeros((2,3,4))
+				--&gt; 2 matrices of 0s, each 3x4
+			type(np.zeros((3,4)))
+				--&gt; type of arrays = numpy.ndarray
+			np.ones((3,4)) 
+				--&gt; array of 1s
+			np.full((3,4), np,pi)
+				--&gt; array of pi
+			np.empty((2,3))
+				--&gt; uninitilized array (unpredictable content)
+			np.array([ [1,2,3,4], [1, 3, 4, 2] ]) 
+				--&gt; initilized using python array
+			np.arange(1,5)
+				--&gt; initialize array w/ numbers 1-4
+				--&gt; works with floats
+			np.arange(1, 5, 0.5)
+				--&gt; array w/ numbers 1-4.5 with 0.5 steps
+</pre>
+
+</body>
+</html>
