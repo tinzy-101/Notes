@@ -121,6 +121,9 @@ compose keys:
 		d. use &lt;xmodmap -pk | grep Multi_key&gt; to seewhich keys you've configured as multi
 		e. CANNOT remove multikeys just by deleting fom xmodmap file, need to manually reconfigure
 			-e.g. get caps back: keycode 66 = Caps_Lock (check names in xkb rules)
+				--&gt; can't find name in xkb rules?
+				--&gt; go to /usr/include/X11/keysymdef.h
+				--&gt; ignore XK_ in front of names, can use names in .Xmodmap file
 			-or else will end up with TWO multikeys
 	6. getting gtk to recognize compose keys (XIM is NOT supported by default)
 		a. go to /etc/gtk-3.0/settings.ini
@@ -137,6 +140,12 @@ understanding keycodes (found in xkb):
 		-D = the row (A = keyboard row, count up to 4th row of alphanumeric block is D)
 		-01 = the column (left to right, ignoring special keys like tab/caps)
 
+</pre>
+
+
+<div id="Environment Variables"><h3 id="Environment Variables" class="header"><a href="#Environment Variables">Environment Variables</a></h3></div>
+<pre>
+	
 </pre>
 
 </body>

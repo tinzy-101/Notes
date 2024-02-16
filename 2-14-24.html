@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-14-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 9 cont'd"><h3 id="Chapter 9 cont'd" class="header"><a href="#Chapter 9 cont'd">Chapter 9 cont'd</a></h3></div>
+<p>
+<span id="Chapter 9 cont'd-Paging"></span><strong id="Paging">Paging</strong>
+</p>
+<pre>
+	--&gt; ALL mem segments are same size
+	--&gt; have to keep track of which available page frames to allocate
+	--&gt; need a page map table 
+		--&gt; page table base register and length register 
+		--&gt; every address in CPU is logical, and needs to be transposed to physical address 
+		--&gt; need to figure out whihc page number the logical frame is stuck in 
+			--&gt; page table has this info
+</pre>
+<p>
+<span id="Chapter 9 cont'd-Associative Memory"></span><strong id="Associative Memory">Associative Memory</strong>
+</p>
+<pre>
+	--&gt; load frame number + page number in associative mem 
+		--&gt; don't need to go out to page tables, associative mem in CPU
+	--&gt; use parallel search: go in with a page number, and immediately out with page frame number
+	
+	Translation look aside buffer:
+		1. CPU has page numbers + displacement within page
+		2. 2 actions on page when want to fetch data or instructions: 
+			--&gt; look into page table in mem
+			--&gt; start up associative mem 
+				--&gt; if get a hit in associative, cancle looking into page table
+				--&gt; if no hit, keep looking in page table, and update TLB in associative mem 
+					--&gt; next time look in associative mem, this page will be there
+		3. real physical address = frame number + displacement from CPU
+</pre>
+<p>
+<span id="Chapter 9 cont'd-Memory Protection"></span><strong id="Memory Protection">Memory Protection</strong>
+</p>
+<pre>
+	--&gt; valid or invalid bit in each frame (each entry in page number)
+		--&gt; valid = page is in process's logical mem
+		--&gt; invalid =  page NOT in process's logical mem
+			--&gt; page fault: if process comes in, and it's invalid
+				--&gt; process blocked
+	e.g. 
+		--&gt; if valid page (page1 is in physical page3), it will continue to go onto physical page
+		--&gt; but in paging system, pages are swapped out by another process
+		--&gt; then, page would be process (logical page1 tries to reference where it is physically, it's not gonna be there)
+			--&gt; causes page fault, block process (do i/o), place process into mem, mem management goes back to page table + say put page1 in frame1 and flip to valid
+			--&gt; now can restart the process (restart program counter entirely), and process can fetch the instructions/data it needs 
+</pre>
+<p>
+<span id="Chapter 9 cont'd-Shared Pages"></span><strong id="Shared Pages">Shared Pages</strong>
+</p>
+<pre>
+	--&gt; reentrant (read only) code shared among processes 
+	--&gt; if modify a page of reentrant code, need to copy the page, keep the rest of code sharable but the copy nonsharable
+	
+	Private Code and data:
+		--&gt; each process keeps separate copy of code and data
+</pre>
+<p>
+<span id="Chapter 9 cont'd-Structure of Page Table"></span><strong id="Structure of Page Table">Structure of Page Table</strong>
+</p>
+<pre>
+	--&gt; hierarchical paging, hash the table, or invert 
+</pre>
+<p>
+<span id="Chapter 9 cont'd-Two Level Paging Scheme"></span><strong id="Two Level Paging Scheme">Two Level Paging Scheme</strong>
+</p>
+<pre>
+	1. have page number and page offset 
+		--&gt; page size = size of each physical page frame
+</pre>
+<p>
+<span id="Chapter 9 cont'd-64 bit Logical Address Space"></span><strong id="64 bit Logical Address Space">64 bit Logical Address Space</strong>
+</p>
+<pre>
+	--&gt; have inner page and outer page 
+	--&gt; processors today dont ahve 64 bit addresses, in practice only use 48/64 bits 
+</pre>
+<p>
+<span id="Chapter 9 cont'd-3 level paging scheme"></span><strong id="3 level paging scheme">3 level paging scheme</strong>
+</p>
+<pre>
+	--&gt; outer page + inner page + offset
+	--&gt; 2nd out page + outer page + inner page + offset 
+</pre>
+
+
+<div id="Combined Paging Segmentation: ON TEST"><h3 id="Combined Paging Segmentation: ON TEST" class="header"><a href="#Combined Paging Segmentation: ON TEST">Combined Paging Segmentation: ON TEST</a></h3></div>
+<pre>
+	1. On disk, have compiled program. Compiler found 3 logical statements (main line code, procedures, functions, arrays, declared vars in stack, etc) when the program was compiled.
+	2. Within segments, compiler breaks them into physical blocks (size = page frames)  
+		--&gt; e.g. exe program in disk broken up so loader can find each segment 
+		--&gt; We have 3 pages: s0 (3 pages), s1 (2 pages), s2 (4 pages)
+			--&gt; let page frame = 4k, offset = 12 bits 
+		--&gt; Compiler also generates virtual addresses 
+	3. loader takes pages off of disk and put into paging device, and build tables:
+			  1. page map table for each segment (0-2)
+			  2. segment map table
+			  	  --&gt; numbers outside = offsets
+				  --&gt; numbers inside = valid bits (1 = valid, 0 = invalid) 
+				  		--&gt; invalid = not in mem
+						--&gt; valid = at least 1 page vaid for that segment
+							--&gt; e.g. PMT S0, page 0, is valid bc bit = 1, so page 0 is in mem 
+				  --&gt; copy stored in CPU register (OS loads this when context switch) 
+	4. 
+
+1. look in TLB
+2. look in PMT in mem to see what page it's at
+3. if can't find page, cause page fault or segment fault
+4. choose free page (hole), have ptr to page now, know what apge frame its in, flip page frame to 1, start process back up to fetch instruction/data in the page 
+Virtual Address in 3 parts:
+which segment, which page, which displacement is the byte in 
+3 1 2048 
+
+1-32
+SSSSSSSSSSPPPPPPPPPPDDDDDDDDDDDD
+00000000001100000010000011111111
+displacement= 0 - 4095 
+
+Start segment 0, page 0, offset 0 (programs don't actually start here)
+Start gen virtual addresses, until reaches 4095.
+Still in segment 0? Yep, but now in page 1. Go from offset 0 to 4095.
+Generating addresses 
+
+Assumptions:
+Virtual Addresses are 32 bits, Segment:10, Page: 10, Displacement: 12
+</pre>
+
+
+<div id="Chapter 10"><h3 id="Chapter 10" class="header"><a href="#Chapter 10">Chapter 10</a></h3></div>
+<pre>
+	--&gt; virtual mem can be huge compared to real physical mem 
+	--&gt; virtual mem looks like code --&gt; data --&gt; heat --&gt; stack (all in virtual pages) 
+	--&gt; demand page: when page needed, will be brought in (need when page not in mem + page fault)
+		--&gt; usually load entire segment onto free frame, but still only bring in when needed (being referenced in instructions)
+		
+</pre>
+<p>
+<span id="Chapter 10-Page Fault"></span><strong id="Page Fault">Page Fault</strong>
+</p>
+<pre>
+	--&gt; page is not valid
+	1. find free frame
+	2. swap page into fram from paging device
+	3. reset tables to indicate pages now in mem
+	4. restart instruction that caused page fault 
+</pre>
+<p>
+<span id="Chapter 10-Copy on Write"></span><strong id="Copy on Write">Copy on Write</strong>
+</p>
+<pre>
+	--&gt; if have page being updated, and it might be shared w other processes, need to copy page when u write to it
+</pre>
+<p>
+<span id="Chapter 10-What happens if no free frames avail to give to process?"></span><strong id="What happens if no free frames avail to give to process?">What happens if no free frames avail to give to process?</strong>
+</p>
+<pre>
+	PAGE REPLACEMENT
+		--&gt; use dirty bit: if page has been modified, its dirty, and can't just load another page, need to store dirty page back onto paging device 
+		--&gt; if want to give frame to another process, need to write it back onto disk b/c its been modified 
+		--&gt; paging device ALWAYS has most recent version of program!!!
+		
+	Different schemes for page replacement:
+		1. find desired page on disk
+		2. find free frame (if free use, else use page replacement algo + select victim)
+		3. write victim to disk if dirty
+		4. bring desire page into newly free frame, udpate page/rame tables
+		5. contineu proecss by restarting instruction that caused the trap
+		**potentially 2 page transfer for apge fault, increasing exec time + context switch time**
+		
+	Page and Frame Replacement Algos:
+		1. page replacement algo
+		2. frame replacement algo 
+	
+	As num pages frame increase, num page faults decrease (invers relationship)
+</pre>
+<p>
+<span id="Chapter 10-First in First Out Algo: ON TEST"></span><strong id="First in First Out Algo: ON TEST">First in First Out Algo: ON TEST</strong>
+</p>
+<pre>
+	
+</pre>
+
+<p>
+<span id="Chapter 10-Answer to ConferZoom"></span><strong id="Answer to ConferZoom">Answer to ConferZoom</strong>
+</p>
+<pre>
+	segment/page/displacement = virtual address scheme 
+</pre>
+
+</body>
+</html>

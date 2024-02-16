@@ -3,7 +3,7 @@
 <head>
 <link rel="Stylesheet" type="text/css" href="style.css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-<title>Java_Help</title>
+<title>Java_And_Tomcat</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -60,6 +60,33 @@
 		--&gt; nextInt()
 		--&gt; nextLong()
 		--&gt; nextShort()
+</pre>
+
+<div id="Tomcat"><h4 id="Tomcat" class="header"><a href="#Tomcat">Tomcat</a></h4></div>
+<p>
+<span id="Tomcat-Background"></span><strong id="Background">Background</strong>
+</p>
+<pre>
+	Tomcat is a web server and Java serlet container, good for building java-based websites and apps
+</pre>
+<p>
+<span id="Tomcat-Installation"></span><strong id="Installation">Installation</strong>
+</p>
+<pre>
+	1. sudo apt update
+	2. sudo apt install openjdk-&lt;java version&gt;-jdk 
+		--&gt; java --version
+		--&gt; version installed: openjdk-17-jdk
+		--&gt; installed with java
+	3. sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat 
+		--&gt; create new system user + group for tomcat w/ home dir /opt/tomcat
+		--&gt; safety, don't want to always run as root
+	4. Download tomcat from: https://tomcat.apache.org/download-10.cgi
+		--&gt; for Debian, download the first zip file from core 
+		--&gt; see =Linux= for compiling from source
+			--&gt; did not work, neither with the tar.gz file
+		--&gt; check RUNNING.txt in unzipped dir
+			--&gt; 
 </pre>
 
 </body>
