@@ -9,7 +9,10 @@
 </head>
 <body>
 
-<div id="Downloading Java:"><h5 id="Downloading Java:" class="header"><a href="#Downloading Java:">Downloading Java:</a></h5></div>
+<div id="Java"><h3 id="Java" class="header"><a href="#Java">Java</a></h3></div>
+<p>
+<span id="Java-Downloading Java:"></span><strong id="Downloading Java:">Downloading Java:</strong>
+</p>
 <pre>
 	1. sudo apt update
 	2. sudo apt install default-jdk
@@ -17,7 +20,9 @@
 		--&gt; check java has been downloaded
 </pre>
 
-<div id="Compiling and Running Java:"><h5 id="Compiling and Running Java:" class="header"><a href="#Compiling and Running Java:">Compiling and Running Java:</a></h5></div>
+<p>
+<span id="Java-Compiling and Running Java:"></span><strong id="Compiling and Running Java:">Compiling and Running Java:</strong>
+</p>
 <pre>
 	1. pubic class name has to be same as name as the .java file
 	2. javac className.java 
@@ -26,7 +31,9 @@
 		--&gt; runs class file
 </pre>
 
-<div id="File Structure"><h5 id="File Structure" class="header"><a href="#File Structure">File Structure</a></h5></div>
+<p>
+<span id="Java-Java File Structure"></span><strong id="Java File Structure">Java File Structure</strong> 
+</p>
 <pre>
 	1. main class w/ main function: 
 		public class main {
@@ -39,7 +46,7 @@
 			int radius;
 			
 			Circle() {
-				radius = 1; 
+				radius   1; 
 			}
 			
 			void setRadius() {
@@ -48,11 +55,13 @@
 		}
 </pre>
 
-<div id="Input:"><h5 id="Input:" class="header"><a href="#Input:">Input:</a></h5></div>
+<p>
+<span id="Java-Java Input:"></span><strong id="Java Input:">Java Input:</strong> 
+</p>
 <pre>
 	1. import java.util.Scanner
-	2. Scanner scanner = new Scanner(System.in)
-	3. String userName = scanner.nextLine() 
+	2. Scanner scanner   new Scanner(System.in)
+	3. String userName   scanner.nextLine() 
 		--&gt; nextBoolean()
 		--&gt; nextByte()
 		--&gt; nextDouble()
@@ -62,7 +71,7 @@
 		--&gt; nextShort()
 </pre>
 
-<div id="Tomcat"><h4 id="Tomcat" class="header"><a href="#Tomcat">Tomcat</a></h4></div>
+<div id="Tomcat"><h3 id="Tomcat" class="header"><a href="#Tomcat">Tomcat</a></h3></div>
 <p>
 <span id="Tomcat-Background"></span><strong id="Background">Background</strong>
 </p>
@@ -93,7 +102,7 @@
 <pre>
 	1. sudo ln -s /opt/tomcat/apache-tomcat-${VERSION} /opt/tomcat/latest 
 		- create symbolic link "latest" poiting to tomcat installation dir
-		  - symbolic link = file that points to another file/dir 
+		  - symbolic link   file that points to another file/dir 
 		- gives more control over versions + updates
 			- upack newer versions of tomcat + change symbolic link to point to it
 	2. sudo chown -R tomcat: /opt/tomcat 
@@ -106,11 +115,11 @@
 			- find java "jdk" installation 
 		  		- /usr/lib/jvm/java-1.17.0-openjdk-amd64
 			- in /etc/profile:
-		  		- export JAVA_HOME="/usr/lib/jvm/java-1.17.0-openjdk-amd64" 
-		  		- export PATH=$JAVA_HOME/bin:$PATH
+		  		- export JAVA_HOME "/usr/lib/jvm/java-1.17.0-openjdk-amd64" 
+		  		- export PATH $JAVA_HOME/bin:$PATH
 		 2. Set up CATALINA_HOME (points to directory where apache tomcat installed) 
 			 - in etc/profile
-			 	- export CATALINA_HOME="~/Downloads/apache-tomcat-10.1.18"
+			 	- export CATALINA_HOME "~/Downloads/apache-tomcat-10.1.18"
 		 		--&gt; points to where java is located
 		3. Reload changes for current shell
 			- source /etc/profile
@@ -124,28 +133,28 @@
 	1. vi /etc/systemd/system/tomcat.service 
 		- paste (in file: &lt;esc"+P&gt;):
 [Unit]
-Description=Tomcat 10 servlet container
-After=network.target
+Description Tomcat 10 servlet container
+After network.target
 
 [Service]
-Type=forking
+Type forking
 
-User=tomcat
-Group=tomcat
+User tomcat
+Group tomcat
 
-Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
-Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true"
+Environment "JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64"
+Environment "JAVA_OPTS -Djava.security.egd file:///dev/urandom -Djava.awt.headless true"
 
-Environment="CATALINA_BASE=/opt/tomcat/latest"
-Environment="CATALINA_HOME=/opt/tomcat/latest"
-Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
-Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+Environment "CATALINA_BASE /opt/tomcat/latest"
+Environment "CATALINA_HOME /opt/tomcat/latest"
+Environment "CATALINA_PID /opt/tomcat/latest/temp/tomcat.pid"
+Environment "CATALINA_OPTS -Xms512M -Xmx1024M -server -XX:+UseParallelGC"
 
-ExecStart=/opt/tomcat/latest/bin/startup.sh
-ExecStop=/opt/tomcat/latest/bin/shutdown.sh
+ExecStart /opt/tomcat/latest/bin/startup.sh
+ExecStop /opt/tomcat/latest/bin/shutdown.sh
 
 [Install]
-WantedBy=multi-user.target
+WantedBy multi-user.target
 
 	1.5. Change JAVA_HOME to correct path to java development kit (JDK)
 		  - make sure java version correct!!
