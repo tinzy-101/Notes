@@ -67,7 +67,7 @@
 <span id="Tomcat-Background"></span><strong id="Background">Background</strong>
 </p>
 <pre>
-	Tomcat is a web server and Java serlet container, good for building java-based websites and apps
+	Tomcat is a web server and Java servlet container, good for building java-based websites and apps
 </pre>
 <p>
 <span id="Tomcat-Installation"></span><strong id="Installation">Installation</strong>
@@ -83,10 +83,92 @@
 		--&gt; safety, don't want to always run as root
 	4. Download tomcat from: https://tomcat.apache.org/download-10.cgi
 		--&gt; for Debian, download the first zip file from core 
-		--&gt; see =Linux= for compiling from source
-			--&gt; did not work, neither with the tar.gz file
-		--&gt; check RUNNING.txt in unzipped dir
-			--&gt; 
+		--&gt; unzip apache-tomcat-10.1.18.zip
+		--&gt; sudo mv apache-tomcat-10.1.18 /opt/tomcat
+	4.5. Documentation in RUNNING.txt in unzipped dir
+</pre>
+<p>
+<span id="Tomcat-Setup"></span><strong id="Setup">Setup</strong>
+</p>
+<pre>
+	1. sudo ln -s /opt/tomcat/apache-tomcat-${VERSION} /opt/tomcat/latest 
+		- create symbolic link "latest" poiting to tomcat installation dir
+		  - symbolic link = file that points to another file/dir 
+		- gives more control over versions + updates
+			- upack newer versions of tomcat + change symbolic link to point to it
+	2. sudo chown -R tomcat: /opt/tomcat 
+		- give user we created in Installation #3 access to tomcat dir 
+	3. sudo sh -c 'chmod +x /opt/tomcat/latest/bin/*.sh'
+		- make shell scripts inside Tomcat's bin dir executable
+		- shell scripts used to manage tomcat instance
+	5. Setting up environment variables (SKIP)
+		1. Set up JAVA_HOME (points to where java dev kit (JDK) is installed)
+			- find java "jdk" installation 
+		  		- /usr/lib/jvm/java-1.17.0-openjdk-amd64
+			- in /etc/profile:
+		  		- export JAVA_HOME="/usr/lib/jvm/java-1.17.0-openjdk-amd64" 
+		  		- export PATH=$JAVA_HOME/bin:$PATH
+		 2. Set up CATALINA_HOME (points to directory where apache tomcat installed) 
+			 - in etc/profile
+			 	- export CATALINA_HOME="~/Downloads/apache-tomcat-10.1.18"
+		 		--&gt; points to where java is located
+		3. Reload changes for current shell
+			- source /etc/profile
+</pre>
+<p>
+<span id="Tomcat-SystemD Unit File"></span><strong id="SystemD Unit File">SystemD Unit File</strong>
+</p>
+<pre>
+	This is actually following the instructions, don't need to follow #5, setting environment variables. 
+
+	1. vi /etc/systemd/system/tomcat.service 
+		- paste (in file: &lt;esc"+P&gt;):
+[Unit]
+Description=Tomcat 10 servlet container
+After=network.target
+
+[Service]
+Type=forking
+
+User=tomcat
+Group=tomcat
+
+Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+Environment="JAVA_OPTS=-Djava.security.egd=file:///dev/urandom -Djava.awt.headless=true"
+
+Environment="CATALINA_BASE=/opt/tomcat/latest"
+Environment="CATALINA_HOME=/opt/tomcat/latest"
+Environment="CATALINA_PID=/opt/tomcat/latest/temp/tomcat.pid"
+Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+
+ExecStart=/opt/tomcat/latest/bin/startup.sh
+ExecStop=/opt/tomcat/latest/bin/shutdown.sh
+
+[Install]
+WantedBy=multi-user.target
+
+	1.5. Change JAVA_HOME to correct path to java development kit (JDK)
+		  - make sure java version correct!!
+
+	2. sudo systemctl daemon-reload 
+		- tell SystemD new unit file created
+	
+	3. sudo systemctl enable --now tomcat
+		- enable + start tomcat 
+	
+	4. sudo systemctl status tomcat 
+		- check status
+</pre>
+<p>
+<span id="Tomcat-Error Time"></span><strong id="Error Time">Error Time</strong>
+</p>
+<pre>
+	#4 sudo systemctl enable --now tomcat DID NOT WORK
+	reason: screwing with the setenv.sh script, adding nonsense path to JRE_HOME
+		- needed to edit /opt/tomcat/apache-tomcat-10.1.18/bin/setenv.sh
+	lesson learned: DON'T set environment variables in multiple places, just choose 1 and wipe the rest
+		- see what env vars are defined as: echo $JAVA_HOME
+			- result shows that the system listens to definition of JAVA_HOME in /etc/profile, seems to trump service file we defined
 </pre>
 
 </body>

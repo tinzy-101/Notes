@@ -144,8 +144,80 @@ understanding keycodes (found in xkb):
 
 
 <div id="Environment Variables"><h3 id="Environment Variables" class="header"><a href="#Environment Variables">Environment Variables</a></h3></div>
+<p>
+<span id="Environment Variables-Background"></span><strong id="Background">Background</strong>
+</p>
 <pre>
+	Environment variables are system-wide and pass config info to apps. Especially useful in configuring a java development environment. In Linux, environment variables are dynamic and used with apps in shells/subshells.
+	Can customize the system and behavior of apps, like storing information about default browser.
+</pre>
+<p>
+<span id="Environment Variables-Environment Variables and Shell Variables"></span><strong id="Environment Variables and Shell Variables">Environment Variables and Shell Variables</strong>
+</p>
+<pre>
+	Variable format:
+		KEY=value
+		KEY="Other value"
+		KEY=value1:value2
 	
+	Rules:
+	1. variable names case sensitive
+	2. multiple values assigned to variable separated by :
+	3. no space around = 
+	
+	Environment variables: system wide and inherited by all child processes / shells
+	Shell variables: apply only to current shell instance; every shell has own internal shell variableA
+</pre>
+<p>
+<span id="Environment Variables-Commands"></span><strong id="Commands">Commands</strong>
+</p>
+<pre>
+	1. env : run another program in custom environment (needs arg, if not just prints current vars)
+	2. printenv : prints current env vars 
+			- printenv LAND PWD (prints language + path to current dir env vars)
+	3. set : sets / unsets shell vars (needs arg, if not lists all vars, shell and env)
+			- more comprehensive than &lt;printenv&gt; and &lt;env&gt;
+	5. unset : deletes shell / env vars
+	6. export : set env vars 
+</pre>
+<p>
+<span id="Environment Variables-ENV Vars"></span><strong id="ENV Vars">ENV Vars</strong>
+</p>
+<pre>
+	1. USER : current user
+	2. HOME : home dir
+	3. EDITOR : default editor (&lt;edit&gt; in terminal)
+	4. SHELL : path to current shell
+	5. LOGNAME : name user
+	6. PATH : list of dirs
+	7. LANG : locales settings
+	8. TERM : terminal emulation
+	9. MAIL : mail location
+</pre>
+<p>
+<span id="Environment Variables-Setting Shell &amp; Env Vars"></span><strong id="Setting Shell &amp; Env Vars">Setting Shell &amp; Env Vars</strong>
+</p>
+<pre>
+	1. (in terminal) MY_VAR='hello' 
+		- sets shell var, name MY_VAR, value hello
+	2. export MY_VAR 
+		- exports shell var as env var, will show up with &lt;printenv&gt;
+	3. export MY_VAR='hello' 
+		- done in 1 step 
+	
+	Persistent Environment Variables
+	1. cd /etc/environment
+		- system-wide env vars 
+		- VAR_TEST="Test var" 
+	2. cd /etc/profile
+		- loaded when there is bash login shell
+		- export JAVA_HOME="/path/to/java/home"
+		- export PATH=$PATH:$JAVA_HOME/bin
+	3. vi ~/.bashrc 
+		- set per user shell config
+		- export PATH+"$HOME/bin:$PATH" 
+		- source ~/.bashrc 
+		  	- load new env vars into current shell session
 </pre>
 
 </body>

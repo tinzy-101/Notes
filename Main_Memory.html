@@ -164,6 +164,49 @@
 <div id="9.3 Paging"><h3 id="9.3 Paging" class="header"><a href="#9.3 Paging">9.3 Paging</a></h3></div>
 <pre>
 	--&gt; paging = mem management scheme that let's proccesses's physical address space be noncontiguous 
+	--&gt; not external fragmentation + compaction (better than contiguous mem alloc)
+	--&gt; OS and hardware need to work together
+</pre>
+<p>
+<span id="9.3 Paging-Basic Method"></span><strong id="Basic Method">Basic Method</strong>
+</p>
+<pre>
+	--&gt; physical mem into fixed blocks: frames
+	--&gt; logical mem into same blocks: pages 
+	--&gt; process exec: pages loaded into any avail mem from source (fs or backin store)
+		--&gt; break bcking store into fixed blocks same size as mem frames  
+	--&gt; address gen by CPU: page number + page offset
+		--&gt; use page number as index for page table 
+		--&gt; page table = base address of each frame in phys mem + offset for location in frame being referenced 
+			--&gt; base frame address + page offset = phys mem address 
+	
+	1. CPU gen logical address, sent to MMU
+	2. MMU split into page number + offset, put into page table
+	3. page number = index for page table, entry in page table at index = number of frame of physical mem with the page 
+	4. offset inside the page = same as offset inside frame
+	5. physical address transalted from logical address now used to access physical mem, frame, and offset 
+		
+	--&gt; page size defined by hardware
+		--&gt; usually 4kb-1gb per page, 2^n size 
+		--&gt; if page number represented by 10 bits, there are 2^10 entries in the page table
+	
+	--&gt; logical address = page num + offset 
+	
+	--&gt; NO external frag w/ paging 
+	
+	1. process arrives in system to be executed 
+	2. each page that the process needs = needs 1 frame
+	3. if n frames avail, allocate them
+	4. first page of process loaded onto allocated frames, then frame num put into apge table for process, next page onto next frame, etc. 
+		--&gt; logical addresses translated to physical addresses (physical addresses NOT contiguous)
+	
+	--&gt; need frame table w/ entries for physical page frames (free or allocated)
+</pre>
+<p>
+<span id="9.3 Paging-Hardware Support"></span><strong id="Hardware Support">Hardware Support</strong>
+</p>
+<pre>
+	--&gt;
 </pre>
 
 <div id="Explanation of Paging doc"><h3 id="Explanation of Paging doc" class="header"><a href="#Explanation of Paging doc">Explanation of Paging doc</a></h3></div>
