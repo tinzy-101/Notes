@@ -206,9 +206,64 @@
 <span id="9.3 Paging-Hardware Support"></span><strong id="Hardware Support">Hardware Support</strong>
 </p>
 <pre>
-	--&gt;
+	--&gt; need to load user registers + get correct hardware page table values from user page table when selecting process to exec 
+	--&gt; implement page tables on hardware registers (take long time for context switch tho)
+</pre>
+<p>
+<span id="9.3 Paging-Translation look-aside buffer"></span><strong id="Translation look-aside buffer">Translation look-aside buffer</strong>
+</p>
+<pre>
+	--&gt; can implement page tables in hardware, but store them in main mem (faster context switch!)
+		--&gt; but slower mem access times)
+	--&gt; solution: use small and fast lookup hardware cache: translation look-aside buffer (TLB)
+		--&gt; TLB has key + value, used to find values in page tables 
+		--&gt; some values wired down (cant be removed) 
+		--&gt; hit ratio = percentage of time page number is found 
+		--&gt; need to implement paging based on hardware's TLB design 
+</pre>
+<p>
+<span id="9.3 Paging-Protection"></span><strong id="Protection">Protection</strong>
+</p>
+<pre>
+	--&gt; protect protection bits from each frame = protect entire paged environment 
+	--&gt; each entry in page table also has valid-invalid bit
+		--&gt; valid = page is in process's logical addess space 
+</pre>
+<p>
+<span id="9.3 Paging-Shared Pages"></span><strong id="Shared Pages">Shared Pages</strong>
+</p>
+<pre>
+	--&gt; reentrant code = can be shared (non self modifying, doesnt change during exec)
+		--&gt; many processes can run code at same time, w/ own copy of registers + data stroage
 </pre>
 
+
+<div id="9.4 Structure of the page table"><h3 id="9.4 Structure of the page table" class="header"><a href="#9.4 Structure of the page table">9.4 Structure of the page table</a></h3></div>
+<p>
+<span id="9.4 Structure of the page table-Hierarchical paging"></span><strong id="Hierarchical paging">Hierarchical paging</strong>
+</p>
+<pre>
+	--&gt; large logical address space for modern systems (2^32 or 2^64)
+	--&gt; will have large page table that u want to divide into smaller pieces
+		--&gt; e.g. page within a page, external page table is divided 
+</pre>
+<p>
+<span id="9.4 Structure of the page table-Hashed page tables"></span><strong id="Hashed page tables">Hashed page tables</strong>
+</p>
+<pre>
+	--&gt; hashed value = virtual page number
+	--&gt; each entry in table has linked list of elements that hash to same location 
+		--&gt; each element: virtual page num, value of mapped page frame, pointer to next element in list
+	--&gt; basically, keep comparing virtual page nums to elements in list until find match 
+</pre>
+<p>
+<span id="9.4 Structure of the page table-Inverted page tables"></span><strong id="Inverted page tables">Inverted page tables</strong>
+</p>
+<pre>
+	--&gt; inverted page table = only 1 entry for each real page/frame of mem 
+		--&gt; every entry = virtual address of page stored in real location 
+	--&gt; overall: 1 page table for whole sys, one entry for every page in physical mem
+</pre>
 <div id="Explanation of Paging doc"><h3 id="Explanation of Paging doc" class="header"><a href="#Explanation of Paging doc">Explanation of Paging doc</a></h3></div>
 <pre>
 </pre>

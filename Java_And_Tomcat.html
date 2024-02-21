@@ -179,6 +179,58 @@ WantedBy multi-user.target
 		- see what env vars are defined as: echo $JAVA_HOME
 			- result shows that the system listens to definition of JAVA_HOME in /etc/profile, seems to trump service file we defined
 </pre>
+<p>
+<span id="Tomcat-Configuring Firewall"></span><strong id="Configuring Firewall">Configuring Firewall</strong>
+</p>
+<pre>
+	- sudo ufw allow 8080/tcp
+	- opens port 8080, so can use Tomcat outside local network
+		- maybe need: sudo apt install ufw
+</pre>
+<p>
+<span id="Tomcat-Confguring Tomcat Web Management Interface"></span><strong id="Confguring Tomcat Web Management Interface">Confguring Tomcat Web Management Interface</strong>
+</p>
+<pre>
+	Need to create user so can access web management interface
+		1. define users and roles in tomcat-users.xml
+		2. create admin-gui user: access /host-manager/tml URL + manage virtual hosts
+		3. create manager-gui user: (un)deploy web apps w/o restarting container thru /host-manager/html interface 
+		
+		1. sudo vi /opt/tomcat/latest/conf/tomcat-users.xml
+		2. paste: 
+
+			&lt;role rolename="admin-gui"/&gt;
+   		&lt;role rolename="manager-gui"/&gt;
+   		&lt;user username="admin" password="admin_password" roles="admin-gui,manager-gui"/&gt;
+				
+				**Change username AND password!!
+
+	To allow access to web interface from anywhere:
+		1. sudo vi /opt/tomcat/latest/webapps/manager/META-INF/context.xml
+			- remove:
+				&lt;!--
+ 			 	&lt;Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         			allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt;
+				--&gt;
+		2. sudo vi /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml 
+			- remove same as #1
+		3. sudo systemctl restart tomcat
+</pre>
+<p>
+<span id="Tomcat-Test Tomcat Install"></span><strong id="Test Tomcat Install">Test Tomcat Install</strong>
+</p>
+<pre>
+	1. In browser: http://&lt;your-ip&gt;:8080
+		- find IP deb 12: nmcli -p device show 
+			- next to IP4.ADDRESS[1]: 11.0.0.61/24 --&gt; 11.0.0.61 = IP
+		- should get apache tomcat screen!!
+	2. http://11.0.0.61:8080/manager/html
+		- tomcat web app manager
+		- login with username/pass set in tomcat-users.xml
+	3. http://11.0.0.61:8080/host-manager/html 
+		- tomcat virtual host manager
+		- login again
+</pre>
 
 </body>
 </html>

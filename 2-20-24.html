@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-20-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<pre>
+Compiler sees segment + push segment into sizes of 4k
+e.g. 4k segment: 4k + 4k + 2k (frag)
+</pre>
+
+<div id="Dynamic Address Translation: ON TEST"><h3 id="Dynamic Address Translation: ON TEST" class="header"><a href="#Dynamic Address Translation: ON TEST">Dynamic Address Translation: ON TEST</a></h3></div>
+<pre>
+	Used to convert physical address to virtual addresses 
+	Have: segment map table, page map table (for each segment)
+	Start at 0 in P1 in the page tables: 0 = invalid, next = 1 = valid, whose value is 013 
+	
+	Segment table runs from 0 - 7, the first number = valid/invalid bit, and last num =page it points to 
+		--&gt; e.g. segment 7 points to P5
+	
+	Sample address: V=(6,01,D5F)	
+		1. go to segment map table, find segment 6 (make sure to count from 0!!!)
+		2. go to page table that's pointed to by segment 6 (P1)
+		3. go to page #1 in P1 (b/c of 01 above) and find starting address it points to (013)
+		4. Virtual address = start address + displacement = 013D5F 
+	
+	**Segment fault = if go to segment map table, and segment 6 does NOT point to any page
+	**Invalid Reference = if go to page map table or segment map table, and page/segment doesn't exist
+		--&gt; e.g. go to segment 10, but there are only segments 0-7
+	**Page Fault = if look at page map table, and the page not pointing to a starting address (empty)
+		--&gt; OR if the valid/invalid bit = 0
+		--&gt; OS needs to put the page into the page frames 
+		--&gt; if no free page frames, need to do page replacement 
+</pre>
+
+<div id="Chapter 10 cont'd"><h3 id="Chapter 10 cont'd" class="header"><a href="#Chapter 10 cont'd">Chapter 10 cont'd</a></h3></div>
+<div id="Chapter 10 cont'd-Page Replacement Algos: ON TEST"><h5 id="Page Replacement Algos: ON TEST" class="header"><a href="#Chapter 10 cont'd-Page Replacement Algos: ON TEST">Page Replacement Algos: ON TEST</a></h5></div>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-FIFO"></span><strong id="FIFO">FIFO</strong>
+</p>
+<pre>
+	--&gt; replace the oldest page in physical memory 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-Optimal Algorithm"></span><strong id="Optimal Algorithm">Optimal Algorithm</strong>
+</p>
+<pre>
+	--&gt; replace page that will not be used for longest period of time 
+	--&gt; can't implement, b/c can't predict async run time of these processes 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-Least Recently Used (LRU)"></span><strong id="Least Recently Used (LRU)">Least Recently Used (LRU)</strong>
+</p>
+<pre>
+	--&gt; replace page not been used in the most amount of time 
+	--&gt; need hardware support
+		--&gt; when page referenced, it gets a clock stamp (slows things down) 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-LRU Approximation Algos"></span><strong id="LRU Approximation Algos">LRU Approximation Algos</strong>
+</p>
+<pre>
+	1. Second chance clock replacement 
+		--&gt; set a reference bit
+		--&gt; go down pages, if find 1, page has been referenced, keep going
+		--&gt; looking for zeroes: find zero, then choose that page 
+		--&gt; after you check each page, set it back to 0
+		--&gt; circular queue of pages
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-Counting Algos"></span><strong id="Counting Algos">Counting Algos</strong>
+</p>
+<pre>
+	1. replace page w/ least number of "hits"
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Page Replacement Algos: ON TEST-Not Used Recently"></span><strong id="Not Used Recently">Not Used Recently</strong>
+</p>
+<pre>
+	1. 2 bits per frame (1 = access, 1 = modify)
+	2. periodically, system resets all access bits to 0
+	3. Order of replacement:
+			  1. O A M
+			  2. 1 0 0
+			  3. 2 0 1
+			  4. 3 1 0
+			  5. 4 1 1 
+		--&gt; want to get rid of one that has not been accessed AND modified FIRST
+		--&gt; want to get rid of one that has been accessed AND modified LAST 
+</pre>
+<div id="Chapter 10 cont'd-Allocation of Frames"><h5 id="Allocation of Frames" class="header"><a href="#Chapter 10 cont'd-Allocation of Frames">Allocation of Frames</a></h5></div>
+<pre>
+	--&gt; every process needs minimum number of frames 
+		--&gt; max = total frames in system 
+	--&gt; fixed allocation or priority (process priority) allocation
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Local vs Global Allocation"></span><strong id="Local vs Global Allocation">Local vs Global Allocation</strong>
+</p>
+<pre>
+	--&gt; global = can choose replcaement frame from total set of frames
+	--&gt; local = process can onyl choose from own set of allocated frames 
+		--&gt; more consistent per-process peformance
+		--&gt; underutilized mem
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Thrashing"></span><strong id="Thrashing">Thrashing</strong>
+</p>
+<pre>
+	--&gt; if sys has a lot of page faults, sys is thrashing
+	--&gt; keep going to OS to find page in mem to replace, stick page in I/O
+	--&gt; if page being replaced has a dirty bit (1 = page has been modified)
+		--&gt; b4 replace page, need to rewrite page on pagng storage device 
+	
+	demand paging = bring pages in when you need them 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Working Set Model"></span><strong id="Working Set Model">Working Set Model</strong>
+</p>
+<pre>
+	--&gt; how many frames to allocated to a process
+	--&gt; need to keep track of working set
+		--&gt; if lots of page faults in working set, make working set larger, vice versa 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Memory Mapped Files"></span><strong id="Memory Mapped Files">Memory Mapped Files</strong>
+</p>
+<pre>
+	--&gt; when reading/writng files, pages from mem are used to store this info 
+	--&gt; want I/O from file sitting in mem
+	--&gt; OS makes decision on how much to sit in mem i
+	
+	Can share files by sharing memory 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Buddy System"></span><strong id="Buddy System">Buddy System</strong>
+</p>
+<pre>
+	--&gt; split mem into slabs to allocate it (no contiguous mem) 
+</pre>
+<p>
+<span id="Chapter 10 cont'd-Allocation of Frames-Translation Look Aside Buffer Reach"></span><strong id="Translation Look Aside Buffer Reach">Translation Look Aside Buffer Reach</strong>
+</p>
+<pre>
+	--&gt; in TLB, 61013 (6 = segment in sement map table, 01 = page in page map table, 013 = starting address pulled from page table
+	--&gt; if make a change to starting address, need to set page to invalid and update then vaid again
+	--&gt; need to reload TLB
+	--&gt; but TLB increases performance, b/c hardware doesnt have to go chasing these diff tables 
+</pre>
+
+
+<div id="Chapter 11: Mass Storage Systems"><h3 id="Chapter 11: Mass Storage Systems" class="header"><a href="#Chapter 11: Mass Storage Systems">Chapter 11: Mass Storage Systems</a></h3></div>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Overview of Mass Storage Structure"></span><strong id="Overview of Mass Storage Structure">Overview of Mass Storage Structure</strong>
+</p>
+<pre>
+	--&gt; EIDE, ATA, SATA, USB, Fibre Channe SCSI, SAS, Firewire = standward set ups of communicating with devices 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Moving Head Disk Mechanism (Hard Disk)"></span><strong id="Moving Head Disk Mechanism (Hard Disk)">Moving Head Disk Mechanism (Hard Disk)</strong>
+</p>
+<pre>
+	--&gt; hard disk has read/write bit, platters filled with tracks
+	--&gt; an arm rotates around platters, with read write heads stickin out over platters 
+	--&gt; platters makes a cylinder
+	--&gt; allocate files by cylinder + track 
+	
+	Data Speed Components:
+		1. Seek time: move R/W heads across tracks to find wanted track (millisecs, slowest part of disk)
+		2. Rotational Delay / Latency: as cylinder spins, need to find where to start R/W
+		3. Transfer Speed: how much you can get from read write heads to your devices 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Solid State Disks"></span><strong id="Solid State Disks">Solid State Disks</strong>
+</p>
+<pre>
+	--&gt; nonvolatile mem, more reliable than HDDs 
+	--&gt; shorter life span, more expensive, faster, less capacity 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Magnetic Tape"></span><strong id="Magnetic Tape">Magnetic Tape</strong>
+</p>
+<pre>
+	--&gt; cheapest, very old, slow 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Structure"></span><strong id="Disk Structure">Disk Structure</strong>
+</p>
+<pre>
+	--&gt; data is organized in logical blocks: sectoring
+	--&gt; on disk have tracks, break tracks into sectors (128/256 bytes) 
+		--&gt; each sector can have controlled info, indicate if u have bad sector 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Attachment"></span><strong id="Disk Attachment">Disk Attachment</strong>
+</p>
+<pre>
+	--&gt; can use presets, e.g. SCSI
+</pre>
+
+<div id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST"><h5 id="Disk Scheduling: ON TEST" class="header"><a href="#Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST">Disk Scheduling: ON TEST</a></h5></div>
+<pre>
+	--&gt; OS schedules disk access for ALL I/O, for different schemes 
+	--&gt; have a request queue w/ tracks needing things 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-FCFS"></span><strong id="FCFS">FCFS</strong>
+</p>
+<pre>
+	--&gt; go to first track in queue
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-SSTF"></span><strong id="SSTF">SSTF</strong>
+</p>
+<pre>
+	--&gt; shortest seek time first 
+	--&gt; can cuase starvation
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-SCAN"></span><strong id="SCAN">SCAN</strong>
+</p>
+<pre>
+	--&gt; start scanning tracks to look for a track that needs service 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-CSCAN"></span><strong id="CSCAN">CSCAN</strong>
+</p>
+<pre>
+	--&gt; always seeks in same direction, jump back in 1 swoop back to 0 to keep looking 
+	--&gt; On test: asking how long to get thru 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-CLOOK"></span><strong id="CLOOK">CLOOK</strong>
+</p>
+<pre>
+	--&gt; like CSCAN, but don't go to end, only go to last request u have
+	--&gt; jump back to 1st request closest to zero
+	--&gt; circular scan but looking ahead 
+</pre>
+
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-Booting from Disk on Window"></span><strong id="Booting from Disk on Window">Booting from Disk on Window</strong>
+</p>
+<pre>
+	--&gt; if many disks on sys, usually 1 has active flag
+	--&gt; the one with the flag is the one that the bootstrap program will go thru and read the sectors, and boot from that disk 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-Swap Space Management"></span><strong id="Swap Space Management">Swap Space Management</strong>
+</p>
+<pre>
+	--&gt; linux uses this
+	--&gt; virtual mem uses disk space as extension of mem 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-RAID Structure"></span><strong id="RAID Structure">RAID Structure</strong>
+</p>
+<pre>
+	--&gt; redundant array of inexpensive disks
+	--&gt; even if u lose one disk, can rebuild from other redundant disks w/ same info 
+</pre>
+<p>
+<span id="Chapter 11: Mass Storage Systems-Disk Scheduling: ON TEST-ZFS Checksums All Metadata and Data"></span><strong id="ZFS Checksums All Metadata and Data">ZFS Checksums All Metadata and Data</strong>
+</p>
+<pre>
+	Checksums: 
+	If have string of bytes check how many 1s in each string
+	1. first string = 5 1s = odd parity = 1 next to it
+	2. second string = 4 1s = even parity = 0 next to it 
+		--&gt; repeat across rows of bytes + columns of bytes 
+	
+	0011 0 
+	1100 0
+	0010 1
+	1111 0
+	
+	0010
+	
+	Need checksum to recreate data if it gets scrambled 
+</pre>
+
+</body>
+</html>
