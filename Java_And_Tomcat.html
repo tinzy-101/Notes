@@ -203,8 +203,11 @@ WantedBy multi-user.target
    		&lt;role rolename="manager-gui"/&gt;
    		&lt;user username="admin" password="admin_password" roles="admin-gui,manager-gui"/&gt;
 				
-				**Change username AND [[password]]!!
-
+				**Change username AND 
+</pre>
+<pre><code><a href="password.html">password</a> 
+</pre></code>
+<pre>
 	To allow access to web interface from anywhere:
 		1. sudo vi /opt/tomcat/latest/webapps/manager/META-INF/context.xml
 			- remove:
