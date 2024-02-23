@@ -75,7 +75,11 @@ Downloading software from a tar.gz
 Downloading .deb package
 	1. sudo dpkg -i &lt;package-name&gt;.deb 
 	2. can use &lt;package-name&gt; --help to see what to do next with downloaded package
-
+Uninstaling .deb package
+	1. dpkg -r $(dpkg -f &lt;your-file.deb&gt; Package)
+		- deletes ALL files associated with .deb file
+	3. OR use apt-cache search &lt;your-package&gt;
+		- dpkg --remove &lt;package-name&gt;
 </pre>
 
 <div id="Keyboard Stuff"><h3 id="Keyboard Stuff" class="header"><a href="#Keyboard Stuff">Keyboard Stuff</a></h3></div>

@@ -263,6 +263,25 @@
 	--&gt; inverted page table = only 1 entry for each real page/frame of mem 
 		--&gt; every entry = virtual address of page stored in real location 
 	--&gt; overall: 1 page table for whole sys, one entry for every page in physical mem
+	--&gt; addresses: process id + page number, search inverted page table for a match, and generate physical address
+	--&gt; pro: less mem to store each table
+	--&gt; con: more time to search table w/ a page reference 
+		--&gt; use hash table to search for only a few page table entries 
+</pre>
+
+
+<div id="9.5 Swapping"><h3 id="9.5 Swapping" class="header"><a href="#9.5 Swapping">9.5 Swapping</a></h3></div>
+<pre>
+	--&gt; process / part of process can be swapped out of mem temporarily into a backing store when it's not being executing
+	--&gt; with swapping: physical address space &gt; real physical mem of sys = more multiprogramming 
+</pre>
+<p>
+<span id="9.5 Swapping-Standard Swapping"></span><strong id="Standard Swapping">Standard Swapping</strong>
+</p>
+<pre>
+	--&gt; standard swapping = move whole processes between main mem and backing store (very fast secondary storage)
+	--&gt; data structures associated with processes also need to be moved to backing store
+	--&gt; pro: physical mem oversubsribed + accomodate more processes 
 </pre>
 <div id="Explanation of Paging doc"><h3 id="Explanation of Paging doc" class="header"><a href="#Explanation of Paging doc">Explanation of Paging doc</a></h3></div>
 <pre>

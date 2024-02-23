@@ -18,6 +18,129 @@
 <pre>
    - database system = database + software to manage database + apps w/ UI
 	- database = repo of data
+	- us db as dbms (database management system, w/ all software) and build apps onto 
+	
+	Relational Structures:
+		- many db built on relational data model: structure, integrity, language
+		- relation = relational model table w/ nonduplicate rows 
+		  - row = record (tuple)
+		  - column = single attribute of the record (attribute) 
+		  - tables = describe relations b/w data to form a record
+	
+	Integrity Constraints: 
+		- integrity constraint = condition that all legal values in table obey 
+		   - e.g. domain constraint: allowed values for attributes 
+		  		- specified with ints, floats, strings
+				- can make attribute "null"
+				- only 1 relation
+			- e.g. primary key constraint: attributes to uniqely identify tuples in relations
+				- superkey: (set of) attribute to identify relation
+				- key: minimal superkey
+				- primary key: one of candidate keys (bc many keys) designated by db designer 
+			- e.g. foreign key constraint: set of attributes to define relationships b/w relations (diff tables) 
+				-  a set of attrib = foreign key in a relation R that references another relation T if: 
+					1. foreign key attribs have same domain as primary key in T
+					2. nonnull value in foreign key attribs match primary key value in T
+</pre>
+
+<div id="34.3 SQL"><h3 id="34.3 SQL" class="header"><a href="#34.3 SQL">34.3 SQL</a></h3></div>
+<pre>
+	- SQL = language to access relational database systems 
+	  - can be used on any relational db system, including apache derby (dev using java)
+	  - MySQL = popular db, use with java 
+		 
+	Download MySQL:
+	 	1. https://dev.mysql.com/downloads/
+		2. go to MySQL Community Server + select correct OS
+		3. download tarball
+		4. $&gt; tar -xvf mysql-server_MVER-DVER_CPU.deb-bundle.tar 
+			- MVER = MySQL version
+			- DVER = linux distro version
+			- CPU = type of processor 
+			  - need to change these values!!! look in downloads folder 
+		5. $&gt; sudo apt-get install libaio1 
+			- extra library 
+		6. $&gt; sudo dpkg-preconfigure mysql-community-server_*.deb 
+			- will get popup to enter password for root
+		
+	Setup MySQL: 
+		1. mysql -u root -p 
+			- enter root password set above
+			- if didn't set password, default password is nothing, use: 
+			  - mysql -u root 
+			- enter mysql console
+		2. create user 'user'@'localhost' identified by 'password'; 
+			- creates user "user" with password "password"
+			- remember ur semicolons!! 
+			  - if u forget, will get \n and prompt: "-&gt;" 
+			  - no bueno, ctrl+C to get out
+		3. grant select, insert, update, delete, create, create view, drop, execute, references on *.* to 'user'@'localhost';
+			- permissions to "user" 
+		4. grant all privileges on *.* to 'user'@'%' identified by 'password';
+			- enable remote access of acct from any IP address
+			- doesn't work right now, but can choose another IP address to sub for '%' to grant remote access there (need to test on orangepi) 
+		5. exit 
+			- exit mysql console
+		6. mysql -V 
+			- check version
+			- done OUTSIDE mysql console (regular terminal)
+		6. ctrl+l 
+			- clear mysql terminal
+</pre>
+<p>
+<span id="34.3 SQL-Creating Database"></span><strong id="Creating Database">Creating Database</strong>
+</p>
+<pre>
+	Default: mysql &amp; test databases 
+		- mysql = tables w/ info abt server + users 
+		  - meant for admin
+		  - DON'T create tables in mysql db
+		- test = db to store and create new db's 
+	
+	Create DB:
+		1. mysql -uuser -ppassword 
+			- don't forget leading -u and -p to indicate user and password!!
+		2. create database javabook;
+			- creates DB called javabook 
+		3. use javabook;
+			- switch into DB
+		3.5 select database(); 
+			- see current selected db
+		4. source script.sql; 
+			- run commands in script file, need to download
+			- will create and init tables used in book
+</pre>
+<p>
+<span id="34.3 SQL-Creating Tables (from console)"></span><strong id="Creating Tables (from console)">Creating Tables (from console)</strong>
+</p>
+<pre>
+	1. create table Student(
+		-&gt; SSID integer
+		-&gt; firstName varchar(25)
+		-&gt; );
+	2. will enter arrow regions, enter each entry of table in and press enter 
+		- if last line ends in semicolon, will exit arrow region
+		- if make a mistake, need to restart whole command  
+		  - instead, use .sql file
+	3. SSID = attriute, integer = datatype stored in attribute 
+	4. Datatypes: 
+		- char(5) = 5 characters
+		- varchar(50) = variable characters, but max 50
+		- integer = integer
+		- primary key = primary key
+			- choose one of the attributes to be primary key to unique identify the table
+			- e.g. choose ssn, b/c that is unique to everyone, while firstName isn't
+	5. show tables; 
+		- see what and where tables
+	6. drop table Course;
+		- permanently drop table 
+	
+	Using .sql file: 
+		1. write out same sql code above in text editor to define table
+		2. source path/to/myfile.sql 
+			- runs script file 
+		3. comments: 
+			-- this is a comment 
 </pre>
 
 </body>

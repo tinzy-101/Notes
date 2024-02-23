@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-22-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 11 cont'd"><h3 id="Chapter 11 cont'd" class="header"><a href="#Chapter 11 cont'd">Chapter 11 cont'd</a></h3></div>
+<p>
+<span id="Chapter 11 cont'd-Direct Memory Access"></span><strong id="Direct Memory Access">Direct Memory Access</strong>
+</p>
+<pre>
+	- happens when nothing happening on memory address line
+	- something in CPU keeps track of data being moved into mem from external device
+</pre>
+<p>
+<span id="Chapter 11 cont'd-I/O Interface"></span><strong id="I/O Interface">I/O Interface</strong>
+</p>
+<pre>
+	- have many different devices (character streams, sync/async, sharable/dedicated, read/write)
+	- OS has control management modules + I/O subsys that work with diff structures in ur files
+	- I/O evices: block, character, mem-mapped, network sockets 
+</pre>
+<p>
+<span id="Chapter 11 cont'd-Nonblocking and Async I/O"></span><strong id="Nonblocking and Async I/O">Nonblocking and Async I/O</strong>
+</p>
+<pre>
+	- usually block until I/O is complete 
+	- others will just continue, and sync up later (async)
+</pre>
+<p>
+<span id="Chapter 11 cont'd-Error Handling"></span><strong id="Error Handling">Error Handling</strong>
+</p>
+<pre>
+	- make sure any I/O instruction is priviledged (coming from OS)
+</pre>
+<p>
+<span id="Chapter 11 cont'd-Power Management"></span><strong id="Power Management">Power Management</strong>
+</p>
+<pre>
+	- is special interrupt port
+	- want to save state of machine if power down 
+</pre>
+
+<div id="Chapter 13: File System Interface"><h3 id="Chapter 13: File System Interface" class="header"><a href="#Chapter 13: File System Interface">Chapter 13: File System Interface</a></h3></div>
+<p>
+<span id="Chapter 13: File System Interface-File Concept"></span><strong id="File Concept">File Concept</strong>
+</p>
+<pre>
+	- contiuous logical address space
+	- 2 types of data stored: human readable text data + binary 
+	  - diff from book 
+</pre>
+<p>
+<span id="Chapter 13: File System Interface-File Attrib"></span><strong id="File Attrib">File Attrib</strong>
+</p>
+<pre>
+	- name, identifier, type, location, size, protection, time, date, user id
+</pre>
+<p>
+<span id="Chapter 13: File System Interface-File Operations"></span><strong id="File Operations">File Operations</strong>
+</p>
+<pre>
+	- file = abstract data type
+	- operations: create, write (at write pointer), read (at read pointer), reposition, delete, truncate, open, close 
+</pre>
+<p>
+<span id="Chapter 13: File System Interface-Open File"></span><strong id="Open File">Open File</strong>
+</p>
+<pre>
+	- open file table = track open tables 
+	- can lock an open file 
+	  - shared lock = many can use
+	  - exclusive lock = only 1 can use 
+</pre>
+<p>
+<span id="Chapter 13: File System Interface-File System Organization"></span><strong id="File System Organization">File System Organization</strong>
+</p>
+<pre>
+	1. directory 
+		- operations, search, create, delete file, etc
+		- single level, two level, tree structure
+	2. partition A (bunch of files)
+	3. directory
+	4. partition B (bunch of files) 
+	
+	- can mount FS as long as host system can support the fs type 
+	- can set up file sharing across network
+	- need to protect files (read, write, exec, list, delete) 
+	  - e.g. access lists on windows 
+</pre>
+
+<div id="File Organizations: ON TEST"><h3 id="File Organizations: ON TEST" class="header"><a href="#File Organizations: ON TEST">File Organizations: ON TEST</a></h3></div>
+<pre>
+	- use file allocation table (FAT)
+	- each file is allocated blocks
+	- 12 bit table, 2^12= 4096, max size partition = 2GB for FAT12 
+	 
+	How it works
+	1. File1.txt has pointer to 2, 2 has pointer to 4, 4 points to 4, 4 points to 6, 6 points to 7, 7 points to end of file 
+	2. MyDir points to 3 (in FAT index), 3 points to 5, 5 points to 5, 5 points to EOC (end of file)	
+	In Dir Entry
+	1. see file and starting block of file (e.g. File1.txt starts in block 2 of the FAT index) 
+	
+</pre>
+
+<div id="Sample DOS 3.5 in floppy disk"><h3 id="Sample DOS 3.5 in floppy disk" class="header"><a href="#Sample DOS 3.5 in floppy disk">Sample DOS 3.5 in floppy disk</a></h3></div>
+<pre>
+	1. In debug: 1 0 1 0 100 (address, drive, first sector, number of sectors u wanna read) 
+	2. Dump mem, can see FAT table on disk 
+		- shows allocation of disk's sectors 
+		- are 2 copies, in case 1 gets corrupted 
+	3. type in different sectors to see contents of different files 
+		- e.g. sector 35 (hex=4600) has contents of file 2 
+	4. type attrib: to see directory items 
+</pre>
+<div id="BTRFS"><h3 id="BTRFS" class="header"><a href="#BTRFS">BTRFS</a></h3></div>
+<pre>
+	- bit track file system = most new type of fs 
+</pre>
+<div id="Project Info"><h3 id="Project Info" class="header"><a href="#Project Info">Project Info</a></h3></div>
+<pre>
+	- add ur name to virtualbox distro name!
+	- run top in terminal and screenshot whole VM 
+</pre>
+
+</body>
+</html>
