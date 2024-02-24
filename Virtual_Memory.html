@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Virtual_Memory</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="10.1 Background"><h3 id="10.1 Background" class="header"><a href="#10.1 Background">10.1 Background</a></h3></div>
+<p>
+<span id="10.1 Background-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	Recap: main mem --&gt; want to keep processes in mem simultaenously, but entire process needs to be in mem b4 can exec
+	Virtual mem --&gt; can exec processes that aren't entirely in main mem 
+		- abstract main mem into array of storage
+		- easy to share files and libraries
+		- efficient process creation 
+</pre>
+<p>
+<span id="10.1 Background-Background"></span><strong id="Background">Background</strong>
+</p>
+<pre>
+	- need basic requirement: instructions executing must be in physical mem:
+		- put entire logical address space in physical mem (dynamic linking) 
+			- limits size of programs to size of physical mem 
+			- can exec processes if only have part of it (usually programs are overallocated mem) 
+	- virtual mem = separate logical mem from physical dev 
+	  - virtual address space of process = logical/virtual view of how process stored in mem 
+	  - stack and heap: heaps grows up as used for dynamic mem alloc, stack grows down thru function calls 
+		 - hold b/w heap + stack = virtual address space + need physical pages as heap/stack grow 
+	- virtual addressing = easier to share pages
+</pre>
+
+<div id="10.2 Demand Paging"><h3 id="10.2 Demand Paging" class="header"><a href="#10.2 Demand Paging">10.2 Demand Paging</a></h3></div>
+<pre>
+	- demand paging = load pages only as needed (demanded by program exec)
+	- use mem efficiently
+</pre>
+<p>
+<span id="10.2 Demand Paging-Basic Concepts"></span><strong id="Basic Concepts">Basic Concepts</strong>
+</p>
+<pre>
+	- when process exec, some pages in main mem, some in secondary storage 
+	- use bit to keep track of which pages where: 
+	  - invalid = page not in logial address space of process, OR currently in 2nd storage 
+		 - access = page fault 
+	  - valid = page is legal + in mem 
+	
+	Handling Page Fault: 
+		1. check internal table in PCB to see if reference = valid/invalid mem access
+		2. if invalid, end process. if valid, bring page in (means page was in 2nd storage)
+		3. find free frame
+		4. schedule 2ndary storage operation to read desired page into new frame
+		5. finish storage read + updte internal table for process + update page table
+		6. restart instruction that was interrupted 
+			- MOST important step (need EXACTLY same state) 
+	
+	Pure demand paging 
+		- never bring page into mem until required
+		- locality of reference =  creates reasonabl performance for demand paging
+	
+	Hardware needed
+		- page table = mark entries (in)valid
+		- secondary mem = hold pages not in main mem, use swap space 
+</pre>
+<p>
+<span id="10.2 Demand Paging-Free-frame list"></span><strong id="Free-frame list">Free-frame list</strong>
+</p>
+<pre>
+	- free frame list = pool of free frames that can be pulled when page fault 
+	- allocate free frames using zero fill on demand = need to erase previous contents b4 allocation
+	- need to eventually repopulate as free frames used up
+</pre>
+<p>
+<span id="10.2 Demand Paging-Performance of demand paging"></span><strong id="Performance of demand paging">Performance of demand paging</strong>
+</p>
+<pre>
+	- need to how low page-fault rate for demand-paging system, or else process exec VERY slow
+	- need to handle + use swap space efficiently 
+	  - I/O swap space faster than fs swap space 
+</pre>
+
+
+<div id="10.3 Copy-on-write"><h3 id="10.3 Copy-on-write" class="header"><a href="#10.3 Copy-on-write">10.3 Copy-on-write</a></h3></div>
+<pre>
+	- need to bypass demand paging when creating processes w/ fork() 
+	- copy-on-write = allow parent and chil dprocesses to initially share same pages 
+	  - creates copies of pages when they are written to 
+	  - saves mem, bc don't need 2 copies of same mem (initially, parent and child have same mem)
+</pre>
+
+
+<div id="10.4 Page Replacement"><h3 id="10.4 Page Replacement" class="header"><a href="#10.4 Page Replacement">10.4 Page Replacement</a></h3></div>
+<pre>
+	- virtual mem = usually over allocating mem 
+	  - e.g. page fault happens when process exec, but when OS tries to find free frame, none
+		  - OS needs to terminate process, standard swapping to free all frames of process, OR page replacement
+</pre>
+<p>
+<span id="10.4 Page Replacement-Basic Page replacement"></span><strong id="Basic Page replacement">Basic Page replacement</strong>
+</p>
+<pre>
+	- if no free frame, find one being used and free it (write contents to swap space + change page tables) 
+	- use freed frame to hold page that caused process to faul
+	- use dirty bit (eveyr page and frame has a bit to show if it has been modified or now) 
+	- NEED page replacement for demand paging to work 
+	  - also need frame allocation algo + page replacement algo 
+</pre>
+<p>
+<span id="10.4 Page Replacement-FIFO page replacement"></span><strong id="FIFO page replacement">FIFO page replacement</strong>
+</p>
+<pre>
+	- choose oldest page to repalce
+	- not great performance 
+	  - sometimes page fault rate increases as num of alocated frames increase 
+</pre>
+<p>
+<span id="10.4 Page Replacement-Optimal page replacement"></span><strong id="Optimal page replacement">Optimal page replacement</strong>
+</p>
+<pre>
+	- replace page that won't be used for longest period of time
+	- lowest page fault rate!!
+	- but: hard to implement, can't predict the future
+</pre>
+<p>
+<span id="10.4 Page Replacement-LRU page replacement"></span><strong id="LRU page replacement">LRU page replacement</strong>
+</p>
+<pre>
+	- replace page that has not been used for longest period of time 
+	  - approximation of OPT algo 
+	- implementation: 
+	  - counter in CPU to track page table accesses
+	  - keep stack of page numbers, if page is reference, move to top of stack 
+	- con:
+	  - lots of overhead w/ updating counter/stack for EVERY reference 
+</pre>
+<p>
+<span id="10.4 Page Replacement-LRU approximation page replacement"></span><strong id="LRU approximation page replacement">LRU approximation page replacement</strong>
+</p>
+<pre>
+	- LRU needs a lot of hardware support (not feasible for most sys)
+	- can use reference bit instead to keep track of pages that have been accessed 
+	  - only approximates LRU
+</pre>
+<p>
+<span id="10.4 Page Replacement-Additional Reference bits algo"></span><strong id="Additional Reference bits algo">Additional Reference bits algo</strong>
+</p>
+<pre>
+	- record reference bits at regular intervals
+	- will get multiple pages w/ identical value, can swap out ALL pages with smallest value or use FIFO to choose
+</pre>
+<p>
+<span id="10.4 Page Replacement-Second chance algo"></span><strong id="Second chance algo">Second chance algo</strong>
+</p>
+<pre>
+	- when page selected, look at reference bit
+		- if bit = 0, replae page
+		- if bit = 1, give page 2nd chance and move to select next FIFO page 
+		  - will clear reference bit + reset time 
+	- use a circular queue 
+	- worst case = every bit is set, cycle thru each queue and everyone gets a 2nd chance, and will clear all bits b4 choosing next page for replacement (basically FIFO)
+</pre>
+<p>
+<span id="10.4 Page Replacement-Enhanced 2nd chance"></span><strong id="Enhanced 2nd chance">Enhanced 2nd chance</strong>
+</p>
+<pre>
+	- use 2 bits: reference + modify
+	1. (0,0) = not used or modified
+	2. (0,1) = not used but modified
+	3. (1,0) = used but not modified 
+	4. (1,1) = used and modified 
+	
+	replaement order: 1 -&gt; 2 -&gt; 3 -&gt; 4
+</pre>
+<p>
+<span id="10.4 Page Replacement-Counting based page replacement"></span><strong id="Counting based page replacement">Counting based page replacement</strong>
+</p>
+<pre>
+	- Page buffering algos:
+			  - keep lsit of modded pages + write these pages to 2nd mem when paging device is idel
+			  - OR keep pool of free frames but remember which page in each frame 
+</pre>
+
+
+<div id="10.5 Allocation of frames"><h3 id="10.5 Allocation of frames" class="header"><a href="#10.5 Allocation of frames">10.5 Allocation of frames</a></h3></div>
+<pre>
+	- how to allocate fixed amt of free mem amont processes?
+	- requirements: OS allocates all of uffer + table space from free frame lsit 
+	 
+</pre>
+<p>
+<span id="10.5 Allocation of frames-Minimum num of frames"></span><strong id="Minimum num of frames">Minimum num of frames</strong>
+</p>
+<pre>
+	- can't alloc more than total num avail frames + alloc min num frames
+	- min num frames determined by comp arch, max num defined by physical mem (still a lot of choice)
+</pre>
+<p>
+<span id="10.5 Allocation of frames-Alloc algos"></span><strong id="Alloc algos">Alloc algos</strong>
+</p>
+<pre>
+	- equal allocation = give every processes same num frames + use leftover frames as free frame buffer pool
+	- proportional allocation = alloca avail mem ot each process based on sie 
+</pre>
+<p>
+<span id="10.5 Allocation of frames-Global vs local alloc"></span><strong id="Global vs local alloc">Global vs local alloc</strong>
+</p>
+<pre>
+	- global replacement = process can choose replacement frame from set of ALL frames
+	- local replacement = process can only choose replacement from a specific set 
+</pre>
+<p>
+<span id="10.5 Allocation of frames-Non uniform mem access"></span><strong id="Non uniform mem access">Non uniform mem access</strong>
+</p>
+<pre>
+	- NUMA systems  = one CPU can access parts of main mem faster than can access others 
+	  - can't treat mem equally on NUMA systems, need to track last CPU + processes 
+</pre>
+
+
+<div id="10.6 Thrashing"><h3 id="10.6 Thrashing" class="header"><a href="#10.6 Thrashing">10.6 Thrashing</a></h3></div>
+<pre>
+	- thrashing = continual cycle of faulting and replacing pages that need to immediately back in
+	- thrashing process = spend more time paging than executing
+</pre>
+<p>
+<span id="10.6 Thrashing-Cause of thrashing"></span><strong id="Cause of thrashing">Cause of thrashing</strong>
+</p>
+<pre>
+	1. process exec, suddently faults b/c it needs more frames, takes frames from others
+	2. other processes also need their frames, so also fault
+	3. faulting processes need to wait for paging device to swap pages in and out 
+		- causes CPU utilization decrease!! 
+	4. CPU scheduler sees CPU uze decreases, and increases multiprogramming
+	5. new process tries to start by taking frames from running proccess = longer queue for paginging device 
+		
+	Remedy:
+		- local replacement algo 
+		- locality model = figure out how many pages frame will need by looking at how many it has rn
+			- locality = set of pages actively used together 
+</pre>
+<p>
+<span id="10.6 Thrashing-Page Fault Frequency"></span><strong id="Page Fault Frequency">Page Fault Frequency</strong>
+</p>
+<pre>
+	- thrashing has high page fault rate = know that process needs more frames
+	- if page fault rate low = too many frames
+	- create upper + lower bounds on wanted page fault rate 
+	  - change allocation based on crossing upper/lower bound or not 
+</pre>
+
+
+<div id="10.7 Memory Compression"><h3 id="10.7 Memory Compression" class="header"><a href="#10.7 Memory Compression">10.7 Memory Compression</a></h3></div>
+<pre>
+	- memory compression = compress many frames into 1, less memory usage without swapping 
+	- need to balance high compression ratios + fast algos 
+</pre>
+
+
+<div id="10.8 Allocating kernel mem"><h3 id="10.8 Allocating kernel mem" class="header"><a href="#10.8 Allocating kernel mem">10.8 Allocating kernel mem</a></h3></div>
+<pre>
+	- if process in user mode needs more mem, gets a frame from lsit of free pages
+	- kernel mem get frames from a diff pool bc:
+		1. kernel have different size needs
+		2. usual need contiuous mem 
+</pre>
+<p>
+<span id="10.8 Allocating kernel mem-Buddy System"></span><strong id="Buddy System">Buddy System</strong>
+</p>
+<pre>
+	- buddy system = alloc mem from fixed-size segment w/ contiguous pages
+	- uses powers of 2 to allocate
+	- can quickly coaslesce adjacent buddies (mem segments)
+	- causes fragmentations b/c of power of 2 rule
+</pre>
+<p>
+<span id="10.8 Allocating kernel mem-Slab allocation"></span><strong id="Slab allocation">Slab allocation</strong>
+</p>
+<pre>
+	- slab = one + physically contiguous pages
+	- cache = 1+ slabs
+	- 1 cache per unique kernel data structure + populated with objects 
+</pre>
+
+
+<div id="10.3 Other Considerations"><h3 id="10.3 Other Considerations" class="header"><a href="#10.3 Other Considerations">10.3 Other Considerations</a></h3></div>
+<p>
+<span id="10.3 Other Considerations-Prepaging"></span><strong id="Prepaging">Prepaging</strong>
+</p>
+<pre>
+	- prepaging = tryin to prevent the many apge faults that happen when process is started in demand paging
+		- bring all/some of pages needed in mem in at one time 
+</pre>
+<p>
+<span id="10.3 Other Considerations-Page Size"></span><strong id="Page Size">Page Size</strong>
+</p>
+<pre>
+	- need to find optimal page size (usually powers of 2, 2^12 to 2^22)
+	- page size based on page table
+	- mem usuage better w/ smaller pages = less fragmentation 
+	- less page faults with larger pages
+</pre>
+<p>
+<span id="10.3 Other Considerations-TLB reach"></span><strong id="TLB reach">TLB reach</strong>
+</p>
+<pre>
+	-
+</pre>
+
+</body>
+</html>
