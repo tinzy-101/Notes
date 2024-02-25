@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>IO_Systems</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="12.1 Overview"><h3 id="12.1 Overview" class="header"><a href="#12.1 Overview">12.1 Overview</a></h3></div>
+<p>
+<span id="12.1 Overview-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	- main jobs of computer: i/o and computing 
+	- OS needs to manage and control io operations + devices 
+</pre>
+<p>
+<span id="12.1 Overview-Overview"></span><strong id="Overview">Overview</strong>
+</p>
+<pre>
+	- need to control devices connected to computers + eed different methods b/w there are so many diff devices 
+	- trend: more standardiation of hardware + software interfaces BUT also more variety of io devices 
+	  - device drivers = uniform device access interface to io subsystems 
+</pre>
+
+<div id="12.2 io hardware"><h3 id="12.2 io hardware" class="header"><a href="#12.2 io hardware">12.2 io hardware</a></h3></div>
+<pre>
+	- device comm with computer system by sending signals over cable or thru air
+	  - use connection point = port
+	  - use bus = set of wires + rigid protocol to define messages that can be sent on wires 
+		- use controller = collectionf of electronics to help operate port, bus, or device 
+</pre>
+<p>
+<span id="12.2 io hardware-Memory mapped I/O"></span><strong id="Memory mapped I/O">Memory mapped I/O</strong>
+</p>
+<pre>
+	- controller accesses register for data + control signals
+	- processor reads/write bit patterns in register to comm with controller 
+	- if recieve io instruction, transfer over bus to registers
+	OR mem mapped io: 
+	- device control registers mapped into address space of processor + CPU execs io requests
+	
+	The registers:
+		1. data in: read by host to get input
+		2. data out: written by host to send output
+		3. status: bits can be read by host, indicate states
+		4. control: written by host to start a command or change mode of device 
+</pre>
+<p>
+<span id="12.2 io hardware-Polling"></span><strong id="Polling">Polling</strong>
+</p>
+<pre>
+	- handshaking = protocol for host and controller comm 
+	  - basically check if each other are busy by setting bits, and controller can read command register when host lets it
+	 
+	 - busy waiting = polling: reading status register over and over until busy bit is not set 
+		- would rather have a device use an interrupt to tell CPU it is ready 
+</pre>
+<p>
+<span id="12.2 io hardware-Direct Memory Access"></span><strong id="Direct Memory Access">Direct Memory Access</strong>
+</p>
+<pre>
+	- direct memory access (DMA) controller = spcialy purpose processor to handle large requests
+	- device controller + DMA controller need to communicate over wires of bus 
+	  	- DMA will interrupt CPU once it finishes its transfer 
+		- steald mem access cycles from main CPU (temp blocks CPU)
+</pre>
+<p>
+<span id="12.2 io hardware-I/O Hardware summary"></span><strong id="I/O Hardware summary">I/O Hardware summary</strong>
+</p>
+<pre>
+	- bus
+	- controller
+	- i/o port and registers
+	- handshaking b/w host and dev controller
+	- exec of handshaking in polling loop via interrupts
+	- offload work to DMA for alrge transfer 
+</pre>
+
+
+<div id="12.3 Application I/O interface"><h3 id="12.3 Application I/O interface" class="header"><a href="#12.3 Application I/O interface">12.3 Application I/O interface</a></h3></div>
+<pre>
+	- need structure + interface for OS so that i/o devices can be treated standardly 
+	- device driver layer = hides differences b/w dev controlelrs from i/o subsystems of kernel 
+</pre>
+<p>
+<span id="12.3 Application I/O interface-Block and character devices"></span><strong id="Block and character devices">Block and character devices</strong>
+</p>
+<pre>
+	- block device interface = helps to access disk drives + other block-oriented devices 
+	- needs to recognize read(), write(), seek() commands 
+	- can use mem mapped file access on top of block device drivers 
+</pre>
+<p>
+<span id="12.3 Application I/O interface-Network devices"></span><strong id="Network devices">Network devices</strong>
+</p>
+<pre>
+	- network socket interface = lets apps connect to remote sockets thru local sockets
+		- send packets to communicate 
+	- used for disks 
+	- no polling or busy waiting 
+</pre>
+<p>
+<span id="12.3 Application I/O interface-Clocks and timers"></span><strong id="Clocks and timers">Clocks and timers</strong>
+</p>
+<pre>
+	- computers have hardware clocks: 
+	  1. give current time
+	  2. give elapsed time
+	  3. set a timer to trigger an operation at time T (e.g. interrupts) 
+	- used for a variety of purposes
+</pre>
+<p>
+<span id="12.3 Application I/O interface-Nonblocking and async IO"></span><strong id="Nonblocking and async IO">Nonblocking and async IO</strong>
+</p>
+<pre>
+	- blocking syscall = exec of calling thread is suspended, and moved to wait queue 
+	  - easier to write than non blocking
+	 - nonblocking i/o = required by some user level processes
+	  - can just async syscalls and commands 
+</pre>
+<p>
+<span id="12.3 Application I/O interface-Vectored I/O"></span><strong id="Vectored I/O">Vectored I/O</strong>
+</p>
+<pre>
+	- vectored i/o = one syscall can perform multiple i/o operations with many locations 
+	- use multiple buffers and transfer their contents using 1 syscall, so don't need context switch
+</pre>
+
+
+<div id="12.7 Kernel I/O subsystem"><h3 id="12.7 Kernel I/O subsystem" class="header"><a href="#12.7 Kernel I/O subsystem">12.7 Kernel I/O subsystem</a></h3></div>
+<p>
+<span id="12.7 Kernel I/O subsystem-I/O scheduling"></span><strong id="I/O scheduling">I/O scheduling</strong>
+</p>
+<pre>
+	- use wait queues for each device + I/O scheduler rearranges them in queue to improve efficiency
+	- sometimes device status table attached to wait queue, w/ entries to show address, type, state of device 
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Buffering"></span><strong id="Buffering">Buffering</strong>
+</p>
+<pre>
+	Reasons to use:
+		1. help w/ speed mismatch w/ producer and consumer
+		2. adaptations for device w/ different data transfer sizes
+		3. support copy semantics for app i/o
+			- version of data written to disk is guaranteed to be version in syscall
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Caching"></span><strong id="Caching">Caching</strong>
+</p>
+<pre>
+	- cache = region of fast mem w/ copies of data 
+	- hold copies of currently exec instructions
+	- improve i/o efficiency
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Spooling and device reservation"></span><strong id="Spooling and device reservation">Spooling and device reservation</strong>
+</p>
+<pre>
+	- spool =  buffer w/ output for device 
+	  - e.g. OS will intercept output for printer and put it in spoo 
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Error handling"></span><strong id="Error handling">Error handling</strong>
+</p>
+<pre>
+	- i/o transfers + devices can fail for transient and permanent reasons, and OS needs to compensate
+	- i/o dev returns one bit of info about status of call
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-I/O protection"></span><strong id="I/O protection">I/O protection</strong>
+</p>
+<pre>
+	- all i/o instructions = privileges, users have to do thru OS
+	- mem mapped and i/o port locations need to be protected form user 
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Kernel data structures"></span><strong id="Kernel data structures">Kernel data structures</strong>
+</p>
+<pre>
+	- kernel needs to keep tarck of use of i/o components using kernel data structures  
+</pre>
+<p>
+<span id="12.7 Kernel I/O subsystem-Power management"></span><strong id="Power management">Power management</strong>
+</p>
+<pre>
+	- OS helps with power use + head gen + cooling 
+	  - CPU cores suspended by dont need them 
+</pre>
+
+
+<div id="12.5 Transforming I/O requests to hardware operations"><h3 id="12.5 Transforming I/O requests to hardware operations" class="header"><a href="#12.5 Transforming I/O requests to hardware operations">12.5 Transforming I/O requests to hardware operations</a></h3></div>
+<pre>
+	- how does OS connect app request to set of network wire or to specific disk sector? 
+	- e.g. in UNIX, device names = regular fs name space, no separation in file path for device name 
+	  - use mount table to associate path iwth device name 
+	- modern OS: add new devices and drivers into computer w/o recompiling the kernel 
+	  - dynamic loading!! (more compilcated than static loading) 
+	
+	I/O Request Life Cycle
+		1. I/O request made thru syscall, kernel I/O subsystem checks if can satisfy (e.g. read request if data alr in buffer, don't need to call an i/o device for that)
+		2. if can satisfy, proces the data to return to caller, and return from syscall. if not, send request to proper device driver.
+		3. device driver processes request, send commands to device controller
+		4. controller completes i/o, causes interrupt
+		5. interrupt handled, data now in buffers, reset i/o device, and return from syscall
+</pre>
+
+
+<div id="12.6 Streams"><h3 id="12.6 Streams" class="header"><a href="#12.6 Streams">12.6 Streams</a></h3></div>
+<pre>
+	- many UNIX systems havev STREAMS = app can assemble pipelines of driver code dynamically
+	- stream head = interface w/ user process
+	- driver end = control device
+	- stream modules = b/w stream head and driver end  
+	- all parts of stream have read/write queue, and use message passing b/w queues 
+	  - user: write() or putmsg() syscall
+	- pro: framemwork with modular + incremental way of writing device drivers + network protocols
+		- async
+		- can use modules on diff devices 
+</pre>
+
+
+<div id="12.7 Performance"><h3 id="12.7 Performance" class="header"><a href="#12.7 Performance">12.7 Performance</a></h3></div>
+<pre>
+	- i/o puts high demand on OS: interrupt handling, loading mem bus, many context switches
+	- front-end processors = good for terminal i/o to help CPU 
+	  - e.g. terminal concentrator = multiplex traffic from 100s of remote terminals into 1 port 
+	  - e.g. I/O channel = dedicated CPU in mainframes/high end systems to help offload I/O work 
+	
+	How to make I/O more efficient:
+		1. less context switches
+		2. data is copied in mem less
+		3. less interrupts (use large transfer + smart controllers + polling)
+		4. increase concurrency
+		5. move processing primitives into hardware 
+			- things are faster in hardware
+		6. balance cpu + mem subsystem bus + i/o performance 
+	
+	Where I/O should be implemented: 
+		1. App level 
+			- pro: app code is flexible, and if app code crashes, whole sys won't crash + don't need to reload drivers after every change to code
+			- con: inefficient, context switching overhead + can't use internal kernal data structures (threads, locking)
+		2. Hardware level 
+			- pro: best performance
+			- con: hard to fix bugs, more dev time, less flexibility
+			- implement in device or in device controller 
+			  
+</pre>
+
+</body>
+</html>

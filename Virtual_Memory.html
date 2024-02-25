@@ -308,7 +308,36 @@
 <span id="10.3 Other Considerations-TLB reach"></span><strong id="TLB reach">TLB reach</strong>
 </p>
 <pre>
-	-
+	- TLB reach =amt of mem accessible to TLB (num entries * page size) 
+	- working set for process stored in TLB (ideally), otherwise process spends a lot of time doin page references 
+	  - can increase the size of the page + provide multiple page sizes to increase TLB reach
+</pre>
+<p>
+<span id="10.3 Other Considerations-Inverted Page Tables"></span><strong id="Inverted Page Tables">Inverted Page Tables</strong>
+</p>
+<pre>
+	- inverted page tables = used to reduce amt of physical mem needd to track virtual to physical address translations
+	- since we are reducing amt of physical mem, we are also losing info about the virtual/physical address translation 
+	  - this info is needed for processing page faults
+	  - solution: external table for each process 
+</pre>
+<p>
+<span id="10.3 Other Considerations-Program structure"></span><strong id="Program structure">Program structure</strong>
+</p>
+<pre>
+	- system performance better if user + compiler knows about demand paging (usually don't)
+	- e.g. if create 2D array with info [0][0], [0][1], ..., [0, 127], ... , [1][0], ... , [127][127]
+		- if os gives less than 128 frames to whole program = 128*128 = 16384 page faults
+		- BUT if  user zeroes all words on one pae before starting next page, 128 page fualts 
+	- compiler + loader have big impact on pages, e.g. keeping routines all in 1 page
+</pre>
+<p>
+<span id="10.3 Other Considerations-I/O interlock and page locking"></span><strong id="I/O interlock and page locking">I/O interlock and page locking</strong>
+</p>
+<pre>
+	- when demand paging, need some pages to sometimes be locked in mem 
+	  - when i/o done to virtual mem
+	- if page's lock bit is set, cannot be used as a replacement for another page 
 </pre>
 
 </body>

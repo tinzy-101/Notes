@@ -122,7 +122,7 @@
 		- if last line ends in semicolon, will exit arrow region
 		- if make a mistake, need to restart whole command  
 		  - instead, use .sql file
-	3. SSID = attriute, integer = datatype stored in attribute 
+	3. SSID = attribute, integer = datatype stored in attribute 
 	4. Datatypes: 
 		- char(5) = 5 characters
 		- varchar(50) = variable characters, but max 50
@@ -140,7 +140,140 @@
 		2. source path/to/myfile.sql 
 			- runs script file 
 		3. comments: 
-			-- this is a comment 
+			-- this is a comment 		
+</pre>
+<p>
+<span id="34.3 SQL-Manipulating Tables"></span><strong id="Manipulating Tables">Manipulating Tables</strong>
+</p>
+<pre>
+	Basic Insert:
+		1. Syntax to insert:
+				insert into tableName [column1, column2, ..., column) 
+					- NOTE: these cols are the attributes u defined when creating the table!
+				values (value1, value2, ...,valuen); 
+		2. Example to insert:
+				insert into Course (courseId, subjectId) 
+				values ('11113', 'CSCI');
+		3. column names are optional
+			- if omit, all col values still need to be entered 
+		4. string values case sensitive + single quotes 
+		5. desc tableName; 
+			- list field, types, attributes, etc in table
+
+	Updating:
+		1. Syntax:	
+				update tableName
+				set column1 = newValue1 [, column2 = newValue2, ...]
+				[where condition];
+		2. Example: change "numOfCredits" to 4 for course called "Database Systems"
+		      update Course 
+				set numOfCredits = 4;
+				where title = 'Database Systems';
+			  
+	Deleting:
+		1. Syntax:
+				delete from tableName
+				[where condition]; 
+		2. Example: delete course "Database Systems" from the Course table 
+				delete from Course
+				where title = 'Database Systems';
+		3. Delete ALL records from Course table: 
+				delete from Course;
+				
+	See changes:
+		1. select * from tableName;
+</pre>
+<p>
+<span id="34.3 SQL-Simple Queries"></span><strong id="Simple Queries">Simple Queries</strong>
+</p>
+<pre>
+	Retrieving Info:
+		1. Syntax:
+				select column-list 
+				from table-list
+				where condition;
+		2. Example: select all students in the CS department, will show their first, middle, last names 
+				select firstName, mi, lastName
+				from Student
+				where deptId = 'CS';
+	
+	Operators:
+		1. = - equal
+		2. &lt;&gt; or != - not equal
+		3. &lt;= - less than or equal
+		4. &gt;= - greater than or Equal
+		5. not - logical negation
+		6. and - logical conjuction
+		7. or - logical disjunction
+	
+	Operator Example:
+		1. select firstName, mi, lastName
+			from Student
+			where deptId = 'CS' and zipCode = '31411';
+		2. increases "filters" for info abt CS students
+		3. can replace "firstName, mi, etc ...." with * to get all attributed 
+	
+	Other operators: 
+		1. like: check if string "s" has pattern "p"
+				s like p or s not like p 
+		2. between-and: check if value "v" between values "v1" and "v2" 
+				v between v1 and v2 
+				v &gt;= v1 and v&lt;= v2
+					- can combine with logical operators: v not between v1 and v2
+		3. is null: check if value "v" is null 
+				v is null 
+			
+	Column Alias: 
+		1. select columnName as alias
+			select lastName as "Last Name", zipCode as "ZipCode"
+			from Student 
+			where deptId = 'CS'
+		2. will print table w/ column names as "Last Name" instead of "lastName" from table Student + extra filter for CS dept id
+  
+  Arithmetic Operators
+  		1. select title, 50 * numOfCredits as "Lecture Minutes Per Week"
+			from Course 
+		2. will print the title of course + lecture minutes as a function of number of credits and label as lecture minutes
+
+	Displaying Distinct Tuples
+		1. select distinct subjectId as "Subject ID" 
+			from Course;
+		2. shows all subject Ids, but removes any duplicates 
+		3. "distinct" will be applied to entire tuple:
+			select distinct subjectId, title from Course;
+				- if subjectId + title combo is unique, then show both
+				- might have repeats in individual columns subjectId and title
+	
+	Displaying Sorted Tuples
+		1. Syntax:
+				select column-list 
+				from table-list 
+				where condition
+				order by columns-to-be-sorted 
+		2. Example:
+				select lastName, firstName, deptId 
+				from Student
+				where deptId = 'CS'
+				order by lastName desc, firstName asc; 
+		3. What example does: 
+			- show lastName, firstName, and deptId of members from table Student with a deptId 'CS'
+			- sort the last names in descending order and first names in ascending order
+		
+	Joining Tables
+		1. Example:
+				select distinct lastName, firstName, courseId
+				from Student, Enrollment
+				where Student.ssn = Enrollment.ssn and 
+				lastName = 'Smith' and fristName = 'Jacob' 
+		2. What example does: 
+			- pull records from both table Student and Enrollment
+			- show lastName, firstName, and courseId of each record
+			- only show records where the ssn, lastName, AND firstName attribute are the same
+</pre>
+
+
+<div id="34.4 JDBC"><h3 id="34.4 JDBC" class="header"><a href="#34.4 JDBC">34.4 JDBC</a></h3></div>
+<pre>
 </pre>
 
 </body>

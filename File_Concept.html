@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>File_Concept</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="13.1 File Concept"><h3 id="13.1 File Concept" class="header"><a href="#13.1 File Concept">13.1 File Concept</a></h3></div>
+<p>
+<span id="13.1 File Concept-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	- file = collection of related info 
+	- file system = collection of files + directory structure 
+	  - most fs live on storage devices 
+</pre>
+<p>
+<span id="13.1 File Concept-File Concept"></span><strong id="File Concept">File Concept</strong>
+</p>
+<pre>
+	- file = logicla storage unit, how OS abstracts physical properties of its storage device
+	- file is very broad, can be used for many different types of information storage 
+	  - text file = sequence of chars
+	  - source file = sequence of functions, organized into declarations w/ executable statements
+	  - executable file = series of code sections that loader can bring into mem + execute
+</pre>
+<p>
+<span id="13.1 File Concept-File Attributes"></span><strong id="File Attributes">File Attributes</strong>
+</p>
+<pre>
+	- name: symbolic file name, human readable
+	- identifier: unique number tag, specifies file inside fs
+	- type: needed for sys w/ diff file types
+	- location: pointer to a device + location on device
+	- size: in bytes, words, blocks
+	- protection: who can read, write, exec, etc
+	- timestamps and user id: keep infor for creation, last mod, last use
+</pre>
+<p>
+<span id="13.1 File Concept-File operations"></span><strong id="File operations">File operations</strong>
+</p>
+<pre>
+	- creating file: 
+	  		1. find space in fs
+	  		2. make new entry for file in a dir
+	- opening file 
+	  		1. call open(), and return file handle used as argument in other calls
+	- writing a file 
+	  		1. make syscall for open file handle + info to be written to file
+	  		2. sys searches dir for file + keep write pointer to place in file to be written to
+	  		3. need to update pointer whenever write happens 
+	- reading a file 
+	  		1. make syscall to specify file handle + where next block of file should be put
+	  		2. need read pointer for where next read happens + update it
+	  		3. need current-file-position pointer for each process 
+	- repositioning in file 
+	  		1. reposition current-file-position ptr
+			2. no i/o needed 
+	- deleting a file 
+	  		1. search the dir for file + release all file space
+			2. erase directory entry 
+	- truncating file 
+	  		1. all attributes same except for file length 
+	
+	- can get other file operations by combinging these 
+	 
+	- open-file table: kept by OS, has info about all open files 
+	  - file request specified as index to the table, don't need to search 
+	  - usually have perprocess table that points to system wide table 
+		 
+	Information associated w/ open file: 
+		1. file pointer: track last read-write location as curent-file-position pointer, unique to each process
+		2. file-open count: when files are closed, OS need to reuse open file table entries
+			- counts num of opens + closes 
+		3. location of file: many file operations need to read/write data inside file, so need location 
+		4. access writes: every process opens file in access mode 
+			- stored on per-process table (assess rights)
+	
+	- file locks are like reader-writer locks 
+	  - shared locks and exclusive locks
+	  - important to treat w/ same care as process synchronization, don't want deadlock 
+</pre>
+<p>
+<span id="13.1 File Concept-File types"></span><strong id="File types">File types</strong>
+</p>
+<pre>
+	- common: implement file types as part of file name 
+	  - file name + extension, separated by period 
+	
+	Common file types: 	
+		  | file type      | extension                | function                                  |
+		  |----------------|--------------------------|-------------------------------------------|
+		  | executable     | exe, com, bin, none      | ready to run, machine lang program        |
+		  | object         | obj, o                   | compiled machine lang, not linked         |
+		  | source code    | c, cc, java, perl, asm   | source code                               |
+		  | batch          | bat, sh                  | command to command interpreter            |
+		  | markup         | cml, html, tex           | textual data, docs                        |
+		  | work processor | xml, rtf, docx           | diff word processor formats               |
+		  | library        | lib, a, so, dll          | libraries of routines for programmers     |
+		  | print or view  | gif, pdf, jpg            | ASCII/bin file in printing/viewing format |
+		  | archive        | rar, zip, tar            | related files groups into 1, compressed   |
+		  | multimedia     | mpeg, mov, mp3, mp4, avi | bin file w/ audio or av info              |
+</pre>
+<p>
+<span id="13.1 File Concept-File Structure"></span><strong id="File Structure">File Structure</strong>
+</p>
+<pre>
+	- files need to fit structure defined by OS 
+	  - if have lots of diff types, makes OS very large b/c need to support all of them 
+</pre>
+<p>
+<span id="13.1 File Concept-Internal file structure"></span><strong id="Internal file structure">Internal file structure</strong>
+</p>
+<pre>
+	- hard to locate offset in file for OS 
+</pre>
+
+
+<div id="13.2 Access Methods"><h3 id="13.2 Access Methods" class="header"><a href="#13.2 Access Methods">13.2 Access Methods</a></h3></div>
+<p>
+<span id="13.2 Access Methods-Sequential Access"></span><strong id="Sequential Access">Sequential Access</strong>
+</p>
+<pre>
+	- simplest metod 
+</pre>
+<p>
+<span id="13.2 Access Methods-Direct access"></span><strong id="Direct access">Direct access</strong>
+</p>
+<pre>
+	- file made of fixed length logical records that let programs read/write quickly with no order
+	- good for immediate access to lots of info 
+	  	- e.g. databases 
+	- use relative block number = index relative to start of file 
+</pre>
+<p>
+<span id="13.2 Access Methods-Other Access methods"></span><strong id="Other Access methods">Other Access methods</strong>
+</p>
+<pre>
+	- can build other methods on top of direct access method 
+</pre>
+
+
+<div id="13.3 Directory Structure"><h3 id="13.3 Directory Structure" class="header"><a href="#13.3 Directory Structure">13.3 Directory Structure</a></h3></div>
+<pre>
+	- directory = symbol table that translates file names into file control blocks 
+	
+	Operations on dir 
+		1. search for file
+		2. create file
+		3. delete file 
+			- will leave hole in dir structure, and fs needs to defragment it
+		4. rename a file
+		5. traverse the file system 
+</pre>
+<p>
+<span id="13.3 Directory Structure-Singel Level Dir"></span><strong id="Singel Level Dir">Singel Level Dir</strong>
+</p>
+<pre>
+	- simplest structure, all files in same dir 
+	- con: limits when more files or 1+ users, every file needs unique name 
+</pre>
+<p>
+<span id="13.3 Directory Structure-Two Level Dir"></span><strong id="Two Level Dir">Two Level Dir</strong>
+</p>
+<pre>
+	- each user as own dir (UFD)
+	- when user logs in, search in main file dir (MFD), indexed by user
+</pre>
+<p>
+<span id="13.3 Directory Structure-Tree structured dir"></span><strong id="Tree structured dir">Tree structured dir</strong>
+</p>
+<pre>
+	- users can create their own subdirs + organize their files, tree most common
+	- root dir, every file has unique path name 
+	- subdirs = special file
+		- all dirs have same internal forma: 0 bit = file, 1 bit = subdir 
+	
+	Path Names: 
+		1. absolute path name = start at the root
+		2. relative path name = path from current dir 
+</pre>
+<p>
+<span id="13.3 Directory Structure-Acyclic-graph dirs"></span><strong id="Acyclic-graph dirs">Acyclic-graph dirs</strong>
+</p>
+<pre>
+	- if want to share a file or subdir, it will exist in fs in 2+ places at once 
+	- tree structure = no shared, but acyclic graphic lets dirs to share subdirs and files 
+	- implement using: 
+	  - link: pointer to another file/subdir 
+		 		 resolve link using path name to locate real file 
+	  - just duplicate all info in both dirs 
+</pre>
+
+
+<div id="13.4 Protection"><h3 id="13.4 Protection" class="header"><a href="#13.4 Protection">13.4 Protection</a></h3></div>
+<pre>
+	- many comps have systems prorams that automatically copy disk files to tape at regular intervals 
+	- protect using username/password, encrypt 2ndary storage, firewalling network access
+</pre>
+<p>
+<span id="13.4 Protection-Type of Access"></span><strong id="Type of Access">Type of Access</strong>
+</p>
+<pre>
+	- need to control access to file operations:
+			  - read, write, execute, append, delete, list, attribute change
+</pre>
+<p>
+<span id="13.4 Protection-Access control"></span><strong id="Access control">Access control</strong>
+</p>
+<pre>
+	- common approach: identity-dependent access, each file/dir associated w/ access-control list 
+	- con: tedious to make list, but can condense into owner, group, and other 
+</pre>
+<p>
+<span id="13.4 Protection-Other Protection Approaches"></span><strong id="Other Protection Approaches">Other Protection Approaches</strong>
+</p>
+<pre>
+	- associate password with each file
+	- con: number of pass to remember is too much, but if only use 1 password, once password found, whole sys vunerable 
+	  - maybe just have passwords for subdirectories 
+</pre>
+
+
+<div id="13.5 Memory mapped files"><h3 id="13.5 Memory mapped files" class="header"><a href="#13.5 Memory mapped files">13.5 Memory mapped files</a></h3></div>
+<pre>
+	- use memory mapping to let part of virtual address space to be logically associated w/ file
+	- increases performance
+</pre>
+<p>
+<span id="13.5 Memory mapped files-Basic Mechanism"></span><strong id="Basic Mechanism">Basic Mechanism</strong>
+</p>
+<pre>
+	- map disk block to page in memory
+	- can manipulate files thru mem, don't need overhead of read() and write() syscalls
+	- many processes can map the same file concurrently = data sharing 
+	  - mem shared is usually implemented by memory mapped files 
+</pre>
+
+</body>
+</html>

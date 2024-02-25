@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Mass_Storage_Structure</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="11.1 Overview of mass storage structure"><h3 id="11.1 Overview of mass storage structure" class="header"><a href="#11.1 Overview of mass storage structure">11.1 Overview of mass storage structure</a></h3></div>
+<p>
+<span id="11.1 Overview of mass storage structure-Intro"></span><strong id="Intro">Intro</strong>
+</p>
+<pre>
+	- need mass storage for permanently storing files + data (secondary storage)
+	- many diff types of secondary storage: transfer 1 char at a time or in blocks, some sequential or random, some sync/async
+		- OS needs to support a wide range so apps can control many diff types of secondary storage
+		- want simplest interface 
+	- HDD + NVM most common + important storage devices 
+	  - need scheduling algos to maximize performance 
+	- NVS (non volatile storage) = general term for all mass storage 
+</pre>
+<p>
+<span id="11.1 Overview of mass storage structure-Hard Disk Drives"></span><strong id="Hard Disk Drives">Hard Disk Drives</strong>
+</p>
+<pre>
+	- every disk has a platter like a CD, both sides of platter covered w/ magnet
+	- record info magnetically on platter, and read by detecting magnetic info 
+	  - arm w/ read-write heads sweeps thru both sides of platter to reach it 
+	- divisions:
+	  - surface of platter divided logically into tracks, subdivided into sectors
+	  - set of tracks at given arm posiiton make up cylinder 
+	- performance measurements:
+	  - transfer rate: rate of data flow
+	  - positioning time / randome access time: 
+	  	 - time to move arm to correct cyinder (seek time)
+		 - AND time for correct sector to rotate to disk head (rotational latency) 
+	- is removable
+</pre>
+<p>
+<span id="11.1 Overview of mass storage structure-Nonvolatile mem devices"></span><strong id="Nonvolatile mem devices">Nonvolatile mem devices</strong>
+</p>
+<pre>
+	- NVM are electrical, not mechanical 
+	  - controller + flash semiconductor chips to store data 
+	- solid state disk (USB) = common use of NVM 
+	- pro:
+	  - more reliable + faster + less power than HDDs
+	- con: 
+	  - more expensive + less capacity 
+	- controller uses a flash translation layer (FTL) to match physical pages to ogical blocks + trakc physical block state 
+	  - NAND semiconductors can't be overwritten, so FTL needs to keep track of which blocks have invalid pages + need to be erased 
+	
+	- garbage collection = good data copy to other locations + free up whole blokcs that can be erased
+	- over provisioning = set aside num of pages as area always avail to write to 
+	- wear leveling = don't always erase the same blocks, bc will wear out those blocks quicker
+</pre>
+<p>
+<span id="11.1 Overview of mass storage structure-Volatile mem"></span><strong id="Volatile mem">Volatile mem</strong>
+</p>
+<pre>
+	- RAM drives = act like secondary storage, but really created by devie drivers 
+	- DRAM = volatile + data doesn't survive a power down, but high speed and good for temp stuff
+     - use to write/read files when share b/w programs
+</pre>
+<p>
+<span id="11.1 Overview of mass storage structure-Secondary storage connection methods"></span><strong id="Secondary storage connection methods">Secondary storage connection methods</strong>
+</p>
+<pre>
+	- connect secondary storage to computer using system bus or I/O bus
+	- most common = SATA (serial advanced tech attachment) 
+	- NVM express (NVMe) = specia fast interface for connectng NVM devices, increased throughput
+	- data transfers on bus carried out by controllers (electronic processors) 
+	  - host controller + device controller work together 
+</pre>
+<p>
+<span id="11.1 Overview of mass storage structure-Address Mapping"></span><strong id="Address Mapping">Address Mapping</strong>
+</p>
+<pre>
+	- storage devices = large 1D arrays of logical blocks, each logical block map to physical sector
+</pre>
+
+
+<div id="11.2 HDD Scheduling"><h3 id="11.2 HDD Scheduling" class="header"><a href="#11.2 HDD Scheduling">11.2 HDD Scheduling</a></h3></div>
+<pre>
+	- need to schedule HDDs so they can work efficiently
+	- want to improve access time and bandwidth
+	- if drive + controller avail, can service request, if not, need scheduling
+</pre>
+<p>
+<span id="11.2 HDD Scheduling-FCFS"></span><strong id="FCFS">FCFS</strong>
+</p>
+<pre>
+	- service whoever in queue first 
+</pre>
+<p>
+<span id="11.2 HDD Scheduling-SCAN"></span><strong id="SCAN">SCAN</strong>
+</p>
+<pre>
+	- arm starts at one end, and scans towards the other, stopping to service along the way
+	- goes back and forth 
+</pre>
+<p>
+<span id="11.2 HDD Scheduling-CSCAN"></span><strong id="CSCAN">CSCAN</strong>
+</p>
+<pre>
+	- CSCAN = more uniform wait time that SCAN
+	- like SCAN, except when it reaches one side, goes directly back to other w/o servicing others along the way 
+</pre>
+
+
+<div id="11.3 NVM scheduling"><h3 id="11.3 NVM scheduling" class="header"><a href="#11.3 NVM scheduling">11.3 NVM scheduling</a></h3></div>
+<pre>
+	- use FCFS b/c dont worry about moving disk heads
+</pre>
+
+
+<div id="11.4 Error detection and correction"><h3 id="11.4 Error detection and correction" class="header"><a href="#11.4 Error detection and correction">11.4 Error detection and correction</a></h3></div>
+<pre>
+	- use checksums to determine errors
+	- one type of checksum = using parity bits 
+	- ECC (error correction code) detects + correct problem 
+	- soft error = can recover by retrying operation
+	- hard error = unrecoverable error, sometimes data loss
+</pre>
+
+
+<div id="11.5 Storage device management"><h3 id="11.5 Storage device management" class="header"><a href="#11.5 Storage device management">11.5 Storage device management</a></h3></div>
+<p>
+<span id="11.5 Storage device management-Drive formatting, partitons, and volumes"></span><strong id="Drive formatting, partitons, and volumes">Drive formatting, partitons, and volumes</strong>
+</p>
+<pre>
+	- low level formatting
+		- b4 can use storage deviec, ened to divide into sectors that controllers can read and write 
+		- NVM pages need to be init and create FTL 
+		- perform in manufacturing
+	
+	OS steps:
+		1. partition device into 1+ groups, OS can treat each partition like separate device 
+			- mounting FS = make it avail to use by sys + users 
+		2. volume creating and management 
+			- sometimes implicit, when fs placed in partition
+			- sometimes explicit, when multiple partitions + devices used together as RAID
+		3. logical formatting
+			- OS stores init strutures onto the deivce 
+</pre>
+<p>
+<span id="11.5 Storage device management-Boot block"></span><strong id="Boot block">Boot block</strong>
+</p>
+<pre>
+	- when computer powers on, needs init program to run
+	- bootstrap loader is stored in NVM mem on motherboard + init all aspects of system 
+	- deivce with boot partition = boot disk / sytem disk 
+</pre>
+<p>
+<span id="11.5 Storage device management-Bad Blocks"></span><strong id="Bad Blocks">Bad Blocks</strong>
+</p>
+<pre>
+	- bad blocks = defective sectors on disk, come naturally from the factory 
+	- can use sector sparing / forwarding to fix 
+	  - controller makes slist of bad blocks + replace bad sector logically w/ space spectors 
+</pre>
+
+
+<div id="11.6 Swap space management"><h3 id="11.6 Swap space management" class="header"><a href="#11.6 Swap space management">11.6 Swap space management</a></h3></div>
+<pre>
+	- swap-space management = low level task for OS
+		- using swap space usually decreases sys performance
+</pre>
+<p>
+<span id="11.6 Swap space management-Swap space use"></span><strong id="Swap space use">Swap space use</strong>
+</p>
+<pre>
+	- use depends on OS and mem-management algos 
+	- if run out of swap space, processes aborted or may completely crash 
+</pre>
+<p>
+<span id="11.6 Swap space management-Swap space location"></span><strong id="Swap space location">Swap space location</strong>
+</p>
+<pre>
+	- swap space can be in normal fs or in separate partition
+	- if in separate partiton, can be created in raw partition = no fs or dir structure 
+	- some OS can swap in raw partitiongs + fs space 
+</pre>
+
+
+<div id="11.7 Storage Attachment"><h3 id="11.7 Storage Attachment" class="header"><a href="#11.7 Storage Attachment">11.7 Storage Attachment</a></h3></div>
+<p>
+<span id="11.7 Storage Attachment-Host attached storage"></span><strong id="Host attached storage">Host attached storage</strong>
+</p>
+<pre>
+	- access secondary storage thru local i/o ports and SATA, fiber channel
+	- can use HDDs, NVMs, etc with host attached storage 
+</pre>
+<p>
+<span id="11.7 Storage Attachment-Network attached storage"></span><strong id="Network attached storage">Network attached storage</strong>
+</p>
+<pre>
+	- storage across network, use remote procedure calls to access 
+	- convenient in LANs 
+</pre>
+<p>
+<span id="11.7 Storage Attachment-Cloud Storage"></span><strong id="Cloud Storage">Cloud Storage</strong>
+</p>
+<pre>
+	- storage across a network, but access over the internet or WAN to remote data center that provides storage 
+	- often use APIs 
+</pre>
+<p>
+<span id="11.7 Storage Attachment-Storage area networks and storage arrays"></span><strong id="Storage area networks and storage arrays">Storage area networks and storage arrays</strong>
+</p>
+<pre>
+	- con of network attached: lots of bandwidth used = latency 
+	- storage area network (SAN) = private network connecting servers + storage units 
+	- can include SSDs
+</pre>
+
+<div id="11.8 RAID Structure"><h3 id="11.8 RAID Structure" class="header"><a href="#11.8 RAID Structure">11.8 RAID Structure</a></h3></div>
+<pre>
+	- need to use disk organization techniques "redundant arrays of independent disks (RAIDs)" to make sure if 1 drive fails, not all fails
+</pre>
+<p>
+<span id="11.8 RAID Structure-Improvement of reliability via redundancy"></span><strong id="Improvement of reliability via redundancy">Improvement of reliability via redundancy</strong>
+</p>
+<pre>
+	- mirroring: duplicate every drive 
+	  - create mirrored volumes, if 1 volume fails still ahve others
+	  - mean time to data loss = 57k years 
+	- striping: parallel access to multiple drives 
+	  - bit level striping: split bits in bytes across multiple drives 
+		 - can ready data a lot quicker b/c each drive is reading 
+	  - block level striping: blocks of file striped across multipel drives 
+		 - increas throughput of small accesses w/ load balancing
+		 - reduce reponse time of large accesses
+</pre>
+<p>
+<span id="11.8 RAID Structure-RAID levels"></span><strong id="RAID levels">RAID levels</strong>
+</p>
+<pre>
+	- mirroring = reliable but expensive, striping = high data transfer rates but not reliable 
+	- RAID levels = other schemes for reliability w/ cost/performance trade offs
+	
+	1. RAID 0: block level striping but not redundancy
+	2. RAID 1: drive mirroring
+	3. RAID 4: mem-style error correcting code 
+	4. RAID 5: block interleaved distributed parity 
+		- unlike 4, stores parity in several drives, not just 1 
+		  - most common parity RAID
+	5. RAID 6: P+Q redundancy scheme, stores extra info on to of RAID 5
+	6. RAID 0+1: have performance from 0, and reliability from 1
+	
+	Where RAID can be implemented:
+		1. volume management software implements RAID in kernel
+		2. RAID in host bus adapter hardware (low cost, but inflexible)
+		3. RAID in hardware of storage array (flexible across levels)
+		4. SAN interconnect layers 
+</pre>
+<p>
+<span id="11.8 RAID Structure-Problems with RAID"></span><strong id="Problems with RAID">Problems with RAID</strong>
+</p>
+<pre>
+	- RAID can't gaurantee that data is always avai to OS and user
+		- sometimes pointers to data wrong
+		- don't protect against software errors, only against physical media errors 
+	- RAID not flexible 
+</pre>
+<p>
+<span id="11.8 RAID Structure-Object Storage"></span><strong id="Object Storage">Object Storage</strong>
+</p>
+<pre>
+	- another approach to data storage: store objects
+		1. create object within storage pool + get objet ID
+		2. access object when needed
+		3. delete object using object ID 
+</pre>
+
+</body>
+</html>
