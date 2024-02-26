@@ -274,6 +274,87 @@
 
 <div id="34.4 JDBC"><h3 id="34.4 JDBC" class="header"><a href="#34.4 JDBC">34.4 JDBC</a></h3></div>
 <pre>
+	- JDBC = java API for developing Java db apps
+	- uniform interface to access and manipulate relational databases 
+	  - exec SQL, retrieve results, propogate changes back to db 
+	- JDBC driver = interface b/w JDBC and propreitary db
+	- 4 interfaces: 
+	  	1. Driver 
+			- 2 Connection 
+		2. Connection 
+			- 2 Statement
+		3. Statement 
+			- 1 ResultSet
+		4. ResultSet
+</pre>
+<p>
+<span id="34.4 JDBC-Steps to Use JDBC"></span><strong id="Steps to Use JDBC">Steps to Use JDBC</strong>
+</p>
+<pre>
+	1. loading drivers 
+			Class.forName("JDBCDriverClass"); 
+		- driver = class that implements java.sql.Driver interace 
+		- Example: 
+		  	Class.forName("com.mysql.jdbc.Driver");
+
+	2. Establishing connections	
+			Connection connection = DriverManager.getConnection(databaseURL);
+				- databaseURL = unique identifer of db on internet 
+			
+							JDBC URLs 
+| Database           | URL Pattern                                  |
+|--------------------|----------------------------------------------|
+| MySQL              | jdbc:mysql://hostname/dbname                 |
+| Oracle             | jdbc:oracle:thin:@hostname:port#:oracleDBSID |
+| Java DB (embedded) | jdbc:derby:dbname                            |
+| Java DB (network)  | jdbc:derby://hostname/dbname                 |
+		
+			Example: 
+				Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/javabook", "scott", "tiger");
+					- create Connection object for local MySQL database javabook with username "scott" and password "tiger"
+					- connection object = wire that connects program to db
+	
+		3. creating statements 
+				Statement statement = connection.createStatement(); 
+			- statement = cart that delibers SQL statements for exec by db + brings result back to program
+	
+		4. executing statements 
+				executeUpdate(String sql) 
+					- execute SQL data definition lang (DLL) and update statements 
+					- Example: 
+					  	statement.executeUpdate("create table Temp (col1 char(5), col2 char(5))");
+				executeQuery(String sq1)
+					- execute SQL query 
+					- result of query return in ResultSet 
+					- Example: 
+					  	ResultSet resultSet = statement.executeQuery("select firstName, mi, lastName from Student where lastName " + " = 'Smith'");
+		
+		5. processing ResultSet 
+				while (resultSet.next())
+					System.out.println(resultSet.getString(1) + " " +
+						resultSet.getString(2) + " " + resultSet.getString(3));
+				- iterate through result and print student names 
+				- ResultSet = table with current row that can be retrived
+				- init row position = null
+				- use next() method to move to next row
+				- instead of getString(1), can say getString("firstName") = attrib of 1st column
+</pre>
+<p>
+<span id="34.4 JDBC-Practice Code"></span><strong id="Practice Code">Practice Code</strong>
+</p>
+<pre>
+	Steps:
+		1. code in java file
+		2. get JDBC driver for MySQL: 
+				- go to: https://dev.mysql.com/downloads/connector/j/ and downlaod connector file
+				- sudo dpkg &lt;&gt;.deb
+				- sudo apt install &lt;&gt;.deb 
+		3. try to compile program 
+				javac Main.java
+	Errors:
+		1. Cannot load proper JDBC, how to link it? 
+			- is com.mysql.jdbc.Driver the right driver? 
+		2. Nothing else is loading (should be printing statements about driver + connection loading)
 </pre>
 
 </body>
