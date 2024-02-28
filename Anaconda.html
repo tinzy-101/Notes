@@ -12,6 +12,103 @@
 <div id="Background"><h3 id="Background" class="header"><a href="#Background">Background</a></h3></div>
 <pre>
 	Anaconda = langugage, python + R for scientific computing
+	Used for creating separate environments with different files/packages/dependencies 
+	Useful when: 
+		1. sharing code with people, others have diff package managers + different package versions and dependencies 
+		2. different projects need different versions of python, which can be kept separate in environments
+</pre>
+
+<div id="Download"><h3 id="Download" class="header"><a href="#Download">Download</a></h3></div>
+<pre>
+	1. Download .sh file: https://www.anaconda.com/download/
+	2. bash &lt;conda-installer-name&gt;-latest-Linux-x86_64.sh
+	3. follow prompts to download, accept default configs 
+		3.5 Remove conda: rm -rf ~/path/to/conda 
+				- conda init --reverse --all
+				- rm -rf ~/.condarc ~/.conda ~/.continuum
+	4. eval "$(/home/tina/anaconda3/bin/conda shell.YOUR_SHELL_NAME hook)" 
+			- use "bash" for YOUR_SHELL_NAME
+			- find shell name: ps -p $$ 
+			- needed so conda will be recognized in current shell (temporary)
+	5. Instead of 4: 
+			- Enter conda with #4
+				- terminal should look like: (base) tina@debian:~$ 
+			- conda config --set auto_activate_base true 
+			   - activates conda on startup
+			- conda init 
+			  	- install's conda's shell functions 
+				- edits /home/tina/.bashrc 
+			- open new shell
+				- should automatically see (base) in terminal 
+				- &lt;conda&gt; to check if running 
+	6. check conda configurations 
+				conda config --show
+</pre>
+
+<div id="Getting Started"><h3 id="Getting Started" class="header"><a href="#Getting Started">Getting Started</a></h3></div>
+<p>
+<span id="Getting Started-Creating Environments"></span><strong id="Creating Environments">Creating Environments</strong>
+</p>
+<pre>
+	1. Creating new environment 
+			conda create -n &lt;env-name&gt;  
+				- want to create new environment for any new project or workflow 
+	2. OR add packages while creating environment 
+			conda create -n &lt;myenvironemnt&gt; python numpy pandas
+	3. default environment location 
+			/home/tina/anaconda3/envs/&lt;myenvironment&gt;
+	4. list all environments and locations (active env has *)
+			conda info --envs 
+	5. activate environment (do before installing packages) 
+			conda activate &lt;myenvironment&gt;
+	6. change current environment back to default "base"
+			conda activate 
+	7. deactivate environment (do before deleting, or just to to stop working in it)
+			conda deactivate 
+	8. conda remove --name &lt;myenvironment&gt; --all
+	
+	For AI project:
+		1. conda create -n ai-project python numpy
+		2. conda activate ai-project
+		3. install EVERYTHING for project in &lt;ai-project&gt;!!
+			
+</pre>
+<p>
+<span id="Getting Started-Installing Packages"></span><strong id="Installing Packages">Installing Packages</strong>
+</p>
+<pre>
+	1. activate environment and install packages 
+			conda activate &lt;myenvironment&gt;
+			conda install matplotlib 
+	2. specify environment and install 
+			conda install --name &lt;myenvironment&gt; matplotlib
+	3. list installed packages 
+			conda list 
+</pre>
+<p>
+<span id="Getting Started-Specifying Channels"></span><strong id="Specifying Channels">Specifying Channels</strong>
+</p>
+<pre>
+	Channels = location on computer or someone on internet where packages stored. Conda looks for packages in default channels. 
+	
+	1. install package from another channel 
+			conda install conda-forge::numpy
+				- install numpy package from conda-forge channel
+</pre>
+<p>
+<span id="Getting Started-Updating conda"></span><strong id="Updating conda">Updating conda</strong>
+</p>
+<pre>
+	1. check version 	
+			conda --version
+	2. update
+			conda update conda 
+</pre>
+
+<div id="Pip vs Conda"><h3 id="Pip vs Conda" class="header"><a href="#Pip vs Conda">Pip vs Conda</a></h3></div>
+<pre>
+	- conda = system package manager, pip = python package manager
+	- use conda to install all needed packages from conda channels then use version of pip from conda to install pip dependencies into environment
 </pre>
 
 </body>

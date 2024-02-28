@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-27-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 14:"><h3 id="Chapter 14:" class="header"><a href="#Chapter 14:">Chapter 14:</a></h3></div>
+<p>
+<span id="Chapter 14:-File System Structure"></span><strong id="File System Structure">File System Structure</strong>
+</p>
+<pre>
+	- logical structure vs where it is physically 
+	- file control block per file, explaining what's on it 
+	- is layered 
+	- need boot control block on device, is pointed to by some info on the disk 
+	  
+	- use buffers inside mem  
+</pre>
+<p>
+<span id="Chapter 14:-Allocation Methods: ON TEST"></span><strong id="Allocation Methods: ON TEST">Allocation Methods: ON TEST</strong>
+</p>
+<pre>
+	1. contiguous allocation: each file is in contiguous blocks 
+		- simple, good performance
+		- problems: finding space, knowing file size, external frag, need compaction offline or online
+		- e.g. how many blocks are in the file TR? 
+		  - 3 blocks b/c length = 3 
+	2. Linked Allocation 
+		- each block is a pointer to the other, are sequential
+		- work well for sequential allocation of a file 
+
+File Allocation Table (FAT)
+ 1. pointer to the next one
+ 2. directory entry has start block, points to 217, 217 points to 618, 618 points to  ..., etc 
+	 	- has 3 blocks (WHY) 
+
+Indexed Allocation 
+	1. index block points to 19
+	2. 19 contains nums of all the diff blocks that are allocated to the file  
+		- can think about these numbers sequentially, or randomly go in with a binary search, looking for something specific 
+		- has logical ordering 
+
+Multiple Index Allocation (Mapping) 
+	1. outer index points to index table, index table points to file 
+
+Linux UFS: 
+	1. Linux UFS 
+	2. direct = pointer goes striaght to data
+	3. single indirect = pointer goes to pointer to data
+	4. doulbe indirect = etc..
+</pre>
+<p>
+<span id="Chapter 14:-Free Space Management"></span><strong id="Free Space Management">Free Space Management</strong>
+</p>
+<pre>
+	- fs has free space list 
+	- if delete a file, the contents aren't removed from the sector/block, only turns the bit off in the file table 
+	  - want to do a hard delete for sensitive data 
+	- used linked list to see all your free space
+</pre>
+<p>
+<span id="Chapter 14:-Page Cache"></span><strong id="Page Cache">Page Cache</strong>
+</p>
+<pre>
+	- can use caches of pages for files you're reading, use virtual mem
+	- e.g. use 4k blocks if virtual mem is 4k
+	- set block / cache aside for files
+</pre>
+<p>
+<span id="Chapter 14:-Recovery"></span><strong id="Recovery">Recovery</strong>
+</p>
+<pre>
+	- most time need to do from back up 
+	- most systems log what's happening, and do correction based on the log (e.g. RAID) 
+</pre>
+
+
+<div id="Chapter 15: File SYstem internals"><h3 id="Chapter 15: File SYstem internals" class="header"><a href="#Chapter 15: File SYstem internals">Chapter 15: File SYstem internals</a></h3></div>
+<pre>
+	- partitioning and mounting file systems to be accessed 
+</pre>
+<p>
+<span id="Chapter 15: File SYstem internals-Virtual File Systems"></span><strong id="Virtual File Systems">Virtual File Systems</strong>
+</p>
+<pre>
+	- 
+</pre>
+<p>
+<span id="Chapter 15: File SYstem internals-Notes"></span><strong id="Notes">Notes</strong>
+</p>
+<pre>
+	-file organization has to match file allocation
+	- if organized as fixed size, need to be allocated a dfixed size 
+	
+	allocation = how programmers
+		- sequential, fixed size, linked, 
+		
+		sequential, fixed sequential, or direct access file 
+			- which will work with linked, sequential allocation set by programmer?
+	
+	e.g. Data file, organized by fixed size records:
+	SSN, Name, and earnings = 1 type of file organization (sequential)
+	
+	3 types of programmers' logical file organizations:
+		- with each organization, need an access method 
+	1. sequential: 1 byte/record/block after another, need to be read/written sequentially 
+		- access method: SAM or QSAM 
+	2. indexed sequential: this uses an index file sorted by some key, e.g. sorted by name 
+		- the index file actually points to the record location 
+		- access method: ISAM (Available in programming language, needs to talk to file management system to get everything working properly)
+	3. direct access: use a key and hash that key to obtain a location in the file 
+		- e.g. key hashes to location 3. is 3 empty?
+			- if free, place in 3.
+			- if not empty, find empty spot and add "art" to the spot. add synonym chain for "art 
+			  " to the location 
+		- access method: DAM (direct access method) or BDAM (basic DAM)
+	
+	if os uses 8k size pages, then db will use 8k size pages too 
+		- both use list indexing 
+</pre>
+
+</body>
+</html>

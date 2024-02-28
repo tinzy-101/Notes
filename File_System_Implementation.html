@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>File_System_Implementation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="14.1 File system structure"><h3 id="14.1 File system structure" class="header"><a href="#14.1 File system structure">14.1 File system structure</a></h3></div>
+<p>
+<span id="14.1 File system structure-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	- fs = permanently on secondary storage, access large amounts of data 
+	- os provides many fs, b/c diff performance, reiability, goals, purposes
+</pre>
+<p>
+<span id="14.1 File system structure-File System Structure"></span><strong id="File System Structure">File System Structure</strong>
+</p>
+<pre>
+	- disks are most common secondary storage used b/c:
+	  1. can read from block, modify block, and write it back to same block
+	  2. disk can access any block of info it has by rotating read-write heads 
+	  
+	- NVMs are starting to be used more, can't be written in place + diff performance chars compared to hdds 
+	 
+	- i/o efficiency = want to perform i/o b/w mem and mass storage in blocks 
+	  - each block on hdd has 1+ sectors
+	  - sector = 512 bytes - 4096 bytes 
+	
+	- fs = convenient access to storage device, but need to make interface user-friendly + way to map logical fs to physical storage 
+	  - diff levels: 
+		 	1. app programs
+			2. logical fs 
+					- manages metadata = fs structure except actual data / file contents 
+					- manages dir structure + give file-organization module neeeded info 
+					- file control block (FCB) = info about the file
+					- needs to protect system 
+			3. file organization module 
+					- store info about files and logical blocks 
+					- file labeled 0 or 1 to N
+					- has free space maanger,t racks unallocated blocks and give them to the module 
+			4. basic file system 
+					- issues generic commands to correct device driver to read/write blocks on storage device 
+					- uses logical block addresses
+					- i/o request sceduling, manage mem buffers/caches 
+			5. i/o control 
+					- device drivers + interrupt handlers to transfer info b/w main mem + disk system 
+					- device driver = translator b/w high level and low level 
+					  - writes bit patterns to i/o controllers mem to tell controller which dev to act on + actions to take
+			6. devices 
+		
+		- layering is good b/c less duplication, but hard to figure out what to layer 
+</pre>
+
+
+<div id="14.2 File System Operations"><h3 id="14.2 File System Operations" class="header"><a href="#14.2 File System Operations">14.2 File System Operations</a></h3></div>
+<p>
+<span id="14.2 File System Operations-Overview"></span><strong id="Overview">Overview</strong>
+</p>
+<pre>
+
+Storage Structures on Disk 
+	1. boot control block 
+			- info needed by sys to boot os
+			- can be empty if does not have OS 
+			- usually first block of a volume 
+			- "boot block" or "partition boot sector" 
+	2. volume control block 
+			- volume details = num blocks in volume, size of blocks, free block count, free block pointers 
+			- "superblock" or "master file table" 
+	3. directory structure 
+			- used to orgnaize files (file names, associated inode nums) 
+	4. per-file FCB 
+			- details about file + special identifier num to be associated w/ directory entry 
+
+Storage Structures in Mem
+	1. mount table 
+			- info about each mounted volume 
+	2. dir structure cache 
+			- dir info of dirs that were recently accessed 
+	3. system-wide open-file table 
+			- copy of FCB for each open file 
+	4. per-process open-file table 
+			- pointers to correct entries in system-wide open-file table 
+	
+</pre>
+
+</body>
+</html>
