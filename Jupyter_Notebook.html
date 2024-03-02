@@ -23,7 +23,26 @@
 			conda list | grep jupyter 
 	3. Open jupyter notebook in web browser
 			jupyter notebook
-				- will run on port 8888 by default 
+				- will run on port 8888 + open on chromium by default 
+				- opens server on firefox 
+	3.5 Opening jupyter notebook on firefox	
+				jupyter notebook --browser=firefox 
+			OR
+				Permanent Solution: 
+					1. go to default file path to jupyter:
+							~/.jupyter 	
+					2. create a jupyter config file
+							jupyter notebook --generate-config
+					3. edit config file 
+							vi jupyter_notebook_config.py
+					4. replace browser config:
+							comment out: #c.NotebookApp.browser =''
+							add in:
+								import webbrowser
+								webbrowser.register('firefox', None, webbrowser.GenericBrowser('/usr/bin/firefox'))
+								c.NotebookApp.browser = 'firefox'
+
+		
 	4. Shut down jupyter server 
 			ctrl+c 
 			y 

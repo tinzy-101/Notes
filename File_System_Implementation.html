@@ -73,7 +73,7 @@ Storage Structures on Disk
 			- volume details = num blocks in volume, size of blocks, free block count, free block pointers 
 			- "superblock" or "master file table" 
 	3. directory structure 
-			- used to orgnaize files (file names, associated inode nums) 
+			- used to organize files (file names, associated inode nums) 
 	4. per-file FCB 
 			- details about file + special identifier num to be associated w/ directory entry 
 
@@ -86,7 +86,30 @@ Storage Structures in Mem
 			- copy of FCB for each open file 
 	4. per-process open-file table 
 			- pointers to correct entries in system-wide open-file table 
+	5. buffer to old file system blocks (if blocks being read from/written to fs) 
+
+Creating new File
+	1. process calls logical fs (logical fs knows format of dir structures)
+	2. logical fs allocates new FCB
+	3. system reads correct dir into mem + update with new file name and FCB
+	4. write back to fs 
 	
+</pre>
+<p>
+<span id="14.2 File System Operations-Usage"></span><strong id="Usage">Usage</strong>
+</p>
+<pre>
+	1. after create new file, can use file for I/O
+	2. open() file, need to first search if file is alr being used by another process 
+	3. if file is already being used, create per-process open-file table pointin to sys-wide open file tables 
+	4. if file not already open, search directory structure for file (usually cached in mem) 
+			- find file + copy FCB to system-wide open file table in mem 
+			- system-wide open file table tracks num processe w/ the file open
+	5. Make entry in per-process open-file table + pointer to entry in sys-wide open file table 
+			- open() returns pointer to correct entry in per process fs table 
+			  - do all file operations with the poninter 
+			- entry in 
+	6. 
 </pre>
 
 </body>

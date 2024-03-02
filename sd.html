@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>sd</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Test 3 Review"><h3 id="Test 3 Review" class="header"><a href="#Test 3 Review">Test 3 Review</a></h3></div>
+
+<p>
+<span id="Test 3 Review-Real mem vs Virtual mem (both contiguous)"></span><strong id="Real mem vs Virtual mem (both contiguous)">Real mem vs Virtual mem (both contiguous)</strong>
+</p>
+<pre>
+	1. fixed size partitions
+	2. variable size partitions 
+		3 mechanisms for putting programs in memory
+		 	a. first fit (first one big enough for the program)
+			b. best fit (sort holes smallest to largest)
+			c. worst fit (sort holes largest to smallest, automatically in largest hold)
+				- if put process in a hole, and still hole remaining, same hole num 
+</pre>
+<p>
+<span id="Test 3 Review-Virtual Memory:"></span><strong id="Virtual Memory:">Virtual Memory:</strong>
+</p>
+<pre>
+ 	1. virtual format: segment / page / displacement
+			- if page size = 4k (2^12), the size of the displacement = 12 bits
+			- 32 bits-12 bits = 20 bits left
+			- let num pages per segment = 10 bits, 2^10 = 1024 pages that can be put into a segment
+			- leaves 10 bits for the segment, and can have 1000 segments inside program
+			- entire address adds up to 4 gb
+	2. dynamic address translation (DAT):
+			- have 4 possible outcomes: 
+				1. page is in mem, and get page address for it
+				2. segment fault, because no pages in that segment are in mem (blank spot in segment map table)
+				3. page fault, blank spot in page map table (page not in mem)
+				4. invalid reference, page or segment does not exist (e.g. page 5 but pages only 0-3)
+			- tables: 
+			  	1. segment map table
+				2. page map table (for each segment)
+				3. page frames = real mem 
+			- given virtual address, get real address by chasing thru tables 
+			  	- in virtual address, given: page frame address + displacement 
+	3. show how virtual storage gets converted to a real address 
+			- whole point of virtual storage system is that not entire program is in mem at one time 
+			- eventually, if you don't have enough real page frames for your program, will have to replace a page from some process or that process
+	4. page replacement algos: 
+			1. POO: principle of optimality 
+					- replace page that's not going to be used furthest time in future 
+			2. NUR: not used recently 
+					- use 2 bits on each page frame: reference bit + modify bit
+					- replace in this order: 00 01 10 11 
+					  1. not referenced and not modified
+					  2. not referenced but modified
+					  3. referenced but no modified
+					  4. referenced and modified 
+					- periodically, all reference bits are reset to 0 
+			3. LRU: least recently used
+					- time stamp each reference
+					- replace oldest referenced one
+			4. FIFO 
+					- time stamp when page placed into mem
+					- replace oldest page 
+			5. LFU: least frequently used 
+					- use a count and replace page with least references
+			6. MFU: most frequently used 
+					- use a count and replace page with most references  
+			7. ClockPolicy (2nd chance) 
+					- round robin checking 1 reference bit
+					- if bit = 1, reset the bit and move pointer to next block 
+					- wants to find a 0 = has been referenced 
+			8. working set 
+					- give process starting num of frames
+					- choose replacement within that working set 
+					- if getting a lot of page faults, know that you need to increase working set 
+</pre>
+
+<p>
+<span id="Test 3 Review-Page Replacement Example:"></span><strong id="Page Replacement Example:">Page Replacement Example:</strong>
+</p>
+<pre>
+	Background: Process 'X' executing, last acces in page frame 004. X has 2 pages in mem and had a page fault. 
+					OS needs to decide which page to replace for X's new page. 
+					Unlike other "active" processes, process Z's state is suspended 
+					Current time: 16:00
+	1. FIFO = using "Entered Time"  
+			- replace page frame 001 because time = 00:10, farthest from current time 16:00
+	2. LRU = "Last Used" 
+			- replace page frame 006 because oldest time used = 05:22 (doesn't matter if process Z is suspended or not)
+	3. LFU = "Use Count" 
+			- replace page frame 005 because lowest use count = 90 
+	4. MFU = "Use Count" 
+			- replace page frame 002 because highest use count = 340
+	5. Clock Policy = "Clock Policy" 
+			- page frame 005 is checked next = 1, so set to 0 and go to the next one
+			- page frame 006 also = 1, so set to 0 and go to 001 (round robin)
+			- all page frames 001 - 004 are = 1, so set to 0
+			- therefore page frame 005 will be the first 0 that gets hit, and will be replaced 
+	6. NUR = "Acc/Mod" 
+			- replace page frame 006 because it has not been accessed or modified (00)
+	7. Working Set Policy = look at which pages the process that needs a replacement has in their working set 
+			- X needs a page replacement, so look at its working set
+			- X working set = frame 002 + frame 004 
+			- in instructions above: page frame 004 was JUST accessed, so don't replace 004 
+			- only 1 other frame in X's working set, so have to replace 002
+</pre>
+ 
+<p>
+<span id="Test 3 Review-File stuff:"></span><strong id="File stuff:">File stuff:</strong>
+</p>
+<pre>
+file sys organization
+access method
+disk organization
+contiguous
+linked list
+index 
+file access mapping (FAT: file access table)
+file protection  (access control list on linux)
+</pre>
+
+<p>
+<span id="Test 3 Review-Disk Track Access Strategies"></span><strong id="Disk Track Access Strategies">Disk Track Access Strategies</strong>
+</p>
+<pre>
+	1. tell queue of tracks, where we are, the previous
+	2. figure out which way the scan works 
+</pre>
+
+<p>
+<span id="Test 3 Review-Block Oriented File Mapping"></span><strong id="Block Oriented File Mapping">Block Oriented File Mapping</strong> 
+</p>
+<pre>
+	1. 10 blocks
+	2. file A starts at block 0, count the blocks by chasing, 0 points to 8, 8 points to 3, etc. until one of them points to NULL 
+	3. count how many blocks (count up to number + NULL, e.g. 6: NULL = 1 block!) 
+</pre>
+
+<p>
+8 basic rights for files:
+</p>
+
+
+<p>
+confer zoom answer: spooler
+</p>
+
+<p>
+latest linux file system:
+</p>
+<ol>
+<li>
+binary tree file sys (BTFS)
+
+</ol>
+<p>
+<span id="Test 3 Review-Optional Problem"></span><strong id="Optional Problem">Optional Problem</strong>
+</p>
+<pre>
+	1. assume multiprogramming: 1 cpu, 2 i/o processors (no contention on i/o)
+	2. only 2 processes run simultaneously
+	3. A: 10cpu, 7io, 5cpu
+		B: 5cpu, 3io, 10 cpu 
+	4. times out at 5 units (quantum) 
+		- e.g. A will time out after 5 units, but B won't time out, can go straight to io
+	5. no other processes will enter until both processes are finished 
+	6. OS takes 2 units for any activity 
+	
+	1. A takes 5 cpu units, times out for 2 units
+	2. start B, B requests service + start io for 3 io units
+	3. after starting B's i/o, A will only get 2 units
+	4. b gets cpu for 5 units, times out, and gets service request compeltion interrupt, so needs another unit to handle it 
+	5. B completes, OS comes in, finishes A
+	
+	1. os starts things up, fcfs so a before b processed
+	2. last pulse it does, start a, a starts at pulse 3 with 1-5 cycles, but quantum is 5, so there is timeout
+	3. os comes in for 2 units, and will take a off executin, and put it on ready lsit behind b
+	4. starts b for 1-5
+	5. go to os, os sets up b for i/o, starts io for 3, interrupt on the vertical bar (tildes then vertical bar)
+	6. 	
+	7. can't start a on the same cycle of the OS, OS can then start up A again 
+	8. A still needs remaining 5 quantums 
+</pre>
+
+</body>
+</html>
