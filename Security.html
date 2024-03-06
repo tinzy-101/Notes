@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Security</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="16.1 The Security Problem"><h3 id="16.1 The Security Problem" class="header"><a href="#16.1 The Security Problem">16.1 The Security Problem</a></h3></div>
+<p>
+<span id="16.1 The Security Problem-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	- security = measure of confience that system/data is preserved
+	  - guarding omputer resources (info in system, CPU, mem, secondary storage, networking)
+	  - use cryptography
+	- protection = mechanisms to control access to processes 
+</pre>
+
+<p>
+<span id="16.1 The Security Problem-The security problem"></span><strong id="The security problem">The security problem</strong>
+</p>
+<pre>
+	- secure = system's resources used and accessed as intended under all circumstances 
+	  - can't get total security, but can get close to it w/ very little security breaches 
+	- security breach = intentional or accidental 
+	  - breach of confidentiality = steal info
+	  - breach of integrity = unauthorized mod of data
+	  - breach of availability = unauthorized destruction of dta
+	  - theft of service = unauthorized use of resources
+	  - denial of service (DOS) = prevents legit use of system, sometimes accidental  
+	
+	Strategies used by hackers: 
+		1. masquerading = one side of communication pretends to be someone else  
+			- breach authentication = gain access not usually allowed 
+		2. replay attack = malicious repeat of valid data transmission 
+			- usually do with message mod = attacker changes data in com w/o sender's knowledge 
+		3. man-in-the-middle = attacker sits in data flow, masquerading as sender/reciever to both sides
+			- session hijacking can happen before = intercept active communication 
+		4. privilege escalation 
+			- system has multiple privilege sets, each user assigned one privilege leevl 
+			- giving attacker greater privilege than it should have on system 
+	
+	How to protect system: 
+		1. Physical 
+				- site w/ computer needs to be protected 
+		2. Networks 
+				- networking = good to access resources outside of system, but can let attackers in 
+		3. OS 
+				- if have insecure settings + configs can have security bugs 
+				- attack surface = set of points attacker tries to break in 
+		4. Apps 
+				- apps w/ too much privilege can let attackers in 
+				  
+	4 layer security model: 
+		- have chain of links b/w physical, networks, OS, apps, if 1 goes down everyone else also goes down 
+		- need to protect against humans too 
+</pre>
+
+
+<div id="16.2 Program Threats"><h3 id="16.2 Program Threats" class="header"><a href="#16.2 Program Threats">16.2 Program Threats</a></h3></div>
+<pre>
+	- 
+</pre>
+
+</body>
+</html>
