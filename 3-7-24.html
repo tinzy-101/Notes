@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>3-7-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 17: Protection"><h3 id="Chapter 17: Protection" class="header"><a href="#Chapter 17: Protection">Chapter 17: Protection</a></h3></div>
+<pre>
+	- have policy you create + how policy is implemented, started in 1990s
+	- Principle of least privilege (hard to implement): 
+	  	- have diff domains w/ diff access, and can get muddled
+		- if file in d1 is r/w, but in d2 is read only, then you choose the lowest privilege to access file 
+		- but what is needed is write access, what to do then?
+	- grain = how deep u want to go into the particular object youre dealing with 
+</pre>
+<p>
+<span id="Chapter 17: Protection-Protection Rings"></span><strong id="Protection Rings">Protection Rings</strong>
+</p>
+<pre>
+	- components of OS ordered by amt of privilege and protected from each other
+	- e.g. kernel is surrounded by sys calls and user programs that protect it A
+	- e.g. ARM CPU Architecture = layer OS, hypervisor, secure monitor around kernel, access w/ syscalls and kernel calls, abstract layer calls
+</pre>
+<p>
+<span id="Chapter 17: Protection-Domains of Protection"></span><strong id="Domains of Protection">Domains of Protection</strong>
+</p>
+<pre>
+	- rings of protection separate functions into domains + order then w/ hierarchy
+	- computer = processes + objects (ardware and software) 
+	- can switch b/w domains 
+	  
+	 UNIX can switch domains based on groups users are in
+	 	- e.g. access matrix: 
+		  	- d1 can read file1, but can't see file2, can go to printer 
+			- d2 can read and execute file1, can't go to printer 
+		- access matrix is really big data structure, but not that much data in it 
+			  
+	static protection = being in a domain as a user
+	dynamic protection = have different rights + can go to different domains 
+		- problem: need to keep domain and privileges simple
+		- gets more complicated as you make more rights, like copy files, control over domains 
+</pre>
+<p>
+<span id="Chapter 17: Protection-Implementing Access Matrix"></span><strong id="Implementing Access Matrix">Implementing Access Matrix</strong>
+</p>
+<pre>
+	1. capability list 
+		- list of objects + all capabilities allowed with the object 
+	2. access list 
+		- list of domains 
+	3. lock key 
+		- compromise b/w access list and capability lists 
+		- pass keys from domain to domain
+		- now have another lock issue, need mutual exclusion 
+	
+	are tradeoffs on everything you implemented in your OS 
+		- e.g. global table simple, large 
+		  - hard to determine access rights for domain non localized 
+		  - revocation capabilities sometimes inefficient
+</pre>
+<p>
+<span id="Chapter 17: Protection-Revocation of Access Rights"></span><strong id="Revocation of Access Rights">Revocation of Access Rights</strong>
+</p>
+<pre>
+	- immediately revoke, or after some event?
+	- selective vs general?
+	- partial vs total revokation?
+	- temp or permanent?
+	
+	If revoke something, need to reqacuisition if you need it  
+		- back pointer = set of pointers from each object to all capabilities of that object
+		- indireciton = capability points to gloal table entry which points to object
+		- key = unique bits associated w/ capability, generated when capability created 
+		  - will have master key 
+</pre>
+<p>
+<span id="Chapter 17: Protection-Role Based Access Control"></span><strong id="Role Based Access Control">Role Based Access Control</strong> 
+</p>
+<pre>
+	- set privileged roles, commonly used on systems
+</pre>
+<p>
+<span id="Chapter 17: Protection-Mandatory Access COntrol (MAC)"></span><strong id="Mandatory Access COntrol (MAC)">Mandatory Access COntrol (MAC)</strong>
+</p>
+<pre>
+	- if sys says needs access, then using discretion, and want to be stronger 
+	- some things even root user cannot access 
+	- best to change root password in linux distro 
+	- capability based systems not very easy to implement, like POSIX says to do
+	
+	Sandboxing: 
+		- try things in a limited environment before you do for entire system 
+	
+	- can do code hashes w/ cypto signing for protection 
+	- can do protection within code itself (e.g. java 2)
+	- can check the stack 
+</pre>
+
+</body>
+</html>

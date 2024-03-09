@@ -62,8 +62,204 @@
 
 
 <div id="16.2 Program Threats"><h3 id="16.2 Program Threats" class="header"><a href="#16.2 Program Threats">16.2 Program Threats</a></h3></div>
+<p>
+<span id="16.2 Program Threats-Malware"></span><strong id="Malware">Malware</strong>
+</p>
 <pre>
+	- malware = software designed to exploit, disable, damange computer systems
+		- e.g. trojan horse: acts in caldestine/malicious manner instead of doing what it said it wold do
+		- e.g. spyware: software that comes w/ program user installs, downloads ads onto system and create pop ups
+		- e.g. ransomware: encrypt info on computer, need to pay money to get decryption key
+		- trap door = designer of program leaves hole in software that only they can use 
+		  - use for embezzlement w/ cod rounding errors 
+		  - logic bomb = trap door that operatores only on specific set of logica conditions, hard to detect 
+		  - very difficult to detect b/c need to look in all lines of the code 
+	- principle of least privilege = every program + every privileged user should operate w/ least possible privilege to finish the job 
+	  - malware violates this
 	- 
+</pre>
+<p>
+<span id="16.2 Program Threats-Code Injection"></span><strong id="Code Injection">Code Injection</strong>
+</p>
+<pre>
+	- code injection = executable code added or modded
+	- happens bc of bad/insecure programming paradigms, especially in c/cpp
+	- one example = buffer overflow, esp malicious bc can run b/w systems t + travel over communication channels
+</pre>
+<p>
+<span id="16.2 Program Threats-Viruses and worms"></span><strong id="Viruses and worms">Viruses and worms</strong>
+</p>
+<pre>
+	- virus = fragment of code embedded in legit program, self replicated and infects other programs 
+	- can destroy fs
+	
+	types of viruses: 
+		1. file: file virus infects system by appending self to file, will take control then return control
+		2. boot: infect boot sector, exec everytime sys booted and OS loaded 
+			- not in fs, "memory virus"
+			- can infect EFI
+		3. macro: written in high level language like visual basic 
+			- most viruses written in low level, like c/cpp
+			- exec when macro run 
+		4. rootkit: viruses that infect os itself
+			- sys completely compromised
+		5. source code: include itself w/ source code 
+		6. polymorphic: changes each time installed to avoid detection 
+			- changes virus signature = pattern used to identy (bytes) 
+		7. encrypted: will decrypt then exec
+		8. stealth: mods parts of system used to identify it, so cannot be id'ed
+		9. multipartite: can infect many parts of system
+		10. armored: obfuscated, so antivirus researchers cannot unravel and understand
+	
+	big problem w/ security today = monoculture = many systems have same hardware and os, so easy to infect
+</pre>
+
+
+<div id="16.3 System and Network Threats"><h3 id="16.3 System and Network Threats" class="header"><a href="#16.3 System and Network Threats">16.3 System and Network Threats</a></h3></div>
+<pre>
+	- security threats a lot worse if connected to network
+	- hackers usually attack from zombie systems = independent systems w/ devices compromised by hackers, but still usable to og owner 
+	  - hard to track hacker
+	  - wifi makes it even harder to track
+</pre>
+<p>
+<span id="16.3 System and Network Threats-Attacking network traffic"></span><strong id="Attacking network traffic">Attacking network traffic</strong>
+</p>
+<pre>
+	- sniffing = passively intercept network traffic
+	- spoofing = pretending to be one party and recieving info/sending info 
+</pre>
+<p>
+<span id="16.3 System and Network Threats-Denial of Service"></span><strong id="Denial of Service">Denial of Service</strong>
+</p>
+<pre>
+	- not trying to get info/steal resources, but disables system
+	- usually based on network = attack facility resources OR disrupt network of facility
+	- cant prevent 
+</pre>
+<p>
+<span id="16.3 System and Network Threats-Port Scanning"></span><strong id="Port Scanning">Port Scanning</strong>
+</p>
+<pre>
+	- port scanning = way to find system vulnerabilities, usually automated
+		- part of fingerprinting = attacker finds OS used and set of services to find vulnerabilities 
+</pre>
+
+
+<div id="16.4 Cryptography as a security tool"><h3 id="16.4 Cryptography as a security tool" class="header"><a href="#16.4 Cryptography as a security tool">16.4 Cryptography as a security tool</a></h3></div>
+<pre>
+	- cryptography = way to constrain potential senders / recievers of messages, b/c cant trust network
+	- use keys = distributed to come computers in networks, can only decode message if have key 
+</pre>
+<p>
+<span id="16.4 Cryptography as a security tool-Encryption"></span><strong id="Encryption">Encryption</strong>
+</p>
+<pre>
+	- encryption very common, send messages securely across network
+	- use set of keys, messages, ciphertexts
+	- symmetric vs assymetric encryption: 
+	  	1. symmetric encryption = same key used to encrypt and decrypt 
+			- data encryption standard (DES) cipher = used byt NIST, but is insecure 
+			- stream cipher = en/decrypt stream of bytes or bits rather than block, more efficent 
+		2. asymmetric encryption = different encryption + decryption keys 
+			- any sender can use one key to encrypt a message, but only key creator can decrypt the message 
+			  	- public key encryption 
+			- RSA = mot common, use public key private key, and product of 2 random prime numbers 
+			- more expensive than symmetric
+</pre>
+<p>
+<span id="16.4 Cryptography as a security tool-Authentication"></span><strong id="Authentication">Authentication</strong>
+</p>
+<pre>
+	- authentication = constraining potential senders f message 
+	- use set of keys, messages, authenticators, and functions to generate authenticators + verifying authnticators 
+	- hash function = creates small, fixed size block of data = message digest/hash value useing a message 
+	- 2 types of authentication algos: 
+	  	1. message authentication code (MAC) 
+				- generate cheksum from message using a secret key
+				- authenticate short values 
+		2. digital signature algo 
+			- digital signatures let anyone verify authenticity of message 
+	
+	can use encryption and authentication together or separately 
+</pre>
+<p>
+<span id="16.4 Cryptography as a security tool-Key Distribution"></span><strong id="Key Distribution">Key Distribution</strong>
+</p>
+<pre>
+	- hard to deliver symmetric keys: sometimes deliver out of band 
+	- asymmetric keys = can be exchanges in public + one user only needs 1 private key for all communication 
+	- need ot use digital certificate: public key digitally signed by trusted party 
+</pre>
+<p>
+<span id="16.4 Cryptography as a security tool-Implementation of Cryptography"></span><strong id="Implementation of Cryptography">Implementation of Cryptography</strong>
+</p>
+<pre>
+	- network organized in layers: TCP + IP -&gt; data link layer 
+	- implemente cryptography in any layer in network protocol stacks 
+	  - no best layer:
+				 - lower layer = not enough protection for higher layers, but more protocols will ebenfit 
+</pre>
+
+
+<div id="16.5 User Authentication"><h3 id="16.5 User Authentication" class="header"><a href="#16.5 User Authentication">16.5 User Authentication</a></h3></div>
+<p>
+<span id="16.5 User Authentication-Password vulnerabilities"></span><strong id="Password vulnerabilities">Password vulnerabilities</strong>
+</p>
+<pre>
+	- passwords = easiest way to authenticate user identity 
+	- very easy to guess passwords + can find via sniffing / monitoring 
+	- can secure passwords using hashing (easy to compute hash functions, but very hard to invert) 
+	  	- con: anyone w/ copy of password file can run hash routines against it 
+</pre>
+<p>
+<span id="16.5 User Authentication-One time passwords"></span><strong id="One time passwords">One time passwords</strong>
+</p>
+<pre>
+	- use set of paried passwords to avoid password sniffing + shoulder surfing 
+	- also use 2 factor authentication, or multifactor + biometrics 
+</pre>
+
+
+<div id="16.6 Implementing security defenses"><h3 id="16.6 Implementing security defenses" class="header"><a href="#16.6 Implementing security defenses">16.6 Implementing security defenses</a></h3></div>
+<p>
+<span id="16.6 Implementing security defenses-Security Policy"></span><strong id="Security Policy">Security Policy</strong>
+</p>
+<pre>
+	- need to have a security policy before anythingn else, like saying that all apps need code review before being deployed
+</pre>
+<p>
+<span id="16.6 Implementing security defenses-Vulnerability assessment"></span><strong id="Vulnerability assessment">Vulnerability assessment</strong>
+</p>
+<pre>
+	- need to do risk assessments analyzing social engineering + port scans + penetration test
+	- penetration test = scanning for vulnerabilities (easy passwords, unauthroized programs, processes, danerou entries in program search path, changes to system programs) 
+</pre>
+<p>
+<span id="16.6 Implementing security defenses-Intrusion prevention"></span><strong id="Intrusion prevention">Intrusion prevention</strong>
+</p>
+<pre>
+	- detect attepted intrusions into computer systems 
+	- need to be able to detect quickly + respond
+	- intrusion prevention systems (IPS) = self moifying firewalls
+	- 2 methods: 
+	  1. signature based detection
+	  2. anomaly detections 
+</pre>
+<p>
+<span id="16.6 Implementing security defenses-Virus Protection"></span><strong id="Virus Protection">Virus Protection</strong>
+</p>
+<pre>
+	- antivirus programs can disinfect programs 
+	- want to run programs in sandbox = controlled section of system, before impelment on entire system
+	- best prevention of viruses = safe computing = no user error
+	- also want to have the system log everything 
+</pre>
+<p>
+<span id="16.6 Implementing security defenses-FIrewalling to protect systems and networks"></span><strong id="FIrewalling to protect systems and networks">FIrewalling to protect systems and networks</strong>
+</p>
+<pre>
+	- firewall = computer/appliant that sits between trusted + untrusted, limits network access b/w security domains 
 </pre>
 
 </body>
