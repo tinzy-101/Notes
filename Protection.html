@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Protection</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="17.1 Goals of Protection"><h3 id="17.1 Goals of Protection" class="header"><a href="#17.1 Goals of Protection">17.1 Goals of Protection</a></h3></div>
+<p>
+<span id="17.1 Goals of Protection-Introduction"></span><strong id="Introduction">Introduction</strong>
+</p>
+<pre>
+	- processes in os need protection from each other (authorization) 
+	  - resources: files, mem segments, CPU, networking, etc
+</pre>
+<p>
+<span id="17.1 Goals of Protection-Goals of Protection"></span><strong id="Goals of Protection">Goals of Protection</strong>
+</p>
+<pre>
+	- way to enforce policies of usage
+	- OS + app dev both need to consider protection
+</pre>
+
+
+<div id="17.2 Principles of Protection"><h3 id="17.2 Principles of Protection" class="header"><a href="#17.2 Principles of Protection">17.2 Principles of Protection</a></h3></div>
+<pre>
+	- principel of least privilege = programs, user, system use only enough privilege to perform tasks
+	- UNIX rule: don't run as root
+	- need to define permissions + compartmentalization + audit trail (divergence from allowed access)
+	- need multiple layers of protection 
+</pre>
+
+
+<div id="17.3 Protection Rings"><h3 id="17.3 Protection Rings" class="header"><a href="#17.3 Protection Rings">17.3 Protection Rings</a></h3></div>
+<pre>
+	- need hardware support for privilege separation from kernel
+	- system boot = at highest privilege, before droppping to lower privilege level (separate levels using cryptographic keys)
+	- TrustZone on ARM
+</pre>
+
+
+<div id="17.4 Domain of Protection"><h3 id="17.4 Domain of Protection" class="header"><a href="#17.4 Domain of Protection">17.4 Domain of Protection</a></h3></div>
+<pre>
+	- rings of protection separate functions into domains + order hierarchically
+	- computer system = processes + objects (hardware + software)
+	- requirements: process only access objects that it has authorization to + currently needs 
+</pre>
+<p>
+<span id="17.4 Domain of Protection-Domain Structure"></span><strong id="Domain Structure">Domain Structure</strong>
+</p>
+<pre>
+	- process operates in protection domain = says which resources it can access
+	- access right = ability to operate on object, domain = set of access rights
+	- process + domain relationship = static (same access rights) or dynamic (domain switching)
+	- each user can be domain (identity of user), or each process can be domain (identity of process), or each procedure can be domain (local vars in procedure)
+</pre>
+
+
+<div id="17.5 Access Matrix"><h3 id="17.5 Access Matrix" class="header"><a href="#17.5 Access Matrix">17.5 Access Matrix</a></h3></div>
+<pre>
+	- access matrix = model of protection
+	  - rows = domains
+	  - columns = objects
+	  - cells = access rights for the object in that domain 
+	- user sets access matrix when creating an object + access matrix changing = operation on object 
+	- processes can switch between domains, but only if access rights are the same 
+</pre>
+
+
+<div id="17.6 Implementatio of the access matrix"><h3 id="17.6 Implementatio of the access matrix" class="header"><a href="#17.6 Implementatio of the access matrix">17.6 Implementatio of the access matrix</a></h3></div>
+<pre>
+	- Simplest: lobal table w/ domain, object, rights-set 
+	- each col of access matrix = access list for one object
+	- capability list for domain = lsit of objects together with operations allowed on objects 
+</pre>
+<p>
+<span id="17.6 Implementatio of the access matrix-Lock-key mechanism"></span><strong id="Lock-key mechanism">Lock-key mechanism</strong>
+</p>
+<pre>
+	- lock key scheme = compromise b/w access lsits + capability lsits
+	- each object has lsit of unique bit patterns = locks, each domain has keys 
+	- trade offs between each way of implementing access matrix 
+</pre>
+
+
+<div id="17.7 REvocation of access Rights"><h3 id="17.7 REvocation of access Rights" class="header"><a href="#17.7 REvocation of access Rights">17.7 REvocation of access Rights</a></h3></div>
+<pre>
+	1. immediate vs delayed revocation
+	2. selective vs general revocation 
+		- affect all users or only group? 
+	3. partial vs total 
+		- take all rights from object, or only some? 
+	4. temperary vs permanent 
+
+	access list = each to revoke
+	capability list = hard to revoke 
+		1. reacquisition
+		2. back pointers = list of points for each object pointing to all capabilites
+		3. indirection = search global table pointed to capability table and delete
+		4. keys = main key for each object, and current value of main key associated with any new capabilities created, remove matching key from table to revoke rights to the object 
+</pre>
+
+
+<div id="17.8 Role based access control"><h3 id="17.8 Role based access control" class="header"><a href="#17.8 Role based access control">17.8 Role based access control</a></h3></div>
+<pre>
+	- RBAC = role based access control, add in principle of least privilege 
+	- assign roles to each user 
+</pre>
+
+
+<div id="17.9 Mandatory Access Control (MAC)"><h3 id="17.9 Mandatory Access Control (MAC)" class="header"><a href="#17.9 Mandatory Access Control (MAC)">17.9 Mandatory Access Control (MAC)</a></h3></div>
+<pre>
+	- tradition = discretionary access control, used to restrict access to files + other object
+	- MAC = much better than DAC, policy that root cant mod
+	- use labels assigned to object + check that subjects (users, processes) can access label 
+</pre>
+
+
+<div id="17.10 Capability based systems"><h3 id="17.10 Capability based systems" class="header"><a href="#17.10 Capability based systems">17.10 Capability based systems</a></h3></div>
+<pre>
+	- linux uses capabilites = slice up owers of root into several areas, represented by a bit 
+	- 3 main areas: permitted, effective, inheritable
+	- capabilities cant be reacuired after revoked
+	- capability = direct implemenation of principle of least privilege 
+</pre>
+
+
+<div id="17.11 Other protection improvement methods"><h3 id="17.11 Other protection improvement methods" class="header"><a href="#17.11 Other protection improvement methods">17.11 Other protection improvement methods</a></h3></div>
+<pre>
+	1. system integrity protection: restrict access to system files, not even root can access
+	2. system call filtering: inspection at syscall gate, within syscall
+	3. sandboxing: run processes in environemnts that limit them, don't give process full set of syscalls
+	4. code signing: sin programs and executables to make sure havent been mod since created 
+</pre>
+
+
+<div id="17.2 Language Based Protection"><h3 id="17.2 Language Based Protection" class="header"><a href="#17.2 Language Based Protection">17.2 Language Based Protection</a></h3></div>
+<pre>
+	- protection ususally implemented in kernel, but good to have higher level interfaces as OS gets more complicated
+	
+	1. compiler based enforcement: 
+			- protection declared, not programed
+			- protection requirements independent fo OS
+			cons: 
+				- less secure than if kernel mpelemtned
+				- kernel more flexible
+				- hardware most efficient 
+			need to:
+				- distribute capabilites safely and efficiently across processes
+				- specify type of operations process can invoke on a resource
+				- specify order of operations process can invoke 
+</pre>
+
+</body>
+</html>
