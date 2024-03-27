@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>2-12-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+System models:
+</p>
+<ul>
+<li>
+non virtual machine: hardware --&gt; kernel --&gt; processes
+
+<li>
+virtual machine: hardware --&gt; kernel --&gt; processes (several kernels and process threads) 
+
+</ul>
+<p>
+History:
+</p>
+<ul>
+<li>
+ibm started vms so systems guys could test their solutions to bugs in vms, and not have to work odd hours to fix these problems
+
+</ul>
+<p>
+Benefits and Features 
+</p>
+<ul>
+<li>
+host system protected from VMs, VMs protected from each other
+
+<li>
+freeze, suspend running VM	
+
+<li>
+good for OS dev and research
+
+</ul>
+<p>
+Trap and emulate:
+</p>
+<ul>
+<li>
+how to switch from virtual user mode to virtual kernel mode? 
+
+<ul>
+<li>
+use trap-and-emulate: VMM gain control, analyze error, and execute operation, then return controll to VM in user mode 
+
+</ul>
+</ul>
+		 
+<p>
+binary translation:
+</p>
+<ul>
+<li>
+when trying to run an OS on a different host, it might have diff CPU (diff machine instruction sets)
+
+<li>
+need to use emulation to perform binary translation of instrucion sets 
+
+</ul>
+	  
+<p>
+nested page tables:
+</p>
+<ul>
+<li>
+VM needs to manage pages and page tables (2 OSes thing they own the page tables)
+
+<li>
+can have control in hardware 
+
+<li>
+can have many levels of virtual addressing 
+
+</ul>
+<p>
+types of VMs and implementations:
+</p>
+<ol>
+<li>
+type 0 hypervisor 
+
+<ul>
+<li>
+VMM is in firmware, OS doesn't need to do anything special 
+
+</ul>
+<li>
+type 1 hypervisor 
+
+<ul>
+<li>
+have series of OSes linked together and have cloning
+
+<li>
+run in kernel mode
+
+<li>
+they don't know they're running VM
+
+<li>
+moving towards hardware
+
+</ul>
+<li>
+type 2 hypervisor 
+
+<ul>
+<li>
+little OS involvement in virtualization
+
+<li>
+poor overall performance
+
+<li>
+don't take advantage of CPUs
+
+</ul>
+<li>
+paravirtualization 
+
+<ul>
+<li>
+VMM provides services that guest must be modified to used
+
+<li>
+icnreased performance
+
+<li>
+almost virtualization (para)
+
+<li>
+xen = very good example
+
+<li>
+emulation != virtualization!!
+
+</ul>
+</ol>
+<p>
+How to schedule CPU w/ different OSes:
+</p>
+<ol>
+<li>
+
+</ol>
+
+</body>
+</html>
