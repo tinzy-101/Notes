@@ -9,9 +9,16 @@
 </head>
 <body>
 
-<div id="Setting up personal access token"><h1 id="Setting up personal access token" class="header"><a href="#Setting up personal access token">Setting up personal access token</a></h1></div>
+<div id="Setting up personal access token for git push"><h1 id="Setting up personal access token for git push" class="header"><a href="#Setting up personal access token for git push">Setting up personal access token for git push</a></h1></div>
 <pre>
-	-
+	1. go to github, press pfp and settings
+	2. scroll to bottom and press developer settings
+	3. click personal access tokens + generate new token (classic)
+	4. name token, set expiration date, and selecte ALL repo scope
+	5. generate token and save it!!
+	6. in terminal: git remote set-url origin https://USERNAME:TOKEN@github.com/USERNAME/REPO.git
+		- enter your USERNAME, TOKEN, and REPO
+	7. go to tracked directory and test that it works with a git push 
 </pre>
 
 <div id="Connecting git and github"><h1 id="Connecting git and github" class="header"><a href="#Connecting git and github">Connecting git and github</a></h1></div>
