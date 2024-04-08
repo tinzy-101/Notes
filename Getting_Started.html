@@ -9,6 +9,36 @@
 </head>
 <body>
 
+<div id="Setting up, Updated"><h3 id="Setting up, Updated" class="header"><a href="#Setting up, Updated">Setting up, Updated</a></h3></div>
+<pre>
+	0. Following: https://medium.com/geekculture/a-beginners-guide-to-setup-opengl-in-linux-debian-2bfe02ccd1e
+	1. Installing dependencies:
+		- sudo apt-get update
+		- sudo apt-get install cmake pkg-config
+		- sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
+		- sudo apt-get install libglew-dev libglfw3-dev libglm-dev
+		- sudo apt-get install libao-dev libmpg123-dev
+	2. Setup GLFW (inits OpenGL context + create app window to draw in)
+		- cd /usr/local/lib/
+		- git clone https://github.com/glfw/glfw.git
+		- cd glfw
+		- cmake .
+		- make
+		- sudo make install
+	3. Setup GLAD (controls which version of OpenGL defined + load OpenGL functions based on version)
+		- https://glad.dav1d.de/
+			- language = C++
+			- gl version at least 3.3, profile=core, tick "generate a loader"
+			- ignore extensions
+			- click "generate" to get lib files (glad.zip)
+ 		- sudo unzip glad.zip (will create loose directories &lt;include&gt; and &lt;src&gt;)
+		- copy folders inside &lt;include&gt; into include directory
+			- cp -R include/* /usr/include/
+		- copy glad.c inside &lt;src&gt; into currect working directory (where executing opengl code)
+	4. g++ hello_triangle.cpp glad.c -ldl -lglfw
+	5. ./a.out (will print whatever u drew in hello_triangle) 
+</pre>
+
 <div id="Creating a Window"><h3 id="Creating a Window" class="header"><a href="#Creating a Window">Creating a Window</a></h3></div>
 <pre>
 	1. need to create an opengl context + app window to draw in 
@@ -35,11 +65,6 @@
 		--&gt; #include &lt;GFLW/glfw3.h&gt;
 	5. gcc main.c -lGL -lglfw
 	
-</pre>
-
-<div id="Hello Window"><h3 id="Hello Window" class="header"><a href="#Hello Window">Hello Window</a></h3></div>
-<pre>
-	--&gt; 
 </pre>
 
 </body>
