@@ -53,18 +53,65 @@ dfsdfsdf
 	- start running malicious instructions (got a lot of microsoft products
 </pre>
 
-<p>
+<pre>
+Test 3 Answers:
+ 4k page size, displacement = 11-31 bits
+Solution:
+	4k = 2^12 = 12 displacement, but 11-31 is 11 bits displacement
+	therefore not possible
+ 
+ 
+ Can have virus in computer boot sector
+ 
+ System and Network Threats
+ 	- worms = use spawning
+	- port scanning 
+	- denial of service 
+	  	- overload 1 server 
+
+Cryptography as a security tool 
+	1. encryption = use key value pairs
+
+e.g. XOR:
+1 + 1 = 0
+0 + 0 = 0
+1 + 0 = 1
+0 + 1 = 1
+
+Art 
+A = 41 
+r = 72
+t = 74
+*Convert to binary
+
+Let key = ArtArt (all in binary)
+	- use XOR value for each bit = get encrypted info 
+	- use same key ArtArt to decrypt it and get og binary for ArtArt
+
+RSA algo
+	1. generate key
+	2. distribute public key to encrypter ppl 
+	3. they encrypt message and give it to you
+	4. you use your private key to decrypt it
+
+- many encryption algos take a lot of time, so are tradeoffs 
+  
+*Authentication
+	- Use hash functions (MD5, SHA-1) 
+	- digital signatures 
+	  - use a lot for legal things (docusign) 
+		 
+Firewalls for protection + VPNs good 
+	- proxy firewall 
+
 1 M segment size + 4k Page size
 BITS: 0-11 segment index
 BITS: 12-20 are page index
 BITS: 21-31 are byte index
-</p>
 
-<p>
 Solution: 4k page size = 2^12, 12 bits displacement
-</p>
-<pre><code>21-31 = 11 bits != 12 bits, so NOT possible
-</pre></code>
+			 21-31 = 11 bits != 12 bits, so NOT possible
+</pre>
 
 </body>
 </html>
