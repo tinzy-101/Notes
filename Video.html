@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Video</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Setting up, Updated"><h3 id="Setting up, Updated" class="header"><a href="#Setting up, Updated">Setting up, Updated</a></h3></div>
+<pre>
+	1. Following: https://medium.com/geekculture/a-beginners-guide-to-setup-opengl-in-linux-debian-2bfe02ccd1e
+	2. Installing dependencies:
+		- sudo apt-get update
+		- sudo apt-get install cmake pkg-config
+		- sudo apt-get install mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev
+		- sudo apt-get install libglew-dev libglfw3-dev libglm-dev
+		- sudo apt-get install libao-dev libmpg123-dev
+	3. Setup GLFW (inits OpenGL context + create app window to draw in)
+		- cd /usr/local/lib/
+		- git clone https://github.com/glfw/glfw.git
+		- cd glfw
+		- cmake .
+		- make
+		- sudo make install
+	4. Setup GLAD (controls which version of OpenGL defined + load OpenGL functions based on version)
+		- https://glad.dav1d.de/
+			- language = C++
+			- gl version at least 3.3, profile=core, tick "generate a loader"
+			- ignore extensions
+			- click "generate" to get lib files (glad.zip)
+ 		- sudo unzip glad.zip (will create loose directories &lt;include&gt; and &lt;src&gt;)
+		- copy folders inside &lt;include&gt; into include directory
+			- cp -R include/* /usr/include/
+		- copy glad.c inside &lt;src&gt; into currect working directory (where executing opengl code)
+	5. included libraries:
+		- #include &lt;iostream&gt;
+		- #include "incldue/glad/glad.h"
+		- #include &lt;GLFW/glfw3.h&gt;
+	6. g++ hello_triangle.cpp glad.c -ldl -lglfw
+	7. ./a.out (will print whatever u drew in hello_triangle) 
+</pre>
+
+<div id="Checking opengl version"><h1 id="Checking opengl version" class="header"><a href="#Checking opengl version">Checking opengl version</a></h1></div>
+<pre>
+	glxinfo | grep "OpenGL version"
+</pre>
+
+<div id="adjustWindow.cpp notes"><h1 id="adjustWindow.cpp notes" class="header"><a href="#adjustWindow.cpp notes">adjustWindow.cpp notes</a></h1></div>
+<pre>
+	- screens switch between images/frames too give illusion of motion
+	- screens display frames by changing from pixels of display to pixels of frame
+		- pixels changed individually from top left to bottom right
+	- while 1 frame being displayed, the next frame is written in background
+		- when current frame is finished being displayed, it will be swapped with the new frame from the background
+		- the old frame is then overwritten with the next, new frame
+		- old frame + new frame = buffers = storage space for pixels
+			- front buffer = buffer where info is being read from to be displayed
+			- back buffer = buffer on which info is being written
+</pre>
+
+<div id="createTriangle.cpp notes"><h1 id="createTriangle.cpp notes" class="header"><a href="#createTriangle.cpp notes">createTriangle.cpp notes</a></h1></div>
+<pre>
+	- need to use the graphics pipeline to create a triangle
+	- graphics pipeline = series of functions turning vertex data (array of vertices, including info on coordinates, color, texture, etc) into a frame
+		1. vertex shader: takes positions of all vertices and transforms them to how u want
+		2. shape assembly: takes transformed vertices and connects them using a primitive 
+			- primitive = shape (e.g. triangle, point, line)
+			- each primitive interprets data differently (e.g. triangle takes 3 points and draws triangle) 
+		3. geometry shader: add vertices and create new primitives (more complex)
+		4. rasterization: mathematical shapes transformed into pixels
+		5. fragment shader: add color to pixels (depend on lighting, texture, shadows, etc)
+			- can have multiple colors for 1 pixel b/c of overlapping objects
+		6. tests and blending: blend transparent objects into final color
+</pre>
+
+</body>
+</html>
