@@ -38,5 +38,19 @@
 
 </pre>
 
+<div id="Using 1 repo across multiple computers"><h1 id="Using 1 repo across multiple computers" class="header"><a href="#Using 1 repo across multiple computers">Using 1 repo across multiple computers</a></h1></div>
+<pre>
+	1. create repo on og computer, start tracking changes with guidelines above
+	2. on second computer that u want to work on repo with:
+		- download git if not already downloaded
+		- git clone https://github.com/&lt;username&gt;/&lt;repo&gt;
+		- connect the repo to the github:
+				  - git remote set-url origin https://&lt;username&gt;:&lt;token&gt;@github.com/&lt;username&gt;/&lt;repo&gt;.git
+		- git commit -m "commit message"
+		- git push
+	3. on o.g. computer, if u want to see the changes made on another computer that were committed to the github repo
+		- git pull (all changes written to the github repo will be downloaded to currect tracked directory)
+</pre>
+
 </body>
 </html>
