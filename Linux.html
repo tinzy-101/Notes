@@ -12,6 +12,12 @@
 
 <div id="Misc"><h3 id="Misc" class="header"><a href="#Misc">Misc</a></h3></div>
 <pre>
+	Combine image files and pdfs into 1 pdf:
+	1. Move all images and pdfs to a dir
+	2. img2pdf *.jpg --output united.pdf 
+		- sudo apt-get install img2pdf (if not yet downloaded)
+	3. pdfunite *.pdf total.pdf
+
 	Filesystem on /dev/sda5 requires manual fsck
 	1. fsck /dev/sda5
 	2. a (will say yes to all options)
