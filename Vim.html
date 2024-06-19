@@ -13,6 +13,23 @@
 <span id="-Misc"></span><strong id="Misc">Misc</strong>
 </p>
 <pre>
+
+vimrc is in ~/_vimrc
+
+tabs: 
+	1. on a current vim instance, create new tab:
+		:tabe file/path/to/new/file
+	2. move to next tab
+		:tabn
+	3. move to previous tab
+		:tabp
+	4. map F7 to :tabp and F8 to tabn (next tab)
+		set nocp
+		map &lt;F7&gt; :tabp&lt;CR&gt;
+		map &lt;F8&gt; :tabn&lt;CR&gt;
+		- &lt;CR&gt; = carriage return, so u don't have to hit enter to exec every time
+	
+
 with a clean copy of vim on debian:
 	- :set nocompatible (so can enter insert mode)
 	- :set backspace=indent,eol,start

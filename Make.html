@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Make</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<pre>
+Makefile is a file in a directory that can help with organized and easy compilation.
+</pre>
+
+<div id="Syntax:"><h4 id="Syntax:" class="header"><a href="#Syntax:">Syntax:</a></h4></div>
+<p>
+Makefile made of set of rules. One rule example:
+</p>
+<pre>
+targets: prerequisites
+	command
+	command
+	command
+</pre>
+
+<p>
+target = file name, separated by spaces (one per rule usually) <br/>
+command = series of files used to make the target <br/>
+prerequisites = set of file names, need to exist b4 commands for target are run (dependencies) <br/>
+</p>
+
+<div id="Example 1"><h4 id="Example 1" class="header"><a href="#Example 1">Example 1</a></h4></div>
+<pre>
+hello:
+	echo "Hello, World"
+	echo "This line prints if file 'hello' doesn't exist"
+</pre>
+<p>
+1 target: "hello" <br/>
+2 commands: echos <br/>
+no prerequisites <br/>
+IF "hello" exists: commands run, IF "hello" DOESN'T exist: commands don't run <br/>
+</p>
+
+<div id="Example 2"><h4 id="Example 2" class="header"><a href="#Example 2">Example 2</a></h4></div>
+<pre>
+blah: blah.c
+	cc blah.c -o blah
+</pre>
+<p>
+1st target blah is selected, w/ blah.c as prereq <br/>
+make decides if it should run blah target, ONLY run if blah doesn't exist, OR blah.c <span id="Example 2-newer than"></span><strong id="newer than">newer than</strong> blah
+</p>
+
+</body>
+</html>
