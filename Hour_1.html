@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Hour_1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<p>
+ways to think about data structures:
+</p>
+<ol>
+<li>
+mathematical/logical models
+
+<ul>
+<li>
+abstract view of things 
+
+<li>
+e.g. abstract data types: define data types by a model of what it should be able to do
+
+<li>
+abstract data type (ADT): define data and operations, but no impelmentation
+
+</ul>
+<li>
+implementation
+
+<ul>
+<li>
+the actual names of data types in a programming language
+
+</ul>
+</ol>
+<div id="List"><h4 id="List" class="header"><a href="#List">List</a></h4></div>
+<p>
+e.g. static list definition:
+</p>
+<ul>
+<li>
+store num of elements by given data type
+
+<li>
+write/modify element at a position
+
+<li>
+read element at a position 
+
+<ul>
+<li>
+all features available in arrays!
+
+</ul>
+</ul>
+ 
+<p>
+e.g. dynamic list def:
+</p>
+<ul>
+<li>
+empty list size 0
+
+<li>
+insert
+
+<li>
+remove
+
+<li>
+count num elements
+
+<li>
+read/modify element
+
+<li>
+specify data type 
+
+<ul>
+<li>
+can implement using arrays + writing in extra functionality 
+
+</ul>
+</ul>
+<p>
+implementation of dynamic list:
+</p>
+<ol>
+<li>
+create a large array of MAXSIZE
+
+<li>
+define variable to mark last element in array + set to -1 
+
+<ul>
+<li>
+if end == -1, then list is empty
+
+</ul>
+<li>
+start adding into list using insert() --&gt; appends, changes value of end
+
+<li>
+if insert at specific position, then every element to the right of that position shifts right 1
+
+<li>
+if remove at specific position, then every element to the right of that position shifts left 1
+
+<li>
+we have satisfied all conditions for dynamic list!
+
+<li>
+but what is a good max size?
+
+<ul>
+<li>
+when array is fun, need to create a new alrger aray + copy previous arrya into new array
+
+<ul>
+<li>
+x2 size is best 
+
+</ul>
+<li>
+free mem from previous array 
+
+</ul>
+</ol>
+<p>
+cost of dynamic list:
+</p>
+<ol>
+<li>
+access - read/write element at an index
+
+<ul>
+<li>
+takes constant time b/c in arrays are organized in a straight line
+
+<li>
+O(1)
+
+</ul>
+<li>
+insert at specific position 
+
+<ul>
+<li>
+need to shift elements to make space
+
+<ul>
+<li>
+O(1) if inserting at the end, bc dont need to shift elements 
+
+</ul>
+<li>
+time complexity proportional to num elements "n" (linear function)
+
+<li>
+O(n)
+
+</ul>
+<li>
+removing element at specific position 
+
+<ul>
+<li>
+O(n) 
+
+</ul>
+<li>
+adding element 
+
+<ul>
+<li>
+O(1) if array not full
+
+<li>
+O(n) if array is full (worst case) 
+
+</ul>
+<li>
+conclusion
+
+<ul>
+<li>
+if the list is constantly added to and removed from + if it grows and shrinks a lot, it is costly
+
+<li>
+a lot of mem sits unused 
+
+<li>
+not efficient to use arrays at dynamic list 
+
+<ul>
+<li>
+substitution: linked list (dynamic list + uses mem more efficiently)
+
+</ul>
+</ul>
+</ol>
+<div id="Linked List"><h4 id="Linked List" class="header"><a href="#Linked List">Linked List</a></h4></div>
+<p>
+intro:
+</p>
+<ul>
+<li>
+program want to store an int, so declares int var
+
+<ul>
+<li>
+memory manager sees this and searches for a free 4-byte block in the memory to store the int
+
+<li>
+allocates the memory to the var, and then the var will be at the starting address of the mem block 
+
+</ul>
+<li>
+program wants to store list of ints, so declares array var of size 4
+
+<ul>
+<li>
+arrays are stored as 1 contiguous mem block, so mem manager looks for a 16-byte block for the array
+
+<li>
+when program wants to access element 4 in array (A(3)), app knows where to write bc it knows starting address +
+	  offset (3) 
+
+<ul>
+<li>
+takes constant time 
+
+</ul>
+<li>
+regardless of size of array, elements are accessed in constant time! 
+
+<li>
+program wants to extend array by adding another element, but mem manager didnt expect this and there is another
+	  element in the way (prev defined var)
+
+<li>
+mem manager has to be given a new size for an array, copy old array and put it into a new, larger block, then 
+	  release mem prev occupied 
+
+<ul>
+<li>
+but, still don't know what a good size for new array would be!
+
+</ul>
+</ul>
+</ul>
+<p>
+solution
+</p>
+<ul>
+<li>
+ask for memory 4 bytes (an int) at a time
+
+<li>
+bc these are all separate requests, not guaranteed adjacent mem for all, all elements are disjointed
+
+<li>
+need mre info saying which element is 1st, 2nd, etc in the list! --&gt; link!
+
+<li>
+so everytime program needs mem for new element, asks for mem for both an INT and POINTER  
+
+<ul>
+<li>
+block 1 = actual data/element to store (int)
+
+<li>
+block 2 = address of next element in array (pointer)
+
+<ul>
+<li>
+if something is last element in array, block 2 = 0 (invalid address) 
+
+</ul>
+</ul>
+</ul>
+<p>
+sample implementation of a node w/ block 1 and block 2: 
+Struct Node {
+	int data; //4 bytes
+	Node* next; //4 bytes
+}
+</p>
+
+<ul>
+<li>
+this data structure of nodes linked together = linked list! 
+
+<ul>
+<li>
+1st node = head node 
+
+<ul>
+<li>
+if know address of 1st node, have access to whole list 
+
+</ul>
+<li>
+only way to traverse is to start at head node 
+
+<ul>
+<li>
+can't access any elements in consant time - need to start at head and keep jumping
+
+</ul>
+<li>
+time complexity 
+
+<ul>
+<li>
+access to elements: O(n) --&gt; proportional to num of elements in lsit
+
+<li>
+insertion: O(n) --&gt; insertion is simple bc no shifting, but still need to access elements causing O(n)
+
+<li>
+delection: O(n) --&gt; need to traverse to find the right element 
+
+</ul>
+<li>
+pros: 
+
+<ul>
+<li>
+no extra mem use
+
+<li>
+creates nodes when needed + free
+
+<li>
+don't need to guess size of arrays to perform operations 
+
+</ul>
+</ul>
+</ul>
+  
+<div id="Array vs Linked List"><h4 id="Array vs Linked List" class="header"><a href="#Array vs Linked List">Array vs Linked List</a></h4></div>
+<table>
+<thead>
+<tr>
+<th>
+Condition
+</th>
+<th>
+Array
+</th>
+<th>
+Linked List
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+cost of accessing an element
+</td>
+<td>
+O(1): address of A[i] = o.g. add + i*4 (4 bytes = int)
+</td>
+<td>
+O(n): average case
+</td>
+</tr>
+<tr>
+<td>
+mem usage
+</td>
+<td>
+fixed size (will have some unused)
+</td>
+<td>
+no unused mem
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+e.g. 3 elements in size 7 array: 7*4=28 bytes
+</td>
+<td>
+extra mem for pointers
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+mem sometimes not avail as 1 contiguous block
+</td>
+<td>
+3 * 8 = 24 bytes
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+good for element data types that are large
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+mem may be avail as small blocks
+</td>
+</tr>
+<tr>
+<td>
+cost of inserting element
+</td>
+<td>
+1. at beginning: O(n) (shift all elements)
+</td>
+<td>
+1. O(1) (create new node + adjust head/link)
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+2. in middle: O(n) (shift elements)
+</td>
+<td>
+2. O(n) (traverse to point)
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+3. at end: O(1) (just append, if space)
+</td>
+<td>
+3. O(n) (traverse whole list)
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+- if no space: O(n)
+</td>
+<td>
+&nbsp;
+</td>
+</tr>
+<tr>
+<td>
+Ease of use
+</td>
+<td>
+easier
+</td>
+<td>
+more error prone (Seg fault, mem leak)
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+&nbsp;
+</td>
+<td>
+&nbsp;
+</td>
+</tr>
+</tbody>
+</table>
+
+<div id="Dynamic Mem Allocation"><h4 id="Dynamic Mem Allocation" class="header"><a href="#Dynamic Mem Allocation">Dynamic Mem Allocation</a></h4></div>
+<ul>
+<li>
+mem allocated at run time
+
+<li>
+vs static mem allocation = mem allocated at compile time
+
+<li>
+useful when you dont know about memory sizes before program is running, e.g. size of an array
+
+<li>
+need to delete all dynamically allocated mem so no mem leaks! 
+
+<ul>
+<li>
+if use "new" (allocate mem), need equiv "delete" expression
+
+</ul>
+</ul>
+
+</body>
+</html>
