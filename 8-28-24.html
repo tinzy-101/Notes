@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>8-28-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Review"><h3 id="Review" class="header"><a href="#Review">Review</a></h3></div>
+<p>
+in big O notation: ALWAYS some form of O(n) --&gt; n = size of array, num times entering loop, etc
+	-- time is proportional to n; as n increases, the time to execute increases by a linear relationship
+don't put output statements in loops: will overwhelm when testing for time complexity
+diff time complexities behave similarly at low n values --&gt; really only matters when n gets really big
+</p>
+
+<div id="Executing Time cont'd"><h3 id="Executing Time cont'd" class="header"><a href="#Executing Time cont'd">Executing Time cont'd</a></h3></div>
+
+<div id="Executing Time cont'd-Search Algos"><h5 id="Search Algos" class="header"><a href="#Executing Time cont'd-Search Algos">Search Algos</a></h5></div>
+<p>
+Linear Search:
+array of elements, want to search for a specific element --&gt; larger array, more comparisons --&gt; O(n)
+</p>
+
+<p>
+Binary Search:
+if array contains elements already sorted (typically ascending) --&gt; use binary search: go to middle of array, check
+whether that element is greater or less than the desired element, then remove half of the array to search, keep halving
+until find --&gt; O(logn)
+*** Only do if elements already sorted!
+</p>
+
+<div id="Executing Time cont'd-Common Growth functions:"><h5 id="Common Growth functions:" class="header"><a href="#Executing Time cont'd-Common Growth functions:">Common Growth functions:</a></h5></div>
+<p>
+O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n**<span id="Executing Time cont'd-Common Growth functions:-2) &lt; O(n"></span><strong id="2) &lt; O(n">2) &lt; O(n</strong>*<span id="Executing Time cont'd-Common Growth functions:-3) &lt; O(2"></span><strong id="3) &lt; O(2">3) &lt; O(2</strong>**n) 
+exponential algos really bad for time complexity!
+</p>
+
+<div id="Executing Time cont'd-Towers of Hanoi"><h5 id="Towers of Hanoi" class="header"><a href="#Executing Time cont'd-Towers of Hanoi">Towers of Hanoi</a></h5></div>
+<p>
+Background: 
+Temple has 3 poles. Pole A has 64 disks, sorted (largest at the bottoms, smallest at the top). 
+Goal: move disks from pole A to pole B. 
+Rules: Only move 1 disk at a time, and smaller disk can't support a larger disk
+Solution:
+T(1) = 1 --&gt; if have 1 disk, takes 1 move
+T(2) = 3 --&gt; 2 disks, 3 moves
+T(3) = 7
+T(n) = 2T(n-1) + 1 = 2***n - 1 --&gt; algo works, but is inefficient
+</p>
+
+<div id="Executing Time cont'd-Fibonacci Numbers"><h5 id="Fibonacci Numbers" class="header"><a href="#Executing Time cont'd-Fibonacci Numbers">Fibonacci Numbers</a></h5></div>
+<p>
+<span id="Executing Time cont'd-Fibonacci Numbers-Use recursion:"></span><strong id="Use recursion:">Use recursion:</strong>
+long fib(long index) { // need long bc fibs grow really quickly
+	if(index == 0) // base case
+		return 0;
+	else if(index == 1) // base case
+		return 1;
+	else
+		return fib(index - 1) + fib(index - 2);
+}
+</p>
+
+<p>
+fib(0) = 0
+fib(1) = 1
+fib(index = fib(index - 1) + fib(index - 2); index &gt;=2
+Time complexity: O(2***n) --&gt; bad, we should'nt be using recursion, could also use iteration
+</p>
+
+<p>
+<span id="Executing Time cont'd-Fibonacci Numbers-Use iteration:"></span><strong id="Use iteration:">Use iteration:</strong>
+Only carry last 2 population values + care about getting the next population value
+	initial values:
+	f0 = 0
+	f1 = 1
+	f2 = 1 
+function is given the index of the sequence that you want to return
+for loop from 3 --&gt; n: do a shift of f0 and f1, then update the value of f2 by adding previous 2 
+	f0 = f1
+	f1 = f2
+	f2 = f0 + f1
+Time complexity: O(n) --&gt; dependant upon num times entering for loop
+</p>
+
+<div id="Executing Time cont'd-GCD Algos"><h5 id="GCD Algos" class="header"><a href="#Executing Time cont'd-GCD Algos">GCD Algos</a></h5></div>
+<p>
+look at gcd b/w 2 non-negative ints (include 0), m &amp; n (n = smaller number)
+</p>
+
+<p>
+<span id="Executing Time cont'd-GCD Algos-Version 1: Brute Force"></span><strong id="Version 1: Brute Force">Version 1: Brute Force</strong>
+set GCD = 1, start with 2, then keep increasing by steps of 1 and test up to smaller value b/w m and n
+time complexity: O(n) --&gt; dependant upon num of loops; n = smaller number of the pair
+can do a lot better!
+</p>
+
+<p>
+<span id="Executing Time cont'd-GCD Algos-Version 2:"></span><strong id="Version 2:">Version 2:</strong>
+Start from top: check m is divisible by n, then decrement by step 1, and continue until you find 1 common factor,
+b/c it will automatically be highest commmon factor
+time complexity: O(n) --&gt; same as V1, just different coefficient, but worse case scenario still no change
+</p>
+
+<p>
+<span id="Executing Time cont'd-GCD Algos-Version 3: Euclid's Algo"></span><strong id="Version 3: Euclid's Algo">Version 3: Euclid's Algo</strong>
+2 ints m, n --&gt; assume n is greater than m (but really doesn't matter)
+b/w 2 non negative ints, can ALWAYS write: m = n ** q (quotient) + r (remainder)
+var g = GCD b/w m and n
+gx = gyq + r --&gt; x and y are aribtrary ints
+r = g(x - yq) --&gt; the remainder also contains the gcd "g", so we dont need to find the gcd b/w (m, n), ONLY (r, n)
+aka: gcd(m, n) == gcd(n, m % n)
+time complexity: O(logn)
+** Can be implemented using recursion OR iteration 
+</p>
+
+<div id="Executing Time cont'd-Finding Prime Numbers"><h5 id="Finding Prime Numbers" class="header"><a href="#Executing Time cont'd-Finding Prime Numbers">Finding Prime Numbers</a></h5></div>
+<p>
+Goal: finding all the prime numbers up to n
+</p>
+
+<p>
+<span id="Executing Time cont'd-Finding Prime Numbers-V1: Brute Force"></span><strong id="V1: Brute Force">V1: Brute Force</strong>
+Check all numbers from 2 to (n-1), see if n divides by those numbers 
+Even better: 2 - floor value of sqrt(n) --&gt; e.g. sqrt(26) = 5.something --&gt; floor = 5, ceiling = 6 --&gt; dont need to check
+up to ceiling value 6
+Even better: skip all composite numbers
+</p>
+
+<p>
+<span id="Executing Time cont'd-Finding Prime Numbers-V2: Sieve approach"></span><strong id="V2: Sieve approach">V2: Sieve approach</strong>
+Goal: find all prime nums from 2-10k
+Steps:
+</p>
+<ol>
+<li>
+write down all ints that you want to examine (1-30)
+
+<li>
+cross out 1 bc not prime
+
+<li>
+next number will be prime, circle
+
+<li>
+cross out all multiple of that number (mult of 2)
+
+<li>
+next number is prime, circle, then cross out all mults of 3
+
+<li>
+and each successive number will be prime, just repeat the algo
+
+</ol>
+<div id="Executing Time cont'd-Convex Hulls"><h5 id="Convex Hulls" class="header"><a href="#Executing Time cont'd-Convex Hulls">Convex Hulls</a></h5></div>
+<p>
+convex hull = graphics problem -- can you enclose a bunch of points on a diagram using a polygon
+convex def: all diagonals in polygon are within the boundary of the polygon (boundary = when you draw circle around most
+protruding points of the polygon)
+</p>
+
+<p>
+<span id="Executing Time cont'd-Convex Hulls-V1: Brute Force Gift Wrapping"></span><strong id="V1: Brute Force Gift Wrapping">V1: Brute Force Gift Wrapping</strong>
+</p>
+<ol>
+<li>
+rightmost, lowest point (priority right more over lowest)
+
+<li>
+start at that point, then start waking so all points on your left, keep repeating until return to og point
+
+<ul>
+<li>
+how to know if all points to the left?
+
+</ul>
+<li>
+convex hull!
+
+<li>
+time complexity: O(hn), worst case h = n, so O(n***2) (h = num of walks)
+
+</ol>
+<p>
+<span id="Executing Time cont'd-Convex Hulls-V2: Graham's algo"></span><strong id="V2: Graham's algo">V2: Graham's algo</strong>
+</p>
+<ol>
+<li>
+find rightmost lowest point
+
+<li>
+calculate all angles bw all other points, will only get up to 180 degrees --&gt; O(n)
+
+<li>
+sort points based on all of the angles --&gt; BEST O(nlogn) 
+
+<ul>
+<li>
+this is the bottleneck
+
+</ul>
+<li>
+start walking, check point at the next largest angle, and check if that point is to left or to right. if to left, add
+	it to the edge of the convex hull, and etc
+
+</ol>
+	
+
+<div id="Executing Time cont'd-HW Notes"><h5 id="HW Notes" class="header"><a href="#Executing Time cont'd-HW Notes">HW Notes</a></h5></div>
+<ol>
+<li>
+trivial
+
+<li>
+use a single loop, no nested loop
+
+<li>
+Point A (x1, y1), walking to Point B (x2, y2) --&gt; shoelace algo
+
+<ul>
+<li>
+have pt C (x3, y3)
+
+<li>
+can draw a box around the 3 points, pt A a vertices, B and C on the edges
+
+<li>
+draw triangle b/w 3 points
+
+<li>
+(x2-x1)(y3-y1)  -1/2(x2-x1)(y2-y1) + (y3-y2)(x2-x3) + (y3-y1)(x3-x1)
+
+<li>
+= 1/2(x1y2 + x2y3 + x3y1) - 1/2(x1y3 + x2y1 + x3y2) --&gt; area of the triangle b/w the 3 points 
+
+<li>
+if expression + --&gt; c to left
+
+<li>
+if expression - --&gt; c to right
+
+<li>
+if expression 0 --&gt; c is on your path, bc area of a line is 0
+
+</ul>
+</ol>
+<div id="Executing Time cont'd-Judge Notes"><h5 id="Judge Notes" class="header"><a href="#Executing Time cont'd-Judge Notes">Judge Notes</a></h5></div>
+<ol>
+<li>
+don't ask for input, no cin cout
+
+</ol>
+
+</body>
+</html>

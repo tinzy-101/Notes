@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>8-26-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Executing Time"><h3 id="Executing Time" class="header"><a href="#Executing Time">Executing Time</a></h3></div>
+<p>
+Don't use absolute timing to get performance for code --&gt; look at growth rates
+larger input = huge impact on execution time? --&gt; bad algo
+</p>
+
+<p>
+Big O notation: O(n) = order of n 
+e.g. sorting: usually not interested in worst or best case, only avg case of how an algo will behave 
+if you cant figure out how algo behaves in avg case, look at behavior in worst case 
+don't care about constants, O(2n**<span id="Executing Time-2) = O(n"></span><strong id="2) = O(n">2) = O(n</strong>**2)
+e.g. for loop, going through n times:
+		-- if each run thru the loop is a constant time C, total time = C**n
+		-- O(C**n) = O(n)
+		-- linear graph: plot n vs O(n) = c**n, will get a linear function w/ slope c
+		-- as input increases, problem will depreciate linearly
+		-- usually don't care about lower values of n (diff b/w algos and time complexities are negligible)
+e.g. nested for loop 
+		-- first loop, n times + 2nd loop n times --&gt; c ** n ** n = O(n^2)
+e.g. for(i = 1; i &lt;=n; i++) {
+			for(j = 1; j &lt;= i; j++) {
+</p>
+<pre><code>stuff 
+</code></pre>
+<p>
+			}
+		}
+			-- geometric series
+			-- in general, if want to add a bunch of nums together (1-n): n(n+1) / 2 
+			-- S = 1 + r + r<sup><small>2 + ... + r</small></sup>(n-1): (1-r^n) / r
+			-- this nested loop: c + 2c + ... + nc = c * n(n + 1) / 2 = cn**<span id="Executing Time-2 / 2 + cn / 2 = O(n"></span><strong id="2 / 2 + cn / 2 = O(n">2 / 2 + cn / 2 = O(n</strong>**2)
+</p>
+<pre><code>-- drop the cn / 2 term because the quadratic cn**<span id="Executing Time-2 / 2 grows much faster, ignore constants to get O(n"></span><strong id="2 / 2 grows much faster, ignore constants to get O(n">2 / 2 grows much faster, ignore constants to get O(n</strong>**2)
+</code></pre>
+<p>
+e.g. for(i=1; i&lt;=n; i++) {
+			for(j = 1; j &lt;=20; j++( {
+</p>
+<pre><code>stuff
+</code></pre>
+<p>
+			}
+		}
+			-- inside loop runs constant time 
+			-- 20 ** c ** n = O(n) 
+e.g. if(vector has object(e)) {		-- if loop is O(n) b/c have to go through n elements in vector to find "e" 
+			cout &lt;&lt; e;
+		}
+		else {
+			for( object t: list( {		-- also O(n)
+</p>
+<pre><code>cout &lt;&lt; t;
+</code></pre>
+<p>
+			}
+		}
+</p>
+<pre><code>-- T(n) = test time + worst case (if else)
+O(n) + O(n) = 2O(n) = O(n)
+</code></pre>
+
+<p>
+O(1) = constant time = don't care about size of input, will always be able to compute algorithm in near same time
+	-- best case time complexity
+</p>
+	
+<p>
+Recurrence Relations:
+	-- basically recursions, with diff time complexities
+e.g. Linear Search:
+	-- T(n) = T(n-1) + O(1)
+</p>
+<pre><code>= T(n -1) + C  --&gt; after we look at 1 element
+= T(n-2) + C + C --&gt; after we look at 2 elements, etc.
+= T(n - 3) + C + C + C
+= T(n - 4) + 4C 
+= ...
+= T(1) + (n-1)C  --&gt; after we search the whole array
+= O(n)
+</code></pre>
+<p>
+		-- spent effort on the first one
+e.g. Merge Sort:
+	-- T(n) = 2T(n/2) + O(n) --&gt; approx n as 2**<span id="Executing Time-k, n = 2"></span><strong id="k, n = 2">k, n = 2</strong>**k  some constant k
+</p>
+<pre><code>= 2T(n/2) + cn
+= 2(2T(n/2**<span id="Executing Time-2) + c"></span><strong id="2) + c">2) + c</strong>*n / 2) + cn
+= 2***2 T(n / 4) + 2cn
+= 4(2T(n / 8) + cn/4) + 2cn
+= ...
+= T(n/2***k)
+= 2**<span id="Executing Time-kT(n / 2"></span><strong id="kT(n / 2">kT(n / 2</strong>**k) + kcn
+= nc_1 + c_2**kn
+= O(kn) is dominant
+= O(nlog(n)) --&gt; but technically O(nlog_2(n)), but base doesn't matter bc its just a constant of proportionality
+</code></pre>
+<p>
+		-- if have 2 arrays already sorted, want to merge together
+</p>
+
+</body>
+</html>
