@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>아희</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Setting Up"><h3 id="Setting Up" class="header"><a href="#Setting Up">Setting Up</a></h3></div>
+<ol>
+<li>
+download aheui interpreter
+
+<ul>
+<li>
+pip install aheui (aheuiPython DNE)
+
+<li>
+aheui.py is in: ./anaconda3/lib/python3.11/site-packages
+
+<li>
+moved aheui.py to directory where u wanna write aheui programs
+
+<li>
+kept throwing errors about circular import! idk why
+
+</ul>
+<li>
+download (go) aheui interpreter
+
+<ul>
+<li>
+download go:
+
+<ul>
+<li>
+install tar.gx binary package from official go site
+
+<li>
+extract binary: tar xzf file.tar.gz
+
+<li>
+couldn't figure out how to download from there 
+
+<li>
+used: sudo apt-get install golang
+
+<li>
+check installed: go version	
+
+</ul>
+<li>
+download go interpreter from github
+
+<ul>
+<li>
+go install github.com/sungwoncho/goaheui@latest
+
+<li>
+interpret program: aheui file.aheui
+
+</ul>
+</ul>
+</ol>
+<div id="Notes"><h3 id="Notes" class="header"><a href="#Notes">Notes</a></h3></div>
+<ol>
+<li>
+Background
+
+<ul>
+<li>
+program = grid of characters,when cursor arrives at boundary of grid, wraps to other side, no momentum loss
+
+<li>
+complete hangul chars (CVC) = commands
+
+<ul>
+<li>
+incomplete hangul + non hangul letters = comments
+
+</ul>
+</ul>
+<li>
+How commands execute:
+
+<ol>
+<li>
+Process consonants - consonants specify actual instruction 
+
+<ul>
+<li>
+update momentum if required by consonants 
+
+</ul>
+<li>
+Set momentum of cursor based on current momentum + vowel --&gt; momentum changes
+
+<li>
+Move cursor based on current momentums
+
+</ol>
+<li>
+Instructions:
+	1.ㅐ,ㅒ,ㅖ,ㅘ,ㅙ,ㅚ,ㅝ,ㅞ,ㅟ --&gt; mean nothing
+
+<ol>
+<li>
+
+<table>
+<tr>
+<td>
+Vowel
+</td>
+<td>
+Momentum
+</td>
+</tr>
+<tr>
+<td>
+ㅏ
+</td>
+<td>
+[0,1] (right)
+</td>
+</tr>
+<tr>
+<td>
+ㅓ
+</td>
+<td>
+[0,-1] (left)
+</td>
+</tr>
+<tr>
+<td>
+ㅗ
+</td>
+<td>
+[-1,0] (up)
+</td>
+</tr>
+<tr>
+<td>
+ㅜ
+</td>
+<td>
+[1,0] (down)
+</td>
+</tr>
+<tr>
+<td>
+ㅑ
+</td>
+<td>
+[0,2] (right 2)
+</td>
+</tr>
+<tr>
+<td>
+ㅕ
+</td>
+<td>
+[0,-2] (left 2)
+</td>
+</tr>
+<tr>
+<td>
+ㅛ
+</td>
+<td>
+[-2,0] (up 2)
+</td>
+</tr>
+<tr>
+<td>
+ㅠ
+</td>
+<td>
+[2,0] (down 2)
+</td>
+</tr>
+<tr>
+<td>
+ㅡ
+</td>
+<td>
+current momentum reflected vertically
+</td>
+</tr>
+<tr>
+<td>
+ㅣ
+</td>
+<td>
+current momentum reflected horizontally
+</td>
+</tr>
+<tr>
+<td>
+ㅢ
+</td>
+<td>
+current momentum reflect hor and ver
+</td>
+</tr>
+</table>
+
+<li>
+initial consonant = action to be performed 
+
+<ul>
+<li>
+sometimes action takes in param
+
+<li>
+final consonant (or lack of) is used as an argument for the parameter
+
+<li>
+if less values than needed in current storage, instructions ONLY reverse momentum
+
+</ul>
+<li>
+Consonant Functionality Groups
+<table>
+<tr>
+<td>
+Consonant
+</td>
+<td>
+Description
+</td>
+</tr>
+<tr>
+<td>
+ㅇ
+</td>
+<td>
+Nop
+</td>
+</tr>
+<tr>
+<td>
+ㅎ
+</td>
+<td>
+terminate program. if current storage NOT empty, pop from storage and return value, else return 0
+</td>
+</tr>
+</table>
+
+</ol>
+</ol>
+
+</body>
+</html>

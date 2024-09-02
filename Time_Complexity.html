@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Time_Complexity</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="18.1 Introduction"><h5 id="18.1 Introduction" class="header"><a href="#18.1 Introduction">18.1 Introduction</a></h5></div>
+<ul>
+<li>
+execution time depends on system load (num of concurrent tasks on comp and input
+
+<li>
+compare growth rates of programs INSTEAD OF exec time bc it varies
+
+<li>
+use O(n) (order of n) to represent growth rate
+
+<ul>
+<li>
+ignore factors inside O(n); O(2n) == O(n)
+
+<li>
+O(1) = algo time doesn't depend on input size, always same
+
+<li>
+O(log n) = O(log_2 n), constant base omitted 
+
+<ul>
+<li>
+common O(log n): binary search, QuickSort, MergeSort, things that eliminate half of input
+
+<li>
+each time
+
+</ul>
+</ul>
+<li>
+best to do average case analysis, but hard so use worst case 
+
+</ul>
+  
+<p>
+ Examples:
+</p>
+<ol>
+<li>
+Linear Search Algo: O(n) worst, O(n/2) average
+
+<li>
+Binary Search Algo: O(log n)
+
+<ul>
+<li>
+this is because after 2 comparisons binary search eliminates half of the input
+
+</ul>
+<li>
+everytime array size is doubled, will need ar more 1+ comparison
+
+<li>
+Selection Sort: O(n***2) 
+
+<ul>
+<li>
+find smallest element in list and swap with first element, then repeat to sort smallest to largest
+
+<li>
+same time complexity for insertion sort
+
+</ul>
+<li>
+Towers of Hanoi: O(2***n) 
+
+<ul>
+<li>
+as input size grows, time to compute grows exponentially
+
+</ul>
+<li>
+Finding Fibonnaci Numbers
+
+<ul>
+<li>
+recursive function: O(2***n)
+
+<ul>
+<li>
+divide and conquer: breaking problems into subproblems and combining solutions to solve overall problem
+
+<li>
+dynamic programming: breaking problem into subproblems, and storing solution to solve future subproblems
+
+</ul>
+<li>
+iterative function: O(n)
+
+</ul>
+<li>
+GCD:
+
+<ul>
+<li>
+brute force: O(n)
+
+<li>
+brute force but start from the highest num and work down: O(n)
+
+<li>
+euclid's algo: O(log n)
+
+</ul>
+<li>
+closest pair of points: O(n log n)
+
+<ul>
+<li>
+use divide and conquer
+
+<li>
+sort from smallest to largest x coordinates
+
+<li>
+divide the set of points into 2, and find closest point in each set
+
+<li>
+find closet pair between point in 1st half and in 2nd half, now have 3 distances
+
+<li>
+closest pair = one with distance: min(d1, d2, d3)
+
+</ul>
+<li>
+Eight Queens problem:
+
+<ul>
+<li>
+use backtracking: search for possible solution incrementally, and abandon an option immediately if it is not valid
+
+</ul>
+<li>
+Finding Convex Hull
+
+<ul>
+<li>
+convex hull = smallest convex polygon that can enclose all of points in a set
+
+<li>
+convex = every line connecting 2 vertices is inside polygon 
+
+<li>
+gift wrapping solution: O(h ** n), worst case O(h *** n)
+
+<ul>
+<li>
+start at rightmost lowest point, start walking to next point in front so that ALL points are to your left 
+
+</ul>
+<li>
+Graham's algo: O(n log n)
+
+<ul>
+<li>
+find rightmost lowest point, calculate angle each point makes with x axis at that point
+
+<li>
+sort all other points by smallest to largest angle
+
+<li>
+connect 2 points with smallest angle
+
+<li>
+for next point, check if it is to the left or right of the 2nd point. if to the right, ignore, if to left, connect
+
+<li>
+incrementally forms a convex hull
+
+</ul>
+</ul>
+</ol>
+	
+
+
+<p>
+Qs:
+</p>
+<ol>
+<li>
+How to tell if algo is O(log n)? O(n log n)?
+
+<li>
+review sorting algos 
+
+</ol>
+
+</body>
+</html>
