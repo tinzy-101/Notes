@@ -3,7 +3,7 @@
 <head>
 <link rel="Stylesheet" type="text/css" href="style.css">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-<title>아희</title>
+<title>Aheui</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -80,6 +80,14 @@ complete hangul chars (CVC) = commands
 <ul>
 <li>
 incomplete hangul + non hangul letters = comments
+
+</ul>
+<li>
+works as a stack: LIFO, pushed into stack first, popped out last
+
+<ul>
+<li>
+kinda like building your way up
 
 </ul>
 </ul>
@@ -224,21 +232,29 @@ if less values than needed in current storage, instructions ONLY reverse momentu
 </ul>
 <li>
 Consonant Functionality Groups
+
+</ol>
+</ol>
+<p>
+ㅇgroup: no final consonant
 <table>
+<thead>
 <tr>
-<td>
-Consonant
-</td>
-<td>
-Description
-</td>
+<th>
+consonant
+</th>
+<th>
+description
+</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td>
 ㅇ
 </td>
 <td>
-Nop
+NOP (operation that does nothing), used for padding
 </td>
 </tr>
 <tr>
@@ -246,13 +262,234 @@ Nop
 ㅎ
 </td>
 <td>
-terminate program. if current storage NOT empty, pop from storage and return value, else return 0
+terminante program
 </td>
 </tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+if storage NOT empty, pop from storage and return result
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+if storage empty, return 0
+</td>
+</tr>
+</tbody>
 </table>
+</p>
 
-</ol>
-</ol>
+<p>
+ㄷgroup: arithmetic operations, ignore final consonant
+<table>
+<thead>
+<tr>
+<th>
+consonant
+</th>
+<th>
+description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ㄷ
+</td>
+<td>
+pop 2 values from storage; push sum
+</td>
+</tr>
+<tr>
+<td>
+ㄸ
+</td>
+<td>
+pop 2 values from storage; push product
+</td>
+</tr>
+<tr>
+<td>
+ㄴ
+</td>
+<td>
+pop 2 values from storage; push result of integer division
+</td>
+</tr>
+<tr>
+<td>
+ㅌ
+</td>
+<td>
+pop 2 values from storage; push 2nd-1st
+</td>
+</tr>
+<tr>
+<td>
+ㄹ
+</td>
+<td>
+pop 2 values from storage; push 2nd % 1st
+</td>
+</tr>
+</tbody>
+</table>
+</p>
+
+<p>
+ㅁgroup: storage manipulation
+<table>
+<thead>
+<tr>
+<th>
+consonant
+</th>
+<th>
+description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ㅁ
+</td>
+<td>
+pop value from current storage
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+if final cons = ㅇ: print as integer, if final cons = ㅎ: print as unicode, else do nothing
+</td>
+</tr>
+<tr>
+<td>
+ㅂ
+</td>
+<td>
+if final cons = ㅇ: push int from input to current storage
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+if final cons = ㅎ: push value of unicode char from input to curent storage
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+else: push num of strokes required to draw the consonant to current storage:
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+ㄱ:2  ㄴ:2  ㄷ:3  ㄹ:5  ㅁ:4  ㅂ:4  ㅅ:2  ㅈ:3  ㅊ:4  ㅋ:3  ㅌ:4  ㅍ:4  ㄲ:4  ㄱㅅ:4
+</td>
+</tr>
+<tr>
+<td>
+&nbsp;
+</td>
+<td>
+ㄴㅈ:5  ㄴㅎ:5  ㄹㄱ:7  ㄹㅁ:9   ㄹㅂ:9  ㄹㅅ:7  ㄹㅌ:9  ㄹㅍ:9  ㄹㅎ:8  ㅂㅅ:6 no cons:0
+</td>
+</tr>
+<tr>
+<td>
+ㅃ
+</td>
+<td>
+duplicate the value on top of stack
+</td>
+</tr>
+<tr>
+<td>
+ㅍ
+</td>
+<td>
+swap the positions of top 2 values on stack
+</td>
+</tr>
+</tbody>
+</table>
+</p>
+
+<p>
+ㅅgroup:
+<table>
+<thead>
+<tr>
+<th>
+consonant
+</th>
+<th>
+description
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+ㅅ
+</td>
+<td>
+current storage is changed by final consonants
+</td>
+</tr>
+<tr>
+<td>
+ㅆ
+</td>
+<td>
+current storage is popped and returned value is pushed to storage mapped to by final cons
+</td>
+</tr>
+<tr>
+<td>
+ㅈ
+</td>
+<td>
+pop 2 values from current storage. if 1st &gt;= 2nd, push 1 to current storage, else push 0
+</td>
+</tr>
+<tr>
+<td>
+ㅊ
+</td>
+<td>
+pop 1 value from current storage. if value = 0, reverse current momentum. else do nothing
+</td>
+</tr>
+</tbody>
+</table>
+</p>
+
+<p>
+Final Consonants mapped to storage:
+Stacks: none, ㄱ, ㄴ, ㄷ, ㄹ, ㅁ, ㅂ, ㅇ, ㅅ, ㅈ, ㅊ, ㅋ, ㅌ, ㅍ, ㅎ, ㄲ, ㄳ, ㄵ, ㄶ, 
+ㄺ, ㄻ, ㄼ, ㄽ, ㄾ, ㄿ, ㅀ, ㅄ, or ㅆ
+The queue: ㅇ
+The extension protocol: ㅎ
+</p>
 
 </body>
 </html>
