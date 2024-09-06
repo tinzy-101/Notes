@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-4-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 1: Big O Notation"><h3 id="Chapter 1: Big O Notation" class="header"><a href="#Chapter 1: Big O Notation">Chapter 1: Big O Notation</a></h3></div>
+<ol>
+<li>
+For every method, specify precondition (cant execute method until something satisfied) and postcondition (after executing method, what should happen?) 
+
+<ul>
+<li>
+really important in real life, for maintaining source code
+
+<li>
+use comments
+
+<li>
+do for EVERY method in header file
+
+<li>
+explain data members, how they should be used (invariance)
+
+</ul>
+<li>
+testing and debugging 
+
+<ul>
+<li>
+add data most likely to cause errors + boundary values (larger than largest possible int)
+
+<li>
+know what the output should be 
+
+<li>
+step thru data structure, think about what the object contains at each step
+
+</ul>
+</ol>
+<div id="Chapter 2: OO Features"><h3 id="Chapter 2: OO Features" class="header"><a href="#Chapter 2: OO Features">Chapter 2: OO Features</a></h3></div>
+<ol>
+<li>
+put members of a class private by default + public member functions to describe behaviors of objects
+
+<li>
+const function: states of object won't be modified --&gt; if modify will get compilcation error 
+
+<li>
+scope resolution operator (::): className::methodName()
+
+<li>
+throttle sample --&gt; create object in the stack of type "throttle" 
+
+<ul>
+<li>
+C++ objects can be in stack OR heap
+
+</ul>
+<li>
+cxx = old version of cpp
+
+<li>
+need "include" guard 
+
+<ul>
+<li>
+#ifndef myUniqueNamespace --&gt; if not defined
+
+<li>
+#define myUniqueNamespace --&gt; define
+
+<li>
+so dont define multiple times 
+
+</ul>
+<li>
+can define namespace in header file 
+
+<ul>
+<li>
+wont be using namespace until say "using namespace std"
+
+</ul>
+<li>
+including header files in main cpp file:
+
+<ul>
+<li>
+&lt; &gt; --&gt; system header files (in cpp, dont end in .h, but in c do end in .h)
+
+<li>
+" " --&gt; user defined header files 
+
+</ul>
+<li>
+value semantics --&gt; ALWAYS consider when writing classes 
+
+<ul>
+<li>
+important for pointer and dynamic memory
+
+<li>
+q: is it safe to write 2 throttle objects, a = b? 
+
+<ul>
+<li>
+legit iff: data members are not pointers! assignment statements are unsafe with pointers
+
+<li>
+will couple 2 objects: b refers to "mary", a refers to "john", after a = b, both refer to "mary", so when b changes, a ALSO changes
+
+</ul>
+<li>
+q: is it safe to use a copy constructor: throttle b(a)
+
+<ul>
+<li>
+legit iff: data members are not pointers!
+
+</ul>
+<li>
+document value semantics at top of classs --&gt; e.g. Assignment operators and copy constructors can be used with objects of the class. 
+
+</ul>
+<li>
+default no argument constructor 
+
+<ul>
+<li>
+always have 1
+
+<li>
+can combine with constructors with parameters: create constructor with parameters, but already predefined e.g. Dog(int height = 0);
+
+</ul>
+<li>
+operator overloading 
+
+<li>
+value parameters 
+
+<ul>
+<li>
+pass in params by value: define formal parameter, use copy constructor to copy data members onto main() space
+
+<ul>
+<li>
+have to return the value: point function(point p) --&gt; return p
+
+</ul>
+<li>
+pass in params by reference: define variable in main, then pass it to the function by reference
+
+<ul>
+<li>
+don't have to return value: void function(point&amp; p) --&gt; no return 
+
+</ul>
+</ul>
+<li>
+const reference parameters 
+
+<ul>
+<li>
+pass by reference is good bc dont need to invoke the copy constructor 
+
+<li>
+only issue with passingy reference is that variables in main() can be modified in methods/functions
+
+<li>
+solution: pass by reference, but make them const so they cant be modified 
+
+<ul>
+<li>
+double function(const point&amp; p);
+
+</ul>
+<li>
+are almost always going to pass in by reference 
+
+<ul>
+<li>
+faster than pass by value bc don't need to call copy constructors
+
+</ul>
+</ul>
+</ol>
+<div id="Chapter 3: Implementation of a Bag: Pointers and Dynamic Arrays"><h3 id="Chapter 3: Implementation of a Bag: Pointers and Dynamic Arrays" class="header"><a href="#Chapter 3: Implementation of a Bag: Pointers and Dynamic Arrays">Chapter 3: Implementation of a Bag: Pointers and Dynamic Arrays</a></h3></div>
+<ol>
+<li>
+separate program into header (.h), implementation (.cpp), and driver program (main) 
+
+<ul>
+<li>
+use typedef ___ value_type --&gt; create a bag of value_types, so bag can be implemented using multiple different types (int, double, string, etc)
+
+<ul>
+<li>
+formally can be done using template
+
+</ul>
+<li>
+use typedef ___ size_type --&gt; keep track of max amount in bag, can use diff types of variables for max amount count: int, size_t
+
+<ul>
+<li>
+size_t = unsigned int = nonnegative int
+
+</ul>
+</ul>
+<li>
+constructor overloading 
+
+<ul>
+<li>
+void operator += (const bag&amp; addend)
+
+<li>
+a += b --&gt; a and b are bags, so adding contents of b to a's bag
+
+<ul>
+<li>
+a.operator += (b)
+
+</ul>
+<li>
+a modified, b is not modified 
+
+</ul>
+<li>
+use partially filled array to fill out data about family 
+
+<ul>
+<li>
+create array larger than your family
+
+<li>
+create a size_type variable "used," only indices of the function 0 --&gt; used - 1 are important, dont care about the rest of the empty array
+
+</ul>
+<li>
+put everything in implementation file into namespace too (namespace is in header)
+
+<li>
+in a bag, if you want to remove an element, just overwrite that element with the last element in the array (bc bags have no order anyways) 
+
+<ul>
+<li>
+implemented in "erase_one"
+
+</ul>
+<li>
+#include algorithm 
+
+<ul>
+<li>
+can use copy() function inside to copy all elements from 1 array to another
+
+</ul>
+</ol>
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+Partially filled sequence: using 4 methods
+
+<li>
+Read through source code for preconditions and postconditions 
+
+<li>
+Review namespace, constructor overloading
+
+</ol>
+
+</body>
+</html>
