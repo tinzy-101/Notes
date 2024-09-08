@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Container_Classes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="3.1 The Bag Class"><h3 id="3.1 The Bag Class" class="header"><a href="#3.1 The Bag Class">3.1 The Bag Class</a></h3></div>
+<ol>
+<li>
+bag = container with no ordering
+
+<li>
+bag class 
+
+<ul>
+<li>
+constructor: init empty bag (in an array)
+
+<li>
+copy constructor: can init bag by making copy if another bag: 
+
+<ul>
+<li>
+bag b; // init empty bag with default constructor 
+
+<li>
+bagc(b) // create bag c as a copy of b using copy constructor
+
+</ul>
+<li>
+typedef for value_type 
+
+<ul>
+<li>
+in public part of classs: typedef int value_type // set value_type to be int 
+
+<li>
+use "value_type" to refer to type of object in bag, and can change value_type to be int, float, char etc
+
+<li>
+non bag member functions can refer to value of bag contents using: bag::value_type
+
+<li>
+alternative: template class
+
+</ul>
+<li>
+typedef for size_type 
+
+<ul>
+<li>
+in public part of class: typedef &lt;integer type of some kind&gt; size_type;
+
+<li>
+keeps track of how many items in bag
+
+<li>
+inside &lt; &gt; can use int OR size_t 
+
+<ul>
+<li>
+size_t = int data type that can only hold non-negative numbers --&gt; good for counting
+
+</ul>
+</ul>
+<li>
+size_type size() const
+
+<ul>
+<li>
+return size of bag
+
+</ul>
+<li>
+void insert(const value_type&amp; entry); 
+
+<ul>
+<li>
+add int "entry" into bag
+
+</ul>
+<li>
+size_type count(const value_type&amp; target) const; 
+
+<ul>
+<li>
+cout the number of "target"s that are in the bag 
+
+</ul>
+<li>
+bool erase_one(const value_type&amp; target); 
+
+<ul>
+<li>
+erase 1 copy of the target if its in the bag, and returns false if target not in bag 
+
+</ul>
+<li>
+size_type erase(const value_type&amp; target); 
+
+<ul>
+<li>
+erase all copies of target and return how many copies removed 
+
+</ul>
+<li>
+union of 2 bags 
+
+<ul>
+<li>
+bag operator +(const bag&amp; b1, const bag&amp; b2);
+
+<li>
+add contents of both bags together
+
+<li>
+also good to overload += operator:
+
+<ul>
+<li>
+void operator +=(const bag&amp; addend);
+
+<li>
+bag1 += addend
+
+</ul>
+</ul>
+<li>
+capacity 
+
+<ul>
+<li>
+in public part of class: static const size_type CAPACITY = 30;
+
+<li>
+also need to define in implementation file: const bag::size_type bag::CAPACITY 
+
+<ul>
+<li>
+DONT use static bc not in class
+
+<li>
+need to refer to capacity as bag::CAPACITY in implementation file 
+
+</ul>
+<li>
+static = ALL of class's objects use the same value, so every bag has same capacity
+
+<li>
+refer to the capacity of any bag object using scope resolution operator: bag::CAPACITY
+
+</ul>
+</ul>
+<li>
+designing the bag class 
+
+<ul>
+<li>
+use a partially filled array --&gt; beginnign part of large array 
+
+<ul>
+<li>
+a bit inefficient
+
+</ul>
+<li>
+controlling capacity of array
+
+<ul>
+<li>
+length of array set by CAPACITY
+
+<ul>
+<li>
+define array in private part of class: value_type data[CAPACITY] 
+
+</ul>
+<li>
+bc value_type is used to define the array (array has component type that is a class, compiler needs to use
+
+<li>
+default constructor to init array components) --&gt; make sure to have default constructor!
+
+<li>
+dont care what fills the array after whatever we put into it
+
+<li>
+want to keep track of how much of CAPACITY we've use: 
+
+<ul>
+<li>
+in private part of class: size_type used;
+
+</ul>
+</ul>
+<li>
+the invariant of a class 
+
+<ul>
+<li>
+how are the member ariable of bag class used to implement a bag of items? we should document 
+
+<li>
+2 rules (= invariant of a class): 
+
+<ul>
+<li>
+num of items in bag stored in member variable "used"
+
+<li>
+for empty bag, dont cared what is stored in array "data", for non empty bag, only care about part that is 
+
+<ul>
+<li>
+filled by the user, and disregard rest of the array 
+
+</ul>
+</ul>
+<li>
+make sure after each function executes the invariant is still valid 
+
+</ul>
+<li>
+insert() member function 
+
+<ul>
+<li>
+needs to check where there is room to insert new item
+
+<li>
+can do this using asser function then placing bag at next place in array 
+
+<li>
+assert(size() &lt; CAPACITY) // bc we are in member function we can use CAPACITY w/o specifying part of bag class
+
+<ul>
+<li>
+better to do assert than your own checks bc will get specific error message 
+
+</ul>
+<li>
+data[used] = entry; // place into last spot in the array
+
+<li>
+++used;
+
+</ul>
+<li>
+erase_one() member function 
+
+<ul>
+<li>
+find index of target (element to be erased) in bag and store in local var "index"
+
+</ul>
+<li>
+take final item in bag and copy to "index" (so no holes in array)
+
+<li>
+reduce "used" count by 1
+
+<li>
+function should return false if "target" is not found in bag 
+
+<li>
++= overloaded operator 
+
+<ul>
+<li>
+use loop to copy all elements in bag over to other bag 
+
+<li>
+make sure to keep incrementing "used" as u add items 
+
+<ul>
+<li>
+++used;
+
+</ul>
+<li>
+OR can use copy() for &lt;algorithm&gt; std library 
+
+<ul>
+<li>
+copies from 1 array to another 
+
+</ul>
+<li>
+make sure to check preconditions: 
+
+<ul>
+<li>
+assert(size() + addend.size() &lt;= CAPACITY)
+
+</ul>
+</ul>
+<li>
++ operator 
+
+<ul>
+<li>
+not a member function, and doesn't have to be a friend function either
+
+<li>
+access CAPACITY using bag::CAPACITY
+
+<li>
+need to add prototype of this function to header file (NOT in class def)
+
+</ul>
+</ul>
+<li>
+Testing 
+
+<ul>
+<li>
+make sure to test b += b (adding bag to itself) bc can cause errors 
+
+</ul>
+</ol>
+	  
+	  
+<div id="3.2 The Sequence Class"><h3 id="3.2 The Sequence Class" class="header"><a href="#3.2 The Sequence Class">3.2 The Sequence Class</a></h3></div>
+<ol>
+<li>
+specification 
+
+<ul>
+<li>
+unlike bag, sequence is ordered
+
+<li>
+member functions need to make it so that user can control where exactly items are entered into the sequence 
+
+</ul>
+<li>
+what we need 
+
+<ul>
+<li>
+size_type, value_type, and CAPACITY
+
+<li>
+default constructor 
+
+<ul>
+<li>
+create empty sequence 
+
+</ul>
+<li>
+size() member function
+
+<ul>
+<li>
+num of items in sequence 
+
+</ul>
+<li>
+member functions to examine sequence 
+
+<ul>
+<li>
+start() 
+
+<ul>
+<li>
+current() function will return the 1st item in sequence	
+
+<li>
+modified current() function, so still have to call current() to get output
+
+</ul>
+<li>
+advance() 
+
+<ul>
+<li>
+current() function changes to return next item in sequence 
+
+<li>
+modifies current() function, so still have to call current() to get output
+
+</ul>
+<li>
+is_item() 
+
+<ul>
+<li>
+returns bool for whether there is an element for current to provide OR if current has advanced to the end
+
+</ul>
+<li>
+loop to print sequence 
+
+<ul>
+<li>
+for(numbers.start(); numbers.is_item(); numbers.advance()) {
+
+<li>
+	count &lt;&lt; numbers.current() &lt;&lt; endl;
+
+<li>
+}
+
+</ul>
+</ul>
+<li>
+insert() and attach() members 
+
+<ul>
+<li>
+insert() 
+
+<ul>
+<li>
+place new item before current item
+
+<li>
+if no current itme, place new item at front of sequence
+
+<li>
+need to shift items at the desired position 1 right to make room (for loop)
+
+</ul>
+<li>
+attach() 
+
+<ul>
+<li>
+place new item after current item 
+
+<li>
+if no current item, place new item at end of sequence 
+
+</ul>
+</ul>
+<li>
+remove_current() member
+
+<ul>
+<li>
+precondition: there MUST be current item
+
+<li>
+remove the current item and item after (if exists) is now new current item 
+
+</ul>
+<li>
+need to shift all subsequent items 1 position left (use for loop)
+
+<li>
+reduce "used" by 1
+
+<li>
+current_index will be the same
+
+</ul>
+<li>
+Design notes 
+
+<ul>
+<li>
+3 private member vars: 
+
+<ul>
+<li>
+array to store sequence (partially filled array)
+
+<li>
+used = tracking how much of array used
+
+<li>
+current index = index of "current" item in array (if there is) 
+
+<ul>
+<li>
+if no valid current item: current_index = used
+
+</ul>
+</ul>
+<li>
+complete invariant of class 
+
+<ul>
+<li>
+number of items in sequence stored in member variable "used"
+
+<li>
+for empty sequence, dont care whats stored in array, for non empty only care about what user entered, not rest
+
+<li>
+if there is current item, its in array[current_index], if not, then current_index = used
+
+</ul>
+</ul>
+</ol>
+
+</body>
+</html>
