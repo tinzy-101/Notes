@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-11-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Dynamically allocated memory cont'd"><h3 id="Dynamically allocated memory cont'd" class="header"><a href="#Dynamically allocated memory cont'd">Dynamically allocated memory cont'd</a></h3></div>
+<ul>
+<li>
+Pass a pointer in by reference when the memory location that the pointer points to needs to be changes 
+
+<ul>
+<li>
+double*&amp; p
+
+<li>
+passing in by value won't modify the pointer in main()
+
+</ul>
+</ul>
+<div id="Bag Class with Dynamic Array"><h3 id="Bag Class with Dynamic Array" class="header"><a href="#Bag Class with Dynamic Array">Bag Class with Dynamic Array</a></h3></div>
+<ol>
+<li>
+for array, index from 1st element (0) to the last element + 1 (e.g. size 5, 5+1=6)
+
+<li>
+copy constructor: pass in const ref object (to another bag) 
+
+<ul>
+<li>
+if you write bag b = a, and you don't have a copy constructor, both b and a will be pointing to the same array
+
+<li>
+huge problem! need to create a new bag, and only copy constructor will do that 
+
+<li>
+if class has pointer data member, MUST overload assignment operator, write destructor, and copy constructor
+
+<ul>
+<li>
+in our bag sequence, the data[] array is a pointer!
+
+</ul>
+</ul>
+<li>
+passing in arguments as const ref is efficient 
+
+<ul>
+<li>
+dont need to call copy onstructor  OR destructor 
+
+</ul>
+<li>
+call destructor when function returns 
+
+<li>
+overloaded = needs to ignore statements like a = a 
+
+<ul>
+<li>
+if(this == &amp;source)
+
+<li>
+		return
+
+</ul>
+<li>
+when returning a new bag object, need to call copy constructor for temp variable
+
+</ol>
+
+</body>
+</html>

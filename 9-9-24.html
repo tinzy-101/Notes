@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-9-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 4"><h3 id="Chapter 4" class="header"><a href="#Chapter 4">Chapter 4</a></h3></div>
+<ol>
+<li>
+Pointers 
+
+<ul>
+<li>
+cannot address more than 4GB of memory on 32 bit computer
+
+<li>
+model memory as continuous blocks of bytes
+
+<li>
+int** i, j --&gt; i is int pointer, but j is an int 
+
+<ul>
+<li>
+clearer to write int **i, j
+
+</ul>
+<li>
+garbage = data in heap space that no one is referencing
+
+</ul>
+<li>
+Dynamic Memory 
+
+<ul>
+<li>
+allocate memory at run time
+
+<li>
+e.g.
+
+<ul>
+<li>
+double **d_ptr 
+
+<ul>
+<li>
+create variable in stack space 
+
+</ul>
+<li>
+d_ptr = new double[10] 
+
+<ul>
+<li>
+create variable in heap space
+
+<li>
+returns address to d_ptr variable in stack space 
+
+</ul>
+</ul>
+<li>
+array notation in cpp 
+
+<ul>
+<li>
+e.g. 
+
+<ul>
+<li>
+int a[] = {1, 2, 3, 4, 5} --&gt; exists in the stack (arrays in cpp can be in stack or heap)
+
+<li>
+a[2] = 5 
+
+<ul>
+<li>
+NOT indexing, its pointer arithmetic
+
+<li>
+**(a+2) = 5 --&gt; real meaning 
+
+<ul>
+<li>
+address of a + 4 bytes + 4 bytes = 5A
+
+<li>
+can also write **(2+a) = 5
+
+<li>
+so technically: 2[a] = 5 --&gt; same as a[2] = 5
+
+</ul>
+</ul>
+</ul>
+</ul>
+<li>
+bad_alloc exception 
+
+<ul>
+<li>
+if you use "new" to allocate more memory than there is, will get this error
+
+<li>
+also no exception handling in C bc exception handling is OOP concept 
+
+</ul>
+<li>
+delete operator 
+
+<ul>
+<li>
+need to delete memory allocated using "new" once done with it
+
+<li>
+e.g. 
+
+<ul>
+<li>
+int **example;
+
+<li>
+example = new int;
+
+<li>
+delete example; --&gt; returns the "new int" back to heap space manager 
+
+<li>
+example = nullptr; --&gt; make sure to set pointer equal to null pointer after delete
+
+</ul>
+<li>
+e.g. 
+
+<ul>
+<li>
+int **example;
+
+<li>
+example = new int[50];
+
+<li>
+delete [] example; --&gt; release dynamic array back to heap space manager
+
+</ul>
+<li>
+e.g. 
+
+<ul>
+<li>
+int i;
+
+<li>
+int **p = &amp;i;
+
+<li>
+delete p; --&gt; will get runtime error, bc variable is created in stack space, so cant be deallocated back to heap
+
+</ul>
+</ul>
+<li>
+define pointer types 
+
+<ul>
+<li>
+typedef int* int_pointer; --&gt; define your own datatype of int* type, called int_pointer 
+
+<ul>
+<li>
+can modify int* type to double*, etc 
+
+</ul>
+</ul>
+</ul>
+<li>
+strings 
+
+<ul>
+<li>
+c++ has 2 types of strings: cstring (null terminated char array, legacy from C), and c++ string 
+
+<ul>
+<li>
+e.g. cstr storing "Hello" needs 6 spaces to accomodate \0
+
+<li>
+e.g. c++ string is an object 
+
+<ul>
+<li>
+if you have an array of strings, then you can do fixed size pointer arithmetic
+
+<li>
+this is because string object is a container w/ a constant size 
+
+<ul>
+<li>
+if string exceeds the size of the container, it will be stored in heap space 
+
+</ul>
+</ul>
+</ul>
+</ul>
+<li>
+example program 
+
+<ul>
+<li>
+value parameters that are pointers 
+
+<ul>
+<li>
+function can change value in location that pointer points to
+
+</ul>
+<li>
+in order to swap 2 variables, need to pass by reference 
+
+<ul>
+<li>
+pass by value will not work 
+
+</ul>
+<li>
+function header 
+
+<ul>
+<li>
+type function(type)
+
+</ul>
+<li>
+function signature 
+
+<ul>
+<li>
+function name + parameter type list 
+
+<li>
+2 functions can have the same name as long as they have different parameter types 
+
+</ul>
+<li>
+if have functions w/ ints as params and reference to ints as params, cannot have the same name bc will be ambiguity
+
+<ul>
+<li>
+int ref is not a real data type! passing int by reference is just passing in an int, but the address is used
+
+<li>
+passing by reference &amp;n, is just pointers in disguise!
+
+</ul>
+<li>
+passing by pointer 
+	  -
+
+</ul>
+</ol>
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+Implement sequence using a dynamic array 
+
+<ul>
+<li>
+if array is full, ask internal data to point at new array large enough to contain new and old data
+
+<li>
+copy old data over
+
+</ul>
+<li>
+pass by reference for efficiency, pass in by const ref for protection
+
+</ol>
+
+</body>
+</html>
