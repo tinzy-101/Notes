@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Pointers_and_Dynamic_Arrays</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="4.1 Pointers and Dynamic Memory"><h4 id="4.1 Pointers and Dynamic Memory" class="header"><a href="#4.1 Pointers and Dynamic Memory">4.1 Pointers and Dynamic Memory</a></h4></div>
+<ol>
+<li>
+container classes before have constant capacity, need to recompile if want a bigger size 
+
+<ul>
+<li>
+if using dynamic arrays, can control size of independent bags, bc size is determined after program is running 
+
+</ul>
+<li>
+pointer = address of variable 
+
+<ul>
+<li>
+variable to store a pointer: double **pointer  
+
+<li>
+setting a pointer var to point to a double address: pointer = &amp;i;
+
+<li>
+print out object that pointer points to: cout &lt;&lt; **pointer; (dereferencing) 
+
+<li>
+modifying the pointer will also modify the object that it points to
+
+</ul>
+<li>
+careful!! p1 = p2 IS NOT THE SAME AS **p1 = **p2
+
+<ul>
+<li>
+p1 = p2 --&gt; make p1 point to the same variable that p1 is already pointing to
+
+<li>
+**p1 = **p2 --&gt; copy the value from the variable that p2 is pointing to to the variable that p1 points to 
+
+<ul>
+<li>
+the values of p1 and p2 will not change (still point to the same location)
+
+</ul>
+</ul>
+<li>
+Dynamic Variables and New Operator 
+
+<ul>
+<li>
+dynamic variables not declared (no identifier/name) + created during program execution
+
+<li>
+create using "new" operator 
+
+<ul>
+<li>
+int **p1 = new int; --&gt; create a variable p1 that points to an int
+
+<li>
+can allocate a whole array using new, will return pointer to 1st component of array 
+
+<ul>
+<li>
+int **p1 = new int[4];
+
+<li>
+p1[2] = 42;
+
+<li>
+this is a dynamic array! number of array components calculated when program running 
+
+</ul>
+</ul>
+<li>
+new allocates mem for dynamic var + return pointer to 1st part of allocated memory 
+
+<ul>
+<li>
+if dynamic var is object of class --&gt; call default constructor, unless you give params:
+
+<li>
+throttle **p1 = new throttle(50);
+
+<li>
+vs just saying throttle **p1; --&gt; default constructor 
+
+</ul>
+</ul>
+<li>
+Heap and bad_alloc exception 
+
+<ul>
+<li>
+new allocated memory on the heap
+
+<li>
+new will fail using a "bad_alloc" exception
+
+</ul>
+<li>
+delete 
+
+<ul>
+<li>
+call "delete" on pointer variables when allocated using "new" to return mem back to heap 
+
+<ul>
+<li>
+int **p;
+
+<li>
+delete p;
+
+</ul>
+<li>
+delete dynamic array 
+
+<ul>
+<li>
+int **p = new int[50];
+
+<li>
+delete [] p;
+
+</ul>
+</ul>
+</ol>
+<div id="4.2 Pointers and Arrays as Parameters"><h4 id="4.2 Pointers and Arrays as Parameters" class="header"><a href="#4.2 Pointers and Arrays as Parameters">4.2 Pointers and Arrays as Parameters</a></h4></div>
+<ol>
+<li>
+value parameters that are pointers 
+
+<ul>
+<li>
+pass in int **p1
+
+<li>
+inside function: **p1 = 42
+
+<li>
+we are dereferencing p1 to modify the int variable that p1 points to 
+
+</ul>
+<li>
+array parameters 
+
+<ul>
+<li>
+array param is treated like a pointer pointing to 1st element of array 
+
+<li>
+e.g. void append(double data[], size_t n)
+
+<li>
+usually size is separately declared 
+
+</ul>
+<li>
+const params that are pointers or arrays 
+
+<ul>
+<li>
+parameter that is pointer or array can also have const
+
+<li>
+e.g. void append (const int** p1) --&gt; p1 is a pointer to a constant integer  
+
+<ul>
+<li>
+can change p1 but NOT **p1, the int that p1 points to 
+
+</ul>
+</ul>
+<li>
+reference parameters that are pointers 
+
+<ul>
+<li>
+if you pass a pointer in by reference, can change the pointer to point to another location 
+
+<li>
+void allocate(double**&amp; p, size_t&amp; n) 
+
+<ul>
+<li>
+allocates mem for a new dynamic array
+
+<li>
+p is a pointer to a double 
+
+</ul>
+</ul>
+</ol>
+<div id="4.3 Bag Class with a Dynamic Array"><h4 id="4.3 Bag Class with a Dynamic Array" class="header"><a href="#4.3 Bag Class with a Dynamic Array">4.3 Bag Class with a Dynamic Array</a></h4></div>
+<ol>
+<li>
+class can be a dynamic data structure (size determined at runtime) 
+
+<li>
+pointer member variables 
+
+<ul>
+<li>
+for dynamic bag, need a dynamic partially filled array: value_type **data 
+
+<li>
+there is no max capacity, but also need another var to keep track of how much mem is being allocated 
+
+<ul>
+<li>
+member var "capacity" to show current capacity of bag (NOT const)
+
+</ul>
+</ul>
+<li>
+invariant for new bag class 
+
+<ul>
+<li>
+number of items in bag is stored in member variable "used"
+
+<li>
+the actual items of the bag are stored in a partially fileld dynamic array, "data"
+
+<li>
+total size of the dynamic array is stored in member variable "capacity"
+
+</ul>
+<li>
+Member FUnctions 
+
+<ul>
+<li>
+when class uses dynamic memory, class member functions allocated dynamic mem as needed
+
+<li>
+constructor of dynamic bag allocates dynamic array that "data" points to
+
+<li>
+want constructor to allocate an initial size passed in as a parameter to the constructor 
+
+<ul>
+<li>
+this size can be updated, so everytime another element is added, e.g. using insert, check if size is big enough,
+
+<li>
+if not big enough, then allocate new, larger dynamic array and copy old stuff over 
+
+<li>
+use a larger initial capacity so dont have to bother keep going back to heap space and allocating new mem
+
+</ul>
+</ul>
+<li>
+constructor 
+
+<ul>
+<li>
+bag(size_type initial_capacity = DEFAULT_CAPACITY) 
+
+<li>
+need to set initial capacity in the constructor
+
+<li>
+bc of the way its defined, you can also use this constructor definition for the default constructor, if no size
+
+<li>
+is given, then the initial capacity will just be the DEFAULT_CAPACITY that you define 
+
+<li>
+implementation:
+
+<ul>
+<li>
+need to set up private member vars to satisfy invarian of the class
+
+<li>
+initialize data, capacity, and used 
+
+</ul>
+</ul>
+<li>
+reserve() 
+
+<ul>
+<li>
+this member function changes the capacity of the current array/bag
+
+<li>
+i think this is the one where need to get new array and copy all the elements over? 
+
+<ul>
+<li>
+YES - no other way to change the size of an array
+
+</ul>
+</ul>
+<li>
+Value Semantics 
+
+<ul>
+<li>
+value semantics = how values are copied from 1 bag to another (in assignemnt statements)
+
+<li>
+CAN'T use assignment operator (=) on a dynamic array/classes 
+
+<ul>
+<li>
+when assigning y=x, both y and x will point to the same memoery, so same data, so changes to y will change x!
+
+<li>
+need to make overloaded assignment operator --&gt; NEEDS to be a member function (required by C++)
+
+<li>
+implementation:
+
+<ul>
+<li>
+similar to the copy constructor
+
+<li>
+dont need to construct a new bag (already have partially filled array allocated)
+
+<li>
+need to check size of array, and might need to change array size and return og array to heap
+
+<li>
+do an initial check if source parameter (thing being copies) is same as object activating "="
+
+<ul>
+<li>
+if(this == &amp;source) return;
+
+</ul>
+<li>
+this --&gt; pointer to to object that activated the "=" operator, which is why we need to compare it to 
+
+<li>
+&amp;source rather than just source
+
+</ul>
+</ul>
+<li>
+when using copy constructor, e.g. bag y(x), need to add a prototype: 
+
+<ul>
+<li>
+bag(const bag&amp; source);
+
+<li>
+this will make sure NOT ONLY member variables are copied over
+
+<li>
+implementation:
+
+<ul>
+<li>
+capacity of dynamic array is same as capacity of abg that is being copied
+
+<li>
+initialize data, capacity, used, then copy contents from 1 bag to another
+
+<li>
+use copy() from algorithms: copy(source.data, source.data + used, data);
+
+</ul>
+</ul>
+</ul>
+<li>
+Destructor 
+
+<ul>
+<li>
+need to return object's dynamic memory to the heap 
+
+<li>
+no parameters and no return value + need to write empty param list 
+
+<ul>
+<li>
+~bag()
+
+</ul>
+<li>
+destructor is typically automatically activated 
+
+<ul>
+<li>
+if a function has a local variable that is object of a class, when returning from the function destructor called
+
+<li>
+if function has value parameter that is obejct, when function returns destructor is called
+
+</ul>
+<li>
+implementation:
+
+<ul>
+<li>
+only have: delete [] data;
+
+</ul>
+</ul>
+</ol>
+<div id="Prescription for a Dynamic Class"><h4 id="Prescription for a Dynamic Class" class="header"><a href="#Prescription for a Dynamic Class">Prescription for a Dynamic Class</a></h4></div>
+<ol>
+<li>
+4 rules when classes use dynamic memory 
+
+<ul>
+<li>
+some member variables are pointer
+
+<li>
+members functions allocate and release dynamic memory as needed
+
+<li>
+automatic value semantics of the class are overridden (NEED assignment operator and copy constructor)
+
+<li>
+class has destructor (release all dynamic mem to heap)
+
+</ul>
+</ol>
+
+</body>
+</html>
