@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-16-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 22: STL Algorithms"><h3 id="Chapter 22: STL Algorithms" class="header"><a href="#Chapter 22: STL Algorithms">Chapter 22: STL Algorithms</a></h3></div>
+<ol>
+<li>
+STL = standard template library, incorporated as std library in cpp
+
+<li>
+3 components of STL 
+
+<ul>
+<li>
+containers = collection of values ("elements")
+
+<ul>
+<li>
+all classes in stl are container classes
+
+</ul>
+<li>
+iterators = like pointers 
+
+<ul>
+<li>
+any container/data structure's elements can be navigated using an iterator
+
+<li>
+e.g. dynamic array accessed using indices, pointer arithmetic, but other data strucs need more complicated methods
+
+<li>
+manipulates what pointer points at the previous and next element
+
+<li>
+list, set, map (bidirectional iterator, can only increment and decrement by 1, NO pointer arithemtic)
+
+<li>
+vector + other first class data types: random access iterator (based on arrays, do can do pointer arithmetic)
+
+</ul>
+<li>
+algorithms = ways to manipulate data 
+
+<ul>
+<li>
+sorting, searing, comparing
+
+<li>
+80 algos in STL, use iterators
+
+<li>
+if searching for element in a container in cpp, will return a pointer/iterator, rather than an index
+
+<li>
+cpp very iterator driven
+
+</ul>
+</ul>
+<li>
+Sequence containers 
+
+<ul>
+<li>
+sequence containers = linear data structures: vector, list, deque (double ended queue)
+
+<li>
+vector 
+
+<ul>
+<li>
+is a dynamic array of elements behind the scenes 
+
+</ul>
+<li>
+list 
+
+<ul>
+<li>
+doubly linked list: made up of nodes, 1 pointer to the node in front, and 1 pointer to node behind
+
+<li>
+singly linked list: only linked in one directions, either pointing forward, or pointing backward
+
+<li>
+list in stl is doubly linked
+
+<li>
+very efficient in inserting and deleting elements anywhere in list (but there is a lot of overhead)
+
+<li>
+&lt; operator: compare 1st element in each list to get answer 
+
+<ul>
+<li>
+if all elements are same, smaller list is less than longer list
+
+</ul>
+</ul>
+<li>
+deque 
+
+<ul>
+<li>
+have head and tail of queue
+
+<li>
+can enter elements into the head OR tail, and remove elements from head OR tail
+
+<li>
+implemented as dynamic array, each element is a fixed size contiguous block of memory/elements, 
+
+<li>
+but the size of array is not fixed 
+
+<ul>
+<li>
+like combo of vector and a list 
+
+</ul>
+<li>
+normal queue is FIFO
+
+<li>
+elements can be stored noncontiguously, but can be accessed like it is contiguous
+
+</ul>
+</ul>
+<li>
+Associative containers 
+
+<ul>
+<li>
+nonlinear containers to quickly locate elements, can store key/value pairs: set, multiset, map, multipmap
+
+<li>
+set 
+
+<ul>
+<li>
+container of elements where you cant have duplicates 
+
+</ul>
+<li>
+map 
+
+<ul>
+<li>
+collection of key/value pairs
+
+<li>
+pair = element
+
+</ul>
+<li>
+multiset 
+
+<ul>
+<li>
+set but allowed to have duplicates 
+
+</ul>
+<li>
+multimap 
+
+<ul>
+<li>
+can have key/value pairs with the key repeated
+
+</ul>
+</ul>
+<li>
+Container adapters 
+
+<ul>
+<li>
+constrained versions of sequences containers, handle special cases: stack, queue, priority queue
+
+<li>
+stack 
+
+<ul>
+<li>
+only works from the top, push, pop, and peek (only look at top of stack)
+
+<li>
+implemented using dynamic array
+
+</ul>
+<li>
+queue 
+
+<ul>
+<li>
+special case of deque: enter from back, and leave from front (FIFO) 
+
+<li>
+linked list implementation
+
+</ul>
+<li>
+priority queue 
+
+<ul>
+<li>
+no FIFO, highest priority element coming in is served first
+
+<li>
+implemented in a heap: a complete binary tree (all levels are full, and elements flushed to left side)
+
+<ul>
+<li>
+knows immediately which element has highest priority
+
+</ul>
+<li>
+but no sorting
+
+<li>
+every parent element must be less than its 2 children, but dont specify relationship between children 
+
+<li>
+min heap: smallest element = highest prioity = root 
+
+<ul>
+<li>
+once the root is removed, take the largest from the bottom of the tree, and put it as root
+
+<li>
+it will start sinking after it compares with its 2 children, and keep switching until the root is the new min
+
+</ul>
+</ul>
+</ul>
+<li>
+Common functions 
+
+<ul>
+<li>
+non arg constructor + cosntructor with args + copy constructor
+
+<li>
+destructor
+
+<li>
+empty() - return true if no elements
+
+<li>
+size()
+
+<li>
+operator= overloading - copy elements
+
+<li>
+overloaded relational operators - comparing elements in 2 containers
+
+</ul>
+<li>
+First class containers: deque, list vectors  
+
+<ul>
+<li>
+swap
+
+<li>
+max_size
+
+<li>
+clear
+
+<li>
+begin --&gt; points at beginning of sequence
+
+<li>
+end --&gt; points at element after last element
+
+<li>
+rbegin --&gt; return iterator to last element in container
+
+<li>
+rend --&gt; return iterator to position before 1st element
+
+<li>
+erase(beg, end) --&gt; rease elements from beg -- end-1
+
+</ul>
+<li>
+Types of iterators
+
+<ul>
+<li>
+list, set, map (bidirectional iterator, can only increment and decrement by 1, NO pointer arithemtic) 
+
+<ul>
+<li>
+also map and multimap
+
+</ul>
+<li>
+vector, deque, array (class), string: random access iterator (based on arrays, do can do pointer arithmetic) 
+
+<ul>
+<li>
+mem has to be based on contiguous memory 
+
+</ul>
+<li>
+stack, queue, priority_quee = no iterator
+
+<li>
+input iterator
+
+<li>
+output iterator
+
+<li>
+forward iterator (only ++)
+
+</ul>
+<li>
+Predefined iterators 
+
+<ul>
+<li>
+if dont know datatype of iterator, use "auto"
+
+<li>
+e.g. auto x = 3; --&gt; infers that 3 is an integer
+
+<li>
+can have const iterator: cant modify iterator contents
+
+<li>
+reverse iterator: helps you go backwards 
+
+</ul>
+</ol>
+	
+
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+count your breeds: time frame should be a lot slower 
+
+<ul>
+<li>
+figure out how to optimize
+
+</ul>
+<li>
+First midterm next week, after 2nd week of discussion of STL
+
+</ol>
+
+</body>
+</html>
