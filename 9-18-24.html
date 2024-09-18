@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-18-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="STL cont'd"><h3 id="STL cont'd" class="header"><a href="#STL cont'd">STL cont'd</a></h3></div>
+<ol>
+<li>
+use auto when defining iterators instead of calling iterator by its actual name (too bothersome)
+
+<li>
+const iterator 
+
+<ul>
+<li>
+vector&lt;int&gt;::iterator p1 = intVector.begin() --&gt; point to first element of vector, default type is "iterator" 
+
+<ul>
+<li>
+can do **p1 = 123 --&gt; change contents of vector using iterator 
+
+<li>
+can use "auto" instead of "vector&lt;int&gt;::iterator"
+
+</ul>
+<li>
+vector&lt;int&gt;::const_iterator p2 = intVector.begin() 
+
+<ul>
+<li>
+bc using a const iterator, CANNOT do **p1 = 123
+
+<li>
+if want to use auto: auto p2 = inteVector.cBegin() --&gt; cBegin returns a const iterator, bc it is NOT const by default
+	-vector&lt;int&gt;::reverse_iterator p1 = intVector.rBegin() --&gt; rBegin for pointer to last object in vector 
+
+<ul>
+<li>
+if want to traverse from last element to 1st element: rBegin --&gt; rend() 
+
+<li>
+rend() = pointer to element before the first element (because array/vector/etc indexing is exclusive of the end index)
+
+</ul>
+</ul>
+</ul>
+<li>
+istream and ostream iterator 
+
+<ul>
+<li>
+istream_iterator&lt;int&gt; inputIterator(cin)
+
+<li>
+ostream_iterator&lt;int&gt; outputIterator(cout)
+
+<li>
+int n1 = **inputIterator; 
+
+<ul>
+<li>
+stops at first whitespace, will retrive input 
+
+</ul>
+<li>
+inputItertor++;
+
+<ul>
+<li>
+advance iterator to take in the next token
+
+</ul>
+<li>
+int n2 = **inputIterator
+
+</ul>
+<li>
+sequence containers 
+
+<ul>
+<li>
+container adapter = NO iterators, but can choose other data structures to implement the structure
+
+<li>
+vector, list, and deque 
+
+<ul>
+<li>
+vector and deque --&gt; dynamic arrays
+
+<li>
+list --&gt; linked list 
+
+</ul>
+<li>
+functions 
+
+<ul>
+<li>
+vector.assign(beg, end) 
+
+<ul>
+<li>
+assign a vector contents of some other data struc from beg --&gt; end - 1 indices of that other struc
+
+</ul>
+</ul>
+<li>
+vector 
+
+<ul>
+<li>
+iterators can be invalidated after insertion, so check for bugs areoun insertion!
+
+<li>
+can access elements in for loop using [] notation IFF the elements are contiguous 
+
+<li>
+if invoke an insert function whose return value is the pointer to the element just inserted, iterator doesnt change 
+
+<ul>
+<li>
+e.g. vecotr.insert(iter+1, 555)
+
+<li>
+if iter is originally at index 0, it will insert 555 at index 1
+
+<li>
+insert returns pointer to 555, but iter still = 0, pointing to start of vector!
+
+<li>
+we're throwing away the pointer to 555 bc not assigning it to anything 
+
+</ul>
+</ul>
+<li>
+doubleDeque 
+
+<ul>
+<li>
+in a deque, iterator is invalidated after insertion, so want to assign the pointer value returned from insert()
+
+<li>
+itr = deque.insert(itr + 1, 555); --&gt; DO NOT just do deque.insert(itr+1, 555) 
+
+<ul>
+<li>
+might pass but depends on the compiler
+
+<li>
+now iter points to itr + 1, where 555 was placed in array
+
+<li>
+if iter originally points to 1st element, now points to 555 
+
+</ul>
+<li>
+pop --&gt; ONLY destroys the element, does not return a value 
+
+<ul>
+<li>
+need to get deque.front() to return the value, then you can do deque.pop_front()
+
+</ul>
+</ul>
+<li>
+list 
+
+<ul>
+<li>
+implemented as doubly linked list, each element = fixed size block of contiguous mem --&gt; CAN do pointer arithmetic
+
+<li>
+same iteratr concept at deque and vector
+
+<li>
+can do iterator++ --&gt; pointer arithemtic to advance to point to next element in the list
+
+<li>
+merge() function --&gt; with merge 2 sorted list, O(n), ascending or descending, just has to match 
+
+<ul>
+<li>
+will not get a compilation/runtime error, just logical error 
+
+<li>
+will merge so final list is also sorted
+
+<li>
+list1.merge(list2) --&gt; list1 will have merged function, contents of list2 removed 
+
+</ul>
+<li>
+remove()
+
+<ul>
+<li>
+removes all occurrences of something
+
+</ul>
+<li>
+splice 
+
+<ul>
+<li>
+extract part of list (remove from that last) and place before the iterator position in the other list
+
+<li>
+can splice 1 element, entire list, or subset of list 
+
+</ul>
+</ul>
+</ul>
+<li>
+associative containers 
+
+<ul>
+<li>
+set 
+
+<ul>
+<li>
+elements cannot repeat
+
+<li>
+implemented using red black tree (binary search tree, elements need to be comparable, results in ascending order by default) 
+
+<ul>
+<li>
+e.g. create a set using elements from an array 
+
+<ul>
+<li>
+int values[] = {1, 3, 5, 2, 2, 6}
+
+<li>
+multiset&lt;int&gt; set(values, values+6);
+
+<li>
+if you print out set it will be ordered 
+
+</ul>
+<li>
+even after you insert elements, it will not be at end, or any specific index, it will be sorted into ascending order
+
+</ul>
+<li>
+there are unsorted sets too in cpp
+
+<li>
+need to define &lt;, &gt;, = for sets
+
+</ul>
+<li>
+map 
+
+<ul>
+<li>
+formed out of entries (key value pairs)
+
+<li>
+map&lt;int, string&gt; map1 --&gt; int = key, string = value
+
+<li>
+can have 2 entries with the same key IFF using multimap 
+
+<ul>
+<li>
+only logical error, no compile/runtime error
+
+<li>
+but can have 2 values be the same 
+
+</ul>
+<li>
+e.g. 
+
+<ul>
+<li>
+p = map1.begin()
+
+<li>
+p-&gt;first = key (dereference the pointer)
+
+<li>
+p-&gt;second = value 
+
+</ul>
+<li>
+map use case: finding the frequency of a word occurring in a string
+
+</ul>
+</ul>
+<li>
+container adapters 
+
+<ul>
+<li>
+stack, queue, priority_queue --&gt; CANNOT use iterators
+
+<li>
+can choose implementing data strucutre. by default: use deque
+
+<li>
+need to #include &lt;queue&gt;, &lt;stack&gt;, etc 
+
+<li>
+stack 
+
+<ul>
+<li>
+stack&lt;int&gt; stack1; --&gt; create a stack, by default implemented using a deque
+
+<li>
+stack&lt;int, vectr&lt;int&gt;&gt;, stack2; --&gt; create a stack implemented using a vector
+
+</ul>
+<li>
+queue 
+
+<ul>
+<li>
+queue&lt;int&gt; queue1; --&gt; create a queue, by default implemented using deque (usually deque most time efficient)
+
+<li>
+queue&lt;int list&lt;int&gt;&gt; queue2; --&gt; create queue implemented using linked list
+
+<li>
+FIFO
+
+</ul>
+<li>
+priority queue 
+
+<ul>
+<li>
+priority_queue&lt;int&gt; queue1; --&gt; implemented using vector as max heap by default, BEST implementation of priority queue
+
+<li>
+priority_queue&lt;int, deque&lt;int&gt;, greater&lt;int&gt;&gt; queue2; --&gt; implemented using queue and smallest is highest priority
+
+<li>
+highest priority leaves the queue first, regardless of which order it came in
+
+<li>
+cpp default: larger value in queue = higher priority (java opposite) --&gt; can be changed
+
+<li>
+when insert values in, queue will come out sorted based on highest priority at end of queue
+
+<li>
+define overloaded &lt; operator: tells how to determine priority in a queue 
+
+</ul>
+</ul>
+</ol>
+<div id="HW Notes:"><h3 id="HW Notes:" class="header"><a href="#HW Notes:">HW Notes:</a></h3></div>
+<ol>
+<li>
+Count your breeds: prefixed array 
+
+<ul>
+<li>
+biggest issue is that there are a huge amoutn of queries with different ranges
+
+<li>
+create an associated prefix sum array
+
+<li>
+a = {{5, 3, 7, 10, 2, 8, 6}
+
+<li>
+prefix = {0, 5, 8, 15, 25, 27, 35, 41}
+
+<li>
+if want sum from r --&gt; l 
+
+<ul>
+<li>
+prefix[r+1] - prefix[l]
+
+</ul>
+<li>
+common solution to handle finding many sums over an array --&gt; O(n)
+
+</ul>
+<li>
+Need to Ask 
+
+<ul>
+<li>
+quiz prb 1, radius++
+
+<li>
+how does copy from &lt;algorithms&gt; work
+
+<li>
+can deque do pointer aritmetic, bc its not contiguus mem?
+
+<li>
+if container adapters are implemented using other more powerful data strucs, can use that other struc's funcs, even if implemented using iterators? 
+
+<ul>
+<li>
+NO! changing the implementing data struc does not change usage/functions, ONLY helps with timing
+
+</ul>
+</ul>
+</ol>
+
+</body>
+</html>
