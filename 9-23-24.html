@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-23-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Algorithms"><h3 id="Algorithms" class="header"><a href="#Algorithms">Algorithms</a></h3></div>
+<ol>
+<li>
+iterator = generalization of pointer 
+
+<ul>
+<li>
+iterators often used with containers
+
+</ul>
+<li>
+Types of algos 
+
+<ul>
+<li>
+nonmodifying, modifying, numeric, heap
+
+</ul>
+<li>
+cpp has moved away from inheritance towards templates and generic programming
+
+<li>
+copy() 
+
+<ul>
+<li>
+need a header: #include &lt;algorithm&gt;
+
+<li>
+params: beginning iterator (can just put name of array), end + 1 iterator, and iterator pointing to another 
+
+<li>
+container that items should be copied to
+
+</ul>
+<li>
+fill and fill_n() 
+
+<ul>
+<li>
+fill: param: forward iterator: beginning iter, end iter, and value to fill in
+
+<li>
+fill_n: param: beginning iter, n copies to write, value to fill in
+
+</ul>
+<li>
+generate and generate_n() 
+
+<ul>
+<li>
+generate(forwarditer begin, forwarditer end, function gen) 
+
+<ul>
+<li>
+repeatedly invoke function gen() and use gen() to generate values, and place those values from begin to end-1 
+
+</ul>
+<li>
+generate_n(forwarditer begin, size n, function gen) 
+
+<ul>
+<li>
+generate n values using gen() and fill in container from begin to n
+
+</ul>
+<li>
+passing in function as param 
+
+<ul>
+<li>
+void m(int t[], size n, int f(int)) --&gt; int (**f)(int) 
+
+<ul>
+<li>
+t[0] = f(t[0]); --&gt; (**f)(t[i])
+
+<ul>
+<li>
+pass in int function that takes in an integer
+
+</ul>
+</ul>
+<li>
+name of function = pointer to the function, so when passing in function just pass in name, don't need &amp;function
+
+</ul>
+</ul>
+<li>
+remove and remove_if() 
+
+<ul>
+<li>
+remove(forwarditer beg, forwarditer end, value_to_remove) 
+
+<ul>
+<li>
+return value = pointer to end of container
+
+<li>
+after removal, everyting shifts up to fill the gap
+
+</ul>
+<li>
+remove_if(forwarditer beg, forwarditer end, greaterTan3);
+
+<ul>
+<li>
+test every elemenet in container, if satisfy the condition given, remove that value
+
+<li>
+our boolean condition comes from a function we write, greaterThan3, which returns true or false
+
+</ul>
+</ul>
+<li>
+remove_copy and remove_copy_if 
+
+<ul>
+<li>
+copy modified container to another container, don't modify original container
+
+</ul>
+<li>
+replace and replace_if() 
+
+<ul>
+<li>
+replace(forwarditer beg, forwarditer end, const T&amp; oldvalue, const T&amp; newValue) 
+
+<ul>
+<li>
+from beg to end-1, replace all oldValues with newValue
+
+</ul>
+</ul>
+<li>
+replace_copy and replace_copy_if() 
+
+<ul>
+<li>
+copied modified container to another new container, do not modify og
+
+</ul>
+<li>
+find and find_if 
+
+<ul>
+<li>
+find: find occurrene of a single value 
+
+<ul>
+<li>
+find(inputiter beg, inputiter end, T&amp; value)
+
+<li>
+if item is found, will return an iterator pointing to element 
+
+<ul>
+<li>
+can store return value in a regular pointer 
+
+</ul>
+<li>
+if not found, will return iterator pointing beyond the last element of the array 
+
+<ul>
+<li>
+container.end()
+
+</ul>
+</ul>
+<li>
+findif: find first element that matches a condition 
+
+<ul>
+<li>
+same as find but add a param for condition 
+
+</ul>
+<li>
+find_end() 
+
+<ul>
+<li>
+find last matching sequence (can be a single or multiple values) 
+
+</ul>
+<li>
+find_first_of() 
+
+<ul>
+<li>
+find first common element between 2 containers
+
+<li>
+need to pass in iterator ranges for both containers to see which subsequences should be compared
+
+<li>
+can also find based on a condition, e.g. find the first value that is greater than at least 1 value in other list
+
+</ul>
+</ul>
+<li>
+search and search_n 
+
+<ul>
+<li>
+search: find first instances of entire subsequences or repeated patterns in a range (opposite of find_end())
+
+<li>
+search_n: find first subsequence of n consecutive values of "x" 
+
+</ul>
+</ol>
+<div id="Midterm Notes"><h3 id="Midterm Notes" class="header"><a href="#Midterm Notes">Midterm Notes</a></h3></div>
+<ol>
+<li>
+1st part: multiple choice, open note, but can only access cpp reference website, open compiler
+
+<li>
+2nd part: solve a problem, also open note, open compiler
+
+</ol>
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+algorithms are very complicated, so download and play around + understand source code
+
+<li>
+Questions 
+
+<ul>
+<li>
+why does remove() not return iterator to the end of the container, it is only to things that are "shifted"?
+
+</ul>
+</ol>
+
+</body>
+</html>

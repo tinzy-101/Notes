@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-25-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Algorithms"><h3 id="Algorithms" class="header"><a href="#Algorithms">Algorithms</a></h3></div>
+<ol>
+<li>
+sort 
+
+<ul>
+<li>
+sorts in ascending order, but can change this
+
+<li>
+can only use on containers supporting random access iterators
+
+<li>
+if a class can be sorted, user need to define how you can compare them 
+
+<ul>
+<li>
+typically less than "&lt;" operator overloading 
+
+</ul>
+<li>
+elements need to sorted b4 binary search 
+
+<ul>
+<li>
+binary search returns bool function, whether the object youre searching for is inside container or not 
+
+</ul>
+<li>
+sort(array, array+8, greater&lt;int&gt;()) 
+
+<ul>
+<li>
+sort in descending order 
+
+</ul>
+<li>
+sorting objects 
+
+<ul>
+<li>
+if create a Patient object called "array":
+
+<ul>
+<li>
+to find the size of the array: sizeof(array) / sizeof(Patient) --&gt; number of bytes of entire "array" object / number of byte taken up by a single patient 
+
+<li>
+this method breaks when arrays are passed into a function (can only do in the same function that the object is defined)
+
+</ul>
+<li>
+can define overloaded comparison operators inside OR outside the class 
+
+<li>
+to sort objects, just pass function or specifcy greater&lt;int&gt;() to use overloaded &gt; operator
+
+</ul>
+</ul>
+<li>
+adjacent_find 
+
+<ul>
+<li>
+find elements of the same value next to eachother --&gt; can specify value or boolean condition function
+
+<li>
+will return iterator to the first instance of the sequence of the same values (first adjacent duplicate values) 
+
+<li>
+can also use a boolean function, e.g. find first instance of 2 even numbers next to eachother
+
+</ul>
+<li>
+merge 
+
+<ul>
+<li>
+use bidirectional iterators for beginning, middle, and end
+
+<li>
+need to sort BEFORE merging or else will not be successfully merged
+
+<li>
+can sort 1 subset of array, then sort the other subset, then merge the 2 into another container, which will do an
+
+<li>
+overall ascending sort
+
+<li>
+inplace_merge --&gt; will merge and place everything back into original container, not into a new one 
+
+<ul>
+<li>
+why not just do a sort?
+
+<li>
+sort = O(nlog(n)), in_place_merge = O(n)
+
+</ul>
+</ul>
+<li>
+reverse and reverse_copy() 
+
+<ul>
+<li>
+reverse: bidirec iter to beginning and end
+
+<li>
+reverse_copy: content of source not rearranged, need to specify new container to place reversed array into 
+
+<ul>
+<li>
+anytime you have xxx_copy() --&gt; whatever operation you perform will not affect the original container
+
+</ul>
+</ul>
+<li>
+rotate and rotate_copy() 
+
+<ul>
+<li>
+e.g. 123 45 --&gt; 45 123 
+
+<li>
+can choose at which point to rotate, if you're rotating at the end or at the beginning, you'll just perform the 
+	  same thing as reverse
+
+<li>
+rotate(array, array+3, array+4)
+
+<ul>
+<li>
+12345 --&gt; 1234 5 --&gt; 5 4321
+
+</ul>
+</ul>
+<li>
+swap 
+
+<ul>
+<li>
+simplest: swapping only 2 values (pass by reference!)
+
+<li>
+iter_swap(): use iterators to swap elements at those iterators (pass in positions via iterator) 
+
+<li>
+swap_range(): if want to swap 4 elements, NEED to swap with another 4 elements too 
+
+<ul>
+<li>
+just pass in range to swap, then iterator to starting element of the other range to swap with
+
+</ul>
+</ul>
+<li>
+count and count_if 
+
+<ul>
+<li>
+count: count the number of instances of a specified value
+
+<li>
+count_if: count the number of instances of an object subject to a condition from bool function u pass in
+
+</ul>
+<li>
+max_element and min_element 
+
+<ul>
+<li>
+find the smallest and largest element within a specified range
+
+<li>
+returns a pointer to that element, you can just dereferene to get the max and min value
+
+</ul>
+<li>
+random_shuffle() 
+
+<ul>
+<li>
+can you control how "random" the shuffle is? yes!
+
+<li>
+can choose the range of elements in container to be shuffled, using iterators again
+
+</ul>
+<li>
+for_each and transform 
+
+<ul>
+<li>
+part of concept of functional programming, which helps to make code less verbose
+
+<li>
+for_each: steps through a container from beginning iter to end iter 
+
+<ul>
+<li>
+can write a function like "display" to print out, attach function to end of for_each, so that it will step 
+		  through the container and print out each object
+
+</ul>
+<li>
+transform: steps through container from begin iter to end iter and apply a transformation function to change 
+		the container
+
+</ul>
+<li>
+set operations 
+
+<ul>
+<li>
+if want to use set_symmetricDifference, set union, etc operations on an array, elements MUST be sorted 
+
+<ul>
+<li>
+this is because these functions are based on a red black tree, which requires elements to be sorted 
+
+<li>
+can also just use on an actual set, bc as soon as an element enters the list, its already sorted
+
+</ul>
+</ul>
+<li>
+numeric operations 
+
+<ul>
+<li>
+accumulate: 
+
+<ul>
+<li>
+iterate from iter begin to end, and have a function say what to do
+
+<li>
+e.g. 1 2 3 4 5
+
+<li>
+accumulate(array, array+4, multiplies&lt;int&gt;()) --&gt; 1 * 1 * 2 * 3 * 4 * 5 = result
+
+</ul>
+<li>
+inner_product
+
+<li>
+adjacent_difference
+
+<li>
+partial_sum 
+
+</ul>
+</ol>
+		
+<div id="C++ 11 New Features"><h3 id="C++ 11 New Features" class="header"><a href="#C++ 11 New Features">C++ 11 New Features</a></h3></div>
+<ol>
+<li>
+Lambda expressions 
+
+<ul>
+<li>
+helps when passing in functions as arguments, can create anonmyous function using a lambda expression to pass in 
+
+<li>
+for_each(array, array+8, [](int v) {cout &lt;&lt; c &lt;&lt; " ";}); 
+
+<ul>
+<li>
+anonymous function, don't name, just have body within { }
+
+<li>
+specify values from outside of the lambda expression in [] (e.g. variable in vicinity)
+
+<li>
+only need to know input, what to operate on, and output value
+
+<li>
+this lambda expression replaces the display() function written outside of the main()
+
+<li>
+so as you iterate through the array using for_each, print out each value separated by space
+
+<li>
+can use from transform function too
+
+<li>
+really useful when only using the function once or twice 
+
+</ul>
+</ul>
+</ol>
+
+</body>
+</html>
