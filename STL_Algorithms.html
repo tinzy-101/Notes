@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>STL_Algorithms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<ol>
+<li>
+symmetric difference = any values NOT in the intersection between 2 sets (intersection = common elements)
+
+<li>
+adjacent different: create a new array filled with the difference between adjacent elements of a given array
+
+<li>
+partial sum:  input: {5, 10, 16}, output: {5+nothing = 5, 5+10 = 15, 15+16 = 31}
+
+<li>
+if initialize a vecotr like vector&lt;int&gt; v(5), won't automatically be populated with 0s 
+
+<ul>
+<li>
+after you copy some values, filling only indices 1-3, your vector wont have trailing 0s
+
+</ul>
+<li>
+When using remove_if 
+
+<ul>
+<li>
+the values will be removed, and other values at the end of the array will be shifted over
+
+<li>
+an iterator to the new end of the array is returned, you need to use that to resize the container
+
+<li>
+if you don't resize, and print, you will print out the correct vector with elements shifted, but also copied:
+
+<ul>
+<li>
+{1, 2, 3, 4, 5, 1, 2} --&gt; remove 5 --&gt; 1 2 3 4 1 2 2 
+
+<li>
+last element (2) is shifted over to fill "empty spot
+
+</ul>
+</ul>
+<li>
+post increment vs pre increment 
+
+<ul>
+<li>
+preincrement: increment value before storing its vaue in an expression:
+
+<ul>
+<li>
+x = 5
+
+<li>
+a = ++x --&gt; a = 6
+
+</ul>
+<li>
+postincrement: increment value after storing its value in an expression:
+
+<ul>
+<li>
+x = 5
+
+<li>
+a = x++ --&gt; a = 5
+
+</ul>
+</ul>
+</ol>
+
+</body>
+</html>
