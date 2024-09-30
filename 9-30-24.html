@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>9-30-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Linked List"><h3 id="Linked List" class="header"><a href="#Linked List">Linked List</a></h3></div>
+<ol>
+<li>
+linked list = sequence of items, link each item to eachother , creating nodes 
+
+<ul>
+<li>
+node = box with arrow pointing out of it to next item 
+
+<ul>
+<li>
+this is just singly linked list, doubly linked list has 2 arrows pointing out
+
+</ul>
+<li>
+elements NOT in contiguous memory space
+
+</ul>
+<li>
+structures = classes, but default accessibility is public (not private) 
+
+<ul>
+<li>
+used in C
+
+<li>
+functionally same as classes
+
+</ul>
+<li>
+can define node as a class 
+
+<ul>
+<li>
+need data element, pointer to next element 
+
+<li>
+can't define node class in terms of node class, but can define a var "node **x", as a pointer wich wont have compilation error 
+
+<ul>
+<li>
+"reference" to node class 
+
+</ul>
+<li>
+have head and tail pointer pointing at first and last node 
+
+<ul>
+<li>
+don't always have a tail pointer 
+
+</ul>
+<li>
+put a nullptr as where the last element points to as an end marker 
+
+<li>
+constructor 
+
+<ul>
+<li>
+want to initialize the initial content of the first node 
+
+<ul>
+<li>
+const value_type&amp; init_data = value_type() 
+
+</ul>
+<li>
+want to initializd pointer to next variable 
+
+<ul>
+<li>
+const node* init_link = nullptr 
+
+</ul>
+</ul>
+<li>
+member functions 
+
+<ul>
+<li>
+sometimes need to write 2 similar versions of the same method 
+
+<ul>
+<li>
+when have to return a pointer to a node
+
+<li>
+if return type = **node
+
+<li>
+first version: can use pointer to make modifications, 2nd version: cannot use pointer to make modifications (return const node**)
+
+</ul>
+<li>
+const node** link() const {return link_field} 
+
+<ul>
+<li>
+return pointer to the link_field
+
+<li>
+CANNOT use this pointer to modify contents of a node
+
+</ul>
+<li>
+node** link() { return link_field} 
+
+<ul>
+<li>
+return pointer to link_field
+
+<li>
+CAN use pointer to modify contents of node
+
+</ul>
+</ul>
+<li>
+const node **c 
+
+<ul>
+<li>
+cannot use c to change any of the nodes that c points to
+
+<li>
+FALSE: node that c points to can never be changed 
+
+<ul>
+<li>
+can be change through other means than this pointer that u declared, e.g. another pointer that points to the same node 
+
+</ul>
+<li>
+can do c-&gt;data() --&gt; access data
+
+<li>
+CANNOT do c-&gt;set_date() --&gt; changing data
+
+<li>
+how to change data using const version 
+
+<ul>
+<li>
+node **second = head_ptr-&gt;link() 
+
+<ul>
+<li>
+create another pointer to where the head_ptr points to 
+
+</ul>
+<li>
+second-&gt;set_data(9.2) 
+
+<ul>
+<li>
+use non const pointer "second" to change the value stored at where the head ptr points to 
+
+</ul>
+</ul>
+</ul>
+</ul>
+<li>
+why linked list 
+
+<ul>
+<li>
+dont need to know size from the beginning, all elements constructed at runtime
+
+<li>
+stored in heap space, can always go to heap space during runtime to dynamically construct a new node element 
+
+<li>
+need to construct elements (from node class) using new operator 
+
+<ul>
+<li>
+also need to handle case of if u run out of mem and can't construct a new node 
+
+</ul>
+</ul>
+<li>
+constructing first linked list (in main) 
+
+<ul>
+<li>
+p = new node 
+
+<ul>
+<li>
+create node, value=0, link=NULL
+
+</ul>
+<li>
+q = new node(4.9) 
+
+<ul>
+<li>
+create node, value=4.9, link=NULL
+
+</ul>
+<li>
+r =new node(1.6, p) 
+
+<ul>
+<li>
+create node, value=1.6, pointing to same node as p (NULL)
+
+<li>
+works bc q (and q, r) are pointers!
+
+</ul>
+<li>
+(**a).data() = a-&gt;data()
+
+</ul>
+<li>
+linked list toolkit 
+
+<ul>
+<li>
+functions defined using (outside) node class to help create a linked list
+
+<li>
+size_t list_length(const node* head_ptr)
+
+<ul>
+<li>
+use head pointer to find length of list using traversal: O(n)
+
+<ul>
+<li>
+IF have a node class w/ size data member (derived data member), don't need to do traversal
+
+</ul>
+<li>
+not using head pointer to modify anything, to use pointer to const node** 
+
+</ul>
+<li>
+list_head_insert 
+
+<ul>
+<li>
+insert so head pointer now points to new element
+
+</ul>
+<li>
+insert 
+
+<ul>
+<li>
+insert after node as pointed to by previous pointer 
+
+</ul>
+<li>
+list_search 
+
+<ul>
+<li>
+returns pointer to a node, so need 2 versions
+
+</ul>
+<li>
+list_locate 
+
+<ul>
+<li>
+returns an index for location, but position starts at 1
+
+</ul>
+<li>
+copy linked list 
+
+<ul>
+<li>
+param:S source ptr, head ptr, tail ptr 
+
+<ul>
+<li>
+head and tail ptr need to be modified so pass in by ref 
+
+</ul>
+<li>
+cant just point to the same nodes, need to create your own nodes
+
+<li>
+also need to handle running out of mem
+
+<li>
+need to create a new head node first, then run a loop to copy 
+
+</ul>
+<li>
+remove node at head of a linked list 
+
+<ul>
+<li>
+create new node to point to head
+
+<li>
+move head to point to 2nd node
+
+<li>
+delete new node (to delete head pointer)
+
+</ul>
+</ul>
+<li>
+parameters for linked list 
+
+<ul>
+<li>
+value parameters that are pointers to a node 
+
+<ul>
+<li>
+pass in by valueif dont want to change original value (or const ref)
+
+</ul>
+<li>
+or pass in by reference
+
+<li>
+use cases 
+
+<ul>
+<li>
+pointer to const node: const node** when function needs to access linked list, but won't modify any of the node content
+
+<li>
+pass in by value: node** when need to change the list but not make pointer point to a new node
+
+<li>
+pass in by reference: node**&amp; when function needs to access linked list AND function might make pointer point to another node
+
+</ul>
+</ul>
+<li>
+implementing bag class using linked list toolkit 
+
+<ul>
+<li>
+only data members: head pointer, and number of nodes
+
+<li>
+make a typedef for value_type --&gt; want to link value_type between bag and node class 
+
+<ul>
+<li>
+typedef node::value_type valuetype
+
+</ul>
+</ul>
+</ol>
+	
+
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+implement bag/sequence class again using linked lists 
+
+<ul>
+<li>
+very usefull to draw what code youre writing
+
+</ul>
+</ol>
+
+</body>
+</html>

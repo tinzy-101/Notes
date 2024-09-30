@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>OrangePi</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Set up"><h4 id="Set up" class="header"><a href="#Set up">Set up</a></h4></div>
+<ol>
+<li>
+sudo pass: orangepi
+
+<li>
+needed "peripherals": 
+
+<ul>
+<li>
+power supply to orangepi (usb c)
+
+<li>
+HDMI to mini HDMI for monitor
+
+<li>
+ethernet to power for wired internet
+
+<li>
+usb a for mouse
+
+<li>
+usb a for keyboard
+
+<li>
+usb c to wall for monitor power supply
+
+</ul>
+<li>
+if monitor shows connection 
+
+<ul>
+<li>
+try unplugging and repluggin power supply
+
+</ul>
+<li>
+connecting to bluetooth 
+
+<ul>
+<li>
+if not already bluetooth toggle on the top right hand corner
+
+<li>
+start bluetooth (no output): 
+
+<ul>
+<li>
+sudo systemctl start bluetooth 
+
+</ul>
+<li>
+check status 
+
+<ul>
+<li>
+systemctl status bluetooth 
+
+<li>
+if no error, go to settings &gt; bluetooth manager to see if can find bluetooth device
+
+<li>
+if it doesn't work, you will prob get error: bluez daemon is not running
+
+</ul>
+<li>
+tried: 
+
+<ul>
+<li>
+add "BLUETOOTH_ENABLED=1" and uncomment "Autoenable=true", "KeySize=0", and "RefreshDiscover=true" to /etc/default/bluetooth.conf 
+
+<ul>
+<li>
+uhm no work
+
+</ul>
+</ul>
+</ul>
+</ol>
+
+</body>
+</html>
