@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Chapter_11</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Ch 11: Pointers and Dynamic Memory Management"><h3 id="Ch 11: Pointers and Dynamic Memory Management" class="header"><a href="#Ch 11: Pointers and Dynamic Memory Management">Ch 11: Pointers and Dynamic Memory Management</a></h3></div>
+<ol>
+<li>
+assigning address of some variable count to another variable x: 
+
+<ul>
+<li>
+int **x = &amp;count;
+
+<li>
+&amp;count = address of count
+
+<li>
+&amp; = address operator
+
+</ul>
+<li>
+cout &lt;&lt; **pCount; 
+
+<ul>
+<li>
+** = indirection operator AND dereference operator
+
+</ul>
+<li>
+local variable 
+
+<ul>
+<li>
+local var, local pointer, array element get arbitrary value if not initialized
+
+<li>
+deref a pointer thats not inited causes fatal runtime error OR modified wrong data
+
+</ul>
+<li>
+using typedef: creating new type synonymous to existing type 
+
+<ul>
+<li>
+typedef existingType newType
+
+</ul>
+<li>
+double radius=5, double** const pValue = &amp;radius 
+
+<ul>
+<li>
+pValue is a constant pointer to a double
+
+<li>
+where pointer points to cannot change, but the value stored in radius can change
+
+<li>
+CAN: 
+
+<ul>
+<li>
+radius++ 
+
+<ul>
+<li>
+changing value of radius, nothing to do with pointer 
+
+</ul>
+<li>
+**pValue = 0 
+
+<ul>
+<li>
+deference pValue to change radius, so NOT changing pointer 
+
+</ul>
+<li>
+(**pValue)++ 
+
+<ul>
+<li>
+dereference pointer to increment radius, so NOT changing value stored in pointer
+
+</ul>
+</ul>
+<li>
+CANNOT: 
+
+<ul>
+<li>
+pValue = &amp;radius
+
+<ul>
+<li>
+though &amp;radius is the same as what it was, still cannot do any reassignment
+
+</ul>
+</ul>
+</ul>
+<li>
+double radius = 5, const double* pValue = &amp;radius 
+
+<ul>
+<li>
+pValue is a pointer to constant double
+
+<li>
+where pValue points to can change, but the value stored in radius CANNOT change
+
+<li>
+CAN: 
+
+<ul>
+<li>
+pValue = &amp;radius 
+
+<ul>
+<li>
+reassign where pValue points to 
+
+</ul>
+</ul>
+<li>
+CANNOT: 
+
+<ul>
+<li>
+radius++
+
+<li>
+(**pValue)++
+
+<li>
+**pValue = 0 
+
+<ul>
+<li>
+all change the value in radius
+
+</ul>
+</ul>
+</ul>
+<li>
+double radius = 5, const double* const pValue = &amp;radius 
+
+<ul>
+<li>
+pValue is a const pointer to a const double 
+
+<li>
+cannot change where pointer points to OR the value of radius
+
+<li>
+CAN: 
+
+<ul>
+<li>
+cout &lt;&lt; **pValue 
+
+</ul>
+<li>
+CANNOT: 
+
+<ul>
+<li>
+do anything else
+
+</ul>
+</ul>
+<li>
+list[6] = {1, 2, 3, ... } 
+
+<ul>
+<li>
+list = pointer to first element = &amp;(list[0])
+
+<li>
+**list = dereferencing pointer to first element = **(&amp;list[0]) = list[0]
+
+</ul>
+<li>
+list[] = {1, 2, 3}, stored in mem starting in address 04BFA810
+
+<ul>
+<li>
+print 04BFA810: 
+
+<ul>
+<li>
+cout &lt;&lt; list; 
+
+<ul>
+<li>
+pointer to first element
+
+</ul>
+<li>
+cout &lt;&lt; &amp;list; 
+
+<ul>
+<li>
+address of list, starting at 04...
+
+</ul>
+<li>
+cout &lt;&lt; &amp;list[0]; 
+
+<ul>
+<li>
+address of 1st element
+
+</ul>
+</ul>
+</ul>
+<li>
+array double list[] = {1, 2, 3}, stored starting 04BFA810 
+
+<ul>
+<li>
+&amp;list[1] is at 04BFA818, because a double value take 8 bytes on a computer
+
+</ul>
+<li>
+array double list[] = {1, 2, 3} 
+
+<ul>
+<li>
+&amp;list[1] = list + 1 = pointer to list[0] + 1 * (size of element stored in array)
+
+<li>
+&amp;list[1] = address of 2nd element in list = list[0] + 8 bytes = list[0] + 1 = list + 1
+
+<li>
+**(list + 1) = dereferencing address of list[0] + 8 bytes (size of 1 double) = list[1]
+
+<li>
+pointer arithmetic
+
+</ul>
+<li>
+int list[] = {10, 20, 30, 40}, cout &lt;&lt; **(list + 1) &lt;&lt; " " &lt;&lt; **list + 1 
+
+<ul>
+<li>
+**(list + 1) = **(&amp;list[0] + 4 bytes (size of int)) = **(&amp;list[1]) = list[1] = 20
+
+<li>
+**list + 1 = **(&amp;list[0]) + 1 = list[0] + 1 = 10 + 1 = 11
+
+<li>
+output: 20 11
+
+</ul>
+<li>
+pointer code 
+
+<ul>
+<li>
+input: 
+
+<ul>
+<li>
+int list[] = {1, 1, 1, 1}
+
+<li>
+**(list) = **(list) + 1 
+
+<ul>
+<li>
+list[0] = list[0] + 1 = 1 + 1 --&gt; list[0] = 2
+
+</ul>
+<li>
+**(list + 1) = **(list + 1) + 2 
+
+<ul>
+<li>
+list[1] = list[1] + 2 = 1 + 2 --&gt; list[1] = 3 
+
+</ul>
+<li>
+**(list + 2) = **(list + 2) + 3 
+
+<ul>
+<li>
+list[2] = list[2] + 3 = 1 + 3 --&gt; list[2] = 4 
+
+</ul>
+<li>
+**(list + 3) = **(list + 3) + 4 
+
+<ul>
+<li>
+list[3] = list[3] + 4 = 1 + 4 --&gt; list[3] = 5 
+
+</ul>
+<li>
+cout &lt;&lt; list[0] &lt;&lt; " " &lt;&lt; list[3] 
+
+</ul>
+</ul>
+<li>
+output: 2 5
+
+<li>
+pointer code 
+
+<ul>
+<li>
+input 
+
+<ul>
+<li>
+int list1[4], list2[4];
+
+<li>
+int** p1, int** p2;
+
+</ul>
+<li>
+what's ALLOWED: 
+
+<ul>
+<li>
+p1 = list1 
+
+<ul>
+<li>
+can assign pointer p1 to list1, a pointer to list[0]
+
+</ul>
+<li>
+p1 = p2 
+
+<ul>
+<li>
+can assign pointer value to another pointer value (both initialized w/ random addresses)
+
+</ul>
+</ul>
+<li>
+what's NOT ALLOWED: 
+
+<ul>
+<li>
+list1 = p1 
+
+<ul>
+<li>
+address of list1[0] is already set, cannot reassign it to the random address in p1
+
+</ul>
+<li>
+list1 = list2 
+
+<ul>
+<li>
+address of list1[0] already set
+
+</ul>
+</ul>
+</ul>
+<li>
+pointer code
+
+<ul>
+<li>
+input
+
+<ul>
+<li>
+char** p 
+
+<ul>
+<li>
+pointer to a char 
+
+</ul>
+<li>
+cin &gt;&gt; p 
+
+<ul>
+<li>
+string "abc" is entered by user 
+
+</ul>
+</ul>
+<li>
+output 
+
+<ul>
+<li>
+will get a runtime error bc p is used w/o being initialized
+
+<li>
+"abc" cannot be stored in p bc p is a pointer to c character, not a character storing var
+
+</ul>
+</ul>
+<li>
+2 functions 
+
+<ul>
+<li>
+function 1: swap(int** v1, int** v2) 
+
+<ul>
+<li>
+passing variable in by pointer
+
+<li>
+user MUST pass in a pointer to exising variable in the stack
+
+</ul>
+<li>
+function 2: swap(int&amp; v1, int&amp; v2) 
+
+<ul>
+<li>
+passing variables in by reference
+
+<li>
+user MUST pass in existing variable (dont need to do anything special when passing it in, no &amp;)
+
+<li>
+dont need to dereference to access variable like with passing in by pointer, and og variable in main will change
+
+</ul>
+<li>
+in main 
+
+<ul>
+<li>
+int n1 = 1
+
+<li>
+int n2 = 2;
+
+</ul>
+<li>
+swap in main 
+
+<ul>
+<li>
+swap(&amp;n1, &amp;n2) 
+
+<ul>
+<li>
+invokes swap1 bc address of n1 and n2 are passed in, which are pointers
+
+</ul>
+<li>
+swap(n1, n2) 
+
+<ul>
+<li>
+invokes swap2 bc the variable are passed in by name, and the only possible function that will take in a 
+			 function by name is the pass in by reference function
+
+</ul>
+</ul>
+</ul>
+<li>
+2 functions: 
+
+<ul>
+<li>
+function1: swap(int v1, int v2) 
+
+<ul>
+<li>
+pass in by value, just pass in var name normally
+
+</ul>
+<li>
+function2: swap(int&amp; v1, int&amp; v2) 
+
+<ul>
+<li>
+pass in by reference 
+
+</ul>
+<li>
+in main 
+
+<ul>
+<li>
+int n1 = 1
+
+<li>
+int n2 = 2
+
+<li>
+swap(n1, n2) 
+
+<ul>
+<li>
+there is a compile error bc this swap call could match either function1 or function2, bc passing in by 
+			 reference and by value looks the same to the user
+
+</ul>
+</ul>
+</ul>
+<li>
+returning pointer from function 
+
+<ul>
+<li>
+correct: WHY
+
+<ul>
+<li>
+int** reverse(int** const list, const int size) 
+
+<li>
+int** reverse(int const list[], const int size) 
+
+</ul>
+<li>
+wrong: WHY 
+
+<ul>
+<li>
+int int[] reverse(int** const list, const int size) 
+
+<ul>
+<li>
+can't have 2 return types int and int[]
+
+</ul>
+<li>
+int** reverse(int** const list[], const int size) 
+
+<ul>
+<li>
+in parameter list dont specify array as list[]
+
+<li>
+wait actually idk
+
+</ul>
+</ul>
+</ul>
+<li>
+array function: min_element(list, list+3) 
+
+<ul>
+<li>
+returns pointer to smallest element from list[0] to list[2]
+
+<li>
+same for max_element
+
+</ul>
+<li>
+array function: max_element(list, list+6, 45) 
+
+<ul>
+<li>
+if no elements in range &gt; 45, then function returns pointer to 1 after last element
+
+</ul>
+<li>
+dynamic mem alloc 
+
+<ul>
+<li>
+correct 
+
+<ul>
+<li>
+int* pValue = new int;
+
+</ul>
+<li>
+incorrect 
+
+<ul>
+<li>
+int* pValue = new double;
+
+<li>
+no mix and match types!
+
+</ul>
+</ul>
+<li>
+if: int* list = new int[10] 
+
+<ul>
+<li>
+to free alloced mem: delete [] list
+
+</ul>
+<li>
+mem code: 
+
+<ul>
+<li>
+int* pValue = new int;
+
+<li>
+**pValue = 45;
+
+<li>
+pValue = new int;
+
+<li>
+delete pValue;
+
+<li>
+causes mem leak? 
+
+<ul>
+<li>
+YES, WHY
+
+<li>
+maybe bc new operator used x2 and memory only freed once? so still mem being used up?
+
+</ul>
+</ul>
+<li>
+if using circle class 
+
+<ul>
+<li>
+code: 
+
+<ul>
+<li>
+cout &lt;&lt; (new Circle(5))-&gt;getArea() &lt;&lt; endl;
+
+</ul>
+<li>
+using new operator creates anonymous object on heap, causing mem leak 
+
+<li>
+but program still compiles and runs
+
+</ul>
+<li>
+how to delete a dynamic object from a pointer "p" 
+
+<ul>
+<li>
+delete p;
+
+</ul>
+<li>
+if have class: 
+
+<ul>
+<li>
+Circle(double radius)
+
+<ul>
+<li>
+{
+
+</ul>
+<li>
+	radius = radius; --&gt; radius is a private variable declared later in class
+
+<ul>
+<li>
+}
+
+</ul>
+<li>
+program compiles but get unexpected radius value
+
+</ul>
+<li>
+destructors 
+
+<ul>
+<li>
+EVERY class has default constructor whether is has explicit constructor OR destructor or not
+
+<li>
+a class only gets ONE destructor
+
+<li>
+destructor has no arguments
+
+</ul>
+</ol>
+
+</body>
+</html>

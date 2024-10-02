@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>Test_1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Ch4 Pointers: Self Test Exercises"><h3 id="Ch4 Pointers: Self Test Exercises" class="header"><a href="#Ch4 Pointers: Self Test Exercises">Ch4 Pointers: Self Test Exercises</a></h3></div>
+<p>
+<a href="4.1-4.5.html">4.1-4.5</a>
+</p>
+
+<div id="Online Quiz"><h3 id="Online Quiz" class="header"><a href="#Online Quiz">Online Quiz</a></h3></div>
+<p>
+<a href="Chapter_11.html">Chapter_11</a>
+<a href="Chapter_22.html">Chapter_22</a>
+<a href="Chapter_23.html">Chapter_23</a> 
+</p>
+
+<div id="Const Notes"><h3 id="Const Notes" class="header"><a href="#Const Notes">Const Notes</a></h3></div>
+<ol>
+<li>
+int const** OR const int**
+
+<ul>
+<li>
+pointer to constant integer
+
+<li>
+the integer that is being pointed to should not be changed
+
+<li>
+where the pointer points can be changed
+
+</ul>
+<li>
+int **const 
+
+<ul>
+<li>
+constant pointer to an integer
+
+<li>
+integer value can change
+
+<li>
+where pointer points to cannot be changed
+
+</ul>
+<li>
+const int** const OR int const** const 
+
+<ul>
+<li>
+constant pointer pointing to constant integer
+
+<li>
+value stored in integer shouldnt change
+
+<li>
+where pointer points to should not be changed
+
+</ul>
+<li>
+how to remember 
+
+<ul>
+<li>
+start from the name of var and move clockwise to next pointer or type
+
+<li>
+start from right and move left  
+
+<ul>
+<li>
+e.g. int &lt;-- const &lt;-- ** &lt;-- const 
+
+<ul>
+<li>
+const pointer (**) to const int 
+
+</ul>
+<li>
+e.g. int *** const 
+
+<ul>
+<li>
+const pointer to pointer to int 
+
+</ul>
+<li>
+e.g. int ** const ** 
+
+<ul>
+<li>
+pointer to const pointer to int 
+
+</ul>
+<li>
+e.g. int const *** 
+
+<ul>
+<li>
+pointer to pointer to const int 
+
+</ul>
+<li>
+e.g. int ** const ** const 
+
+<ul>
+<li>
+const pointer to pointer pointer to int 
+
+</ul>
+</ul>
+<li>
+pointer is const when ** is BEFORE the const (attached to start of const)
+
+<li>
+int/float/etc is const when ** is AFTER the const (attached to end of const) OR attached to END of int/float/etc
+
+</ul>
+</ol>
+<div id="Runtime vs Compile Error"><h3 id="Runtime vs Compile Error" class="header"><a href="#Runtime vs Compile Error">Runtime vs Compile Error</a></h3></div>
+<ol>
+<li>
+compile time error: 
+
+<ul>
+<li>
+usually semantics or syntax error 
+
+<ul>
+<li>
+e.g. operations w/ different types, int + string
+
+<li>
+missing parens, semicolons
+
+<li>
+printing value of var w/o initializing
+
+</ul>
+</ul>
+<li>
+runtime error: 
+
+<ul>
+<li>
+usually logical, e.g. divide by 0, accessing var w/o initializing it
+
+</ul>
+</ol>
+<div id="Stack vs Heap"><h3 id="Stack vs Heap" class="header"><a href="#Stack vs Heap">Stack vs Heap</a></h3></div>
+<p>
+1.
+</p>
+
+</body>
+</html>
