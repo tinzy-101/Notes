@@ -10,6 +10,82 @@
 <body>
 
 <div id="Ch 23"><h3 id="Ch 23" class="header"><a href="#Ch 23">Ch 23</a></h3></div>
+<ol>
+<li>
+types of stl algos: 
+
+<ul>
+<li>
+nonmodifying
+
+<li>
+modifying
+
+<li>
+numeric
+
+<li>
+heap
+
+</ul>
+<li>
+code e.g. 
+
+<ul>
+<li>
+int values[] = {1, 2, 3, 4, 5};
+
+<li>
+fill_n(values + 2, 2, 9); 
+
+<li>
+output: 
+
+<ul>
+<li>
+1 2 9 9 5
+
+<li>
+3, 4 are overwritten bc starting from values[2], fill in 2 9's
+
+</ul>
+</ul>
+<li>
+adjacent find 
+
+<ul>
+<li>
+find 2 consec equal elements
+
+</ul>
+<li>
+rotate 
+
+<ul>
+<li>
+input: 
+
+<ul>
+<li>
+int values[] = {1, 2, 3, 4, 4, 5, 1, 1};
+
+<li>
+rotate(values, values + 5, values + 8);
+
+</ul>
+<li>
+output: 
+
+<ul>
+<li>
+5 1 1 1 2 3 4 4
+
+<li>
+start rotating at first element in range
+
+</ul>
+</ul>
+</ol>
 
 </body>
 </html>

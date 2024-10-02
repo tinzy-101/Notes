@@ -64,6 +64,246 @@ while(c &lt; n) {
 num iterations of loop: cieling of (n-5)/3
 
 </ul>
+<li>
+for sorted list of 1024 elements, binarys search takes at most 100 comparison
+
+<li>
+towers of hanoi: O(2^n)
+
+<li>
+insertion sort: O(n^2)
+
+<li>
+dynamic programming 
+
+<ul>
+<li>
+solve sub problems, combine solutionf os subproblems to get overall solution
+
+<li>
+dont use recursion (redundant bc subproblems are related), just solve each sub once and store result
+
+<li>
+O(n) when using this approach
+
+</ul>
+<li>
+fibonacci algo in text: O(2^n)
+
+<li>
+euclid's algo: O(log(n))
+
+<li>
+sieve of eratosthenes 
+
+<ul>
+<li>
+O(n^(1.5)/logn)
+
+</ul>
+<li>
+finding closest pair of points 
+
+<ul>
+<li>
+O(nlog(n))
+
+</ul>
+<li>
+backtracking = look for solution incrementally, abandon as soon as u find out its not possible
+
+<li>
+gift wrapping algo for convex hull 
+
+<ul>
+<li>
+O(n^2)
+
+</ul>
+<li>
+graham's algo for convex hull 
+
+<ul>
+<li>
+O(nlog(n))
+
+</ul>
+</ol>
+<div id="Ch 22: STL Containers"><h3 id="Ch 22: STL Containers" class="header"><a href="#Ch 22: STL Containers">Ch 22: STL Containers</a></h3></div>
+<ol>
+<li>
+3 components of STL: containers, iterators, algorithms
+
+<li>
+3 containers: sequence, associative, container adapters
+
+<li>
+sequence 
+
+<ul>
+<li>
+list, vector, deque
+
+</ul>
+<li>
+associative 
+
+<ul>
+<li>
+map, set
+
+</ul>
+<li>
+container adapter 
+
+<ul>
+<li>
+queue, stack
+
+</ul>
+<li>
+use iterators: 
+
+<ul>
+<li>
+list, deque, multimap (no queue, stack)
+
+</ul>
+<li>
+first class features 
+
+<ul>
+<li>
+swap(), max_size(), clear(), erase(), add()
+
+</ul>
+<li>
+defining iterator for vector v of type int 
+
+<ul>
+<li>
+vector&lt;int&gt;::iterator p
+
+</ul>
+<li>
+types of iterators 
+
+<ul>
+<li>
+input
+
+<li>
+output
+
+<li>
+forward
+
+<li>
+bidirectional: vector, deque, list, set, map
+
+<li>
+random access: vector, deque
+
+</ul>
+<li>
+vector: efficient if inserting at end, but expensive everywhere else
+
+<li>
+deque: efficient at front and back, but expensive in middle
+
+<li>
+list: efficient for frequent insertion in the middle
+
+<li>
+sequence containers common functions: 
+
+<ul>
+<li>
+assign(n, element)
+
+<li>
+push_back(elem)
+
+<li>
+pop_back()
+
+<li>
+insert(position, elem)
+
+</ul>
+<li>
+insert elem in set 
+
+<ul>
+<li>
+s.insert(elem)
+
+</ul>
+<li>
+find elem in set: 
+
+<ul>
+<li>
+s.find(elem)
+
+</ul>
+<li>
+stack functions: 
+
+<ul>
+<li>
+pop
+
+<li>
+top
+
+<li>
+push(elem)
+
+<li>
+size
+
+<li>
+empty
+
+</ul>
+<li>
+functions in deque: 
+
+<ul>
+<li>
+pop
+
+<li>
+push(elem)
+
+<li>
+size
+
+<li>
+empty
+
+</ul>
+<li>
+functions in priority_queue 
+
+<ul>
+<li>
+pop
+
+<li>
+top
+
+<li>
+push(elem)
+
+<li>
+size
+
+<li>
+empty
+
+</ul>
 </ol>
 
 </body>
