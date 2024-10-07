@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-7-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Templates"><h3 id="Templates" class="header"><a href="#Templates">Templates</a></h3></div>
+<ol>
+<li>
+if a function passes in datatype "typedef" by value, can't use for multiple 
+
+<li>
+template functions 
+
+<ul>
+<li>
+underlying data type given a name, but not pinned down to a specific type in the function implementation
+
+<li>
+compiler will determine the data type to give you the right version of the function (invocation time)
+
+</ul>
+<li>
+2 methods 
+
+<ul>
+<li>
+using typedef 
+
+<ul>
+<li>
+define typedef int item, pass in by value "item a" and "item b", do a comparison and return largest
+
+<li>
+return type of function also item
+
+<li>
+once you use the function once on ints, it will only ever work on ints
+
+</ul>
+<li>
+using template
+
+<ul>
+<li>
+define template prefix, use anonymous class type: template &lt;class Item&gt; 
+
+<li>
+define funciton header: Item maximal(Item a, Item b)
+
+<li>
+this type is determined at compile time (will return the right function to use depending on the type)
+
+<li>
+can use on any types that operators in the funcitons are defined for
+
+</ul>
+</ul>
+<li>
+Item temp =x 
+
+<ul>
+<li>
+copy constructor invoked
+
+</ul>
+<li>
+cannot pass in long as the size of an array, because its too big, so it cant do pointer arithmetic 
+
+<ul>
+<li>
+usually pass in size_t n (unsigned int) --&gt; only nonneg ints)
+
+<li>
+DON'T do: const size_t SIZE = 5; unless you are using a template in the function header so that you can 
+
+<ul>
+<li>
+instantiate the function with passing in the right type for the size of the array
+
+</ul>
+</ul>
+<li>
+e.g. template class to insert into a sorted list 
+
+<ul>
+<li>
+if you pass in by value, e.g. Item entry, will need a copy constructor
+
+</ul>
+<li>
+bag class using template 
+
+<ul>
+<li>
+want to define bag class using template, instead of using only a typedef
+
+</ul>
+<li>
+when using template class 
+
+<ul>
+<li>
+NEED implementation and function prototypes in the header file (cant split into implementation file)
+
+<li>
+OR can put implementation into a .template file (its just a text file) --&gt; will lose color syntax 
+
+<ul>
+<li>
+#include "bag4.template" in the header file after the class definition
+
+</ul>
+</ul>
+<li>
+once you leave the class, anything with a bag type that you define needs to be instantiated 
+
+<ul>
+<li>
+e.g. const typename bag&lt;Item&gt;::size_type bag&lt;Item&gt;::DEFAULT_CAPACITY
+
+</ul>
+<li>
+every function becomes a template function 
+
+<ul>
+<li>
+need to have a template header preceding each function def
+
+<li>
+even nonmember function, who use the class, need to use the template
+
+<li>
+EXCEPT constructor, that you dont need to instantitate
+
+</ul>
+<li>
+if want to use a return type defined in the class 
+
+<ul>
+<li>
+bag&lt;Item&gt;::size_type --&gt; need to add "typename"
+
+<li>
+only need for return types, if using size_type in the body of a function compiler knows that its the name of a type
+
+</ul>
+<li>
+use Item instead of valuetype
+
+<li>
+if you have default values in function: specify them once in header files
+
+<li>
+dont add any directives, using namespace std 
+
+<ul>
+<li>
+need to manually: std::cout
+
+</ul>
+</ol>
+<div id="Templates for Iterators"><h3 id="Templates for Iterators" class="header"><a href="#Templates for Iterators">Templates for Iterators</a></h3></div>
+<ol>
+<li>
+how to write an iterator to access a linked list
+
+<li>
+node class is also converted to a template class
+
+<li>
+when working with templates in node class, dont need 2 versions of functions returning const <span id="Templates for Iterators-node and reg node"></span><strong id="node and reg node">node and reg node</strong>
+
+</ol>
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+ask takyiu for access to old midterm
+
+<li>
+figure out where copy constructor vs assignment operator are implicity (?) called
+
+<li>
+used posted sequenced linked list solution to implement template sequence
+
+<li>
+reorganize exercises into folder 
+
+<ul>
+<li>
+each sequence implementation = 1 folder
+
+<li>
+judge problems in 1 folder
+
+</ul>
+<li>
+Need to: 
+
+<ul>
+<li>
+read the textbook
+
+<li>
+make comments on the source code
+
+</ul>
+<li>
+email oscar 
+
+<ul>
+<li>
+can use beaker money for other stuff for the project?
+
+<li>
+senat meetings held online?
+
+</ul>
+<li>
+pay cc
+
+</ol>
+
+</body>
+</html>
