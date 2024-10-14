@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-14-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Stacks"><h3 id="Stacks" class="header"><a href="#Stacks">Stacks</a></h3></div>
+<ol>
+<li>
+stack = LIFO 
+
+<ul>
+<li>
+only work with top of stack (logical concept, depends on implementation)
+
+<li>
+can implement using: partially filled array
+
+<li>
+list and linked list are more concrete than stack (Stack is a logical concept)
+
+<li>
+e.g. linked list implementation 
+
+<ul>
+<li>
+top of stack = head of linked list (if dont want to maintain tail ptr)
+
+</ul>
+</ul>
+<li>
+stl functions 
+
+<ul>
+<li>
+empty() - return true if stack if empty
+
+<li>
+size() - return number of items
+
+<li>
+top() - returns reference
+
+<li>
+pop() - destroy top element, returns nothing
+
+<li>
+push() - push to top of stack
+
+</ul>
+<li>
+stack overflow and underfloq 
+
+<ul>
+<li>
+overflow = still trying to push, exceed capacity of stack (if using dynamic array won't have this problem)
+
+<li>
+underflow = stack empty, but still trying to pop()
+
+</ul>
+<li>
+expression evaluation = common application of stacks 
+
+<ul>
+<li>
+e.g. find if parenthesis match: (())() = matching, (() = not matching
+
+<li>
+algo: if see left paren, push to stack. if see right paren and stack not empty, pop the left paren
+
+<li>
+if get to a point where see right paren but stack if empty, then know that its not matching
+
+<li>
+if stack is empty at end, once get through whole stack, know you have succeeded
+
+</ul>
+<li>
+expression evaluations 
+
+<ul>
+<li>
+infix notation: operator is between 2 operands --&gt; 5 - 6
+
+<li>
+prefix notation: operator is before 2 operands --&gt; - 5 6
+
+<li>
+postfix notation: operator is after 2 operands --&gt; 5 6 -
+
+</ul>
+<li>
+fully parenthized numeric expression: EVERY binary operation is surrounded by parentheses 
+
+<ul>
+<li>
+strategy 1: evalutate inner most parentheses first --&gt; intuitive but hard to turn into algo
+
+<li>
+strategy 2: evaluate left more paren first --&gt; implement using stack to store last used operands and operators 
+
+<ul>
+<li>
+have 1 stack to store left parens + operators, 1 stack to store operands
+
+</ul>
+<li>
+not super realistic bc not likley that expression is always fully parenthesized
+
+</ul>
+<li>
+fixed sized array implementation of a stack 
+
+<ul>
+<li>
+close enough to dynamic array implementation
+
+<li>
+when popping and only have statically allocated values pushed onto the stack, just need to change value of used, don't need to delete anything
+
+<li>
+can't delete anything bc wasnt dynamically allocated, the stack manager will return all variables when object/var goes out of scope
+
+</ul>
+<li>
+linked list implementation
+
+<li>
+reverse polish notation (rpn) 
+
+<ul>
+<li>
+2 3 + 7 *
+
+<ul>
+<li>
+(2 + 3) * 7 = 35 
+
+</ul>
+<li>
+7 3 5 * + 4 - 
+
+<ul>
+<li>
+(7 + (3*5)) - 4
+
+</ul>
+<li>
+to evalutate, only need operand stack --&gt; if see operator, pop 2 operands and push new value after operate on them
+
+<li>
+very nice because never use parenthesis
+
+</ul>
+<li>
+translating infix to postfix 
+
+<ul>
+<li>
+only need a operator stack, if see operand, print it out, if see operator, push into stack
+
+</ul>
+</ol>
+		 
+		 
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+implement fully parenthesized infix notation evaluator (if time)
+
+</ol>
+
+</body>
+</html>

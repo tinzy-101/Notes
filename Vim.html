@@ -9,93 +9,339 @@
 </head>
 <body>
 
-<p>
-<span id="-Misc"></span><strong id="Misc">Misc</strong>
-</p>
-<pre>
+<div id="Misc"><h3 id="Misc" class="header"><a href="#Misc">Misc</a></h3></div>
+<ol>
+<li>
+vimrc is in ~/__vimrc (only 1 underscore)
 
-vimrc is in ~/_vimrc
-
+<li>
 tabs: 
-	1. on a current vim instance, create new tab:
+
+<ol>
+<li>
+on a current vim instance, create new tab:
 		:tabe file/path/to/new/file
-	2. move to next tab
+
+<li>
+move to next tab
 		:tabn
-	3. move to previous tab
+
+<li>
+move to previous tab
 		:tabp
-	4. map F7 to :tabp and F8 to tabn (next tab)
+
+<li>
+map F7 to :tabp and F8 to tabn (next tab)
 		set nocp
 		map &lt;F7&gt; :tabp&lt;CR&gt;
 		map &lt;F8&gt; :tabn&lt;CR&gt;
-		- &lt;CR&gt; = carriage return, so u don't have to hit enter to exec every time
-	5. name/rename tab: 
+
+<ul>
+<li>
+&lt;CR&gt; = carriage return, so u don't have to hit enter to exec every time
+
+</ul>
+<li>
+name/rename tab: 
 		saveas name_without_quotes.cpp
+
+</ol>
+</ol>
 	
 
+<ol>
+<li>
 with a clean copy of vim on debian:
-	- :set nocompatible (so can enter insert mode)
-	- :set backspace=indent,eol,start
 
+<ul>
+<li>
+:set nocompatible (so can enter insert mode)
+
+<li>
+:set backspace=indent,eol,start
+
+</ul>
+<li>
 copy text to clipboard: 
-	1. visual mode, select text
-	2. "+y
-		- no colon!
-	4. to paste in another vim instance, right click + paste OR ctrl + shift + v 
-if getting errors with swap files:
-	-(Q) to quit session
-	-in terminal, kill &lt;process ID&gt;
 
+<ol>
+<li>
+visual mode, select text
+
+<li>
+"+y
+
+<ul>
+<li>
+no colon!
+
+</ul>
+<li>
+to paste in another vim instance, right click + paste OR ctrl + shift + v 
+
+<li>
+if getting errors with swap files: 
+
+<ul>
+<li>
+(Q) to quit session
+
+<li>
+in terminal, kill &lt;process ID&gt;
+
+</ul>
+</ol>
+<li>
 find and replace:
-	- :%s/foo/bar/g
-	- replace "foo" with "bar"
 
+<ul>
+<li>
+:%s/foo/bar/g
+
+<li>
+replace "foo" with "bar"
+
+</ul>
+<li>
 navigating file:
-	-shift g = end of file
-	-^/0 = start of line
-	-$ = end of line
-	-gg = start of file
-	-use percentages: 
-		--&gt; esc + 1% = start of file, 100% = end of file
-	-w = jump to next word
-		--&gt; shift + w = take to 1st char after space (ignore special chars)
-	-b = jump to previous word
+
+<ul>
+<li>
+shift g = end of file
+
+<li>
+^/0 = start of line
+
+<li>
+$ = end of line
+
+<li>
+gg = start of file
+
+<li>
+use percentages: 
+
+<ul>
+<li>
+esc + 1% = start of file, 100% = end of file
+
+</ul>
+<li>
+w = jump to next word
+
+<ul>
+<li>
+shift + w = take to 1st char after space (ignore special chars)
+
+</ul>
+<li>
+b = jump to previous word
+
+</ul>
+</ol>
 	
-	
+<ol>
+<li>
 colorschemes:
-	-open vi
-	-[:colorscheme] to see assigned scheme
-	-[:colorscheme + space + ctrld] to see all schemes avail
-	-bonus: syntax highlighting [:syntax enable]
 
+<ul>
+<li>
+open vi
+
+<li>
+[:colorscheme] to see assigned scheme
+
+<li>
+[:colorscheme + space + ctrld] to see all schemes avail
+
+<li>
+bonus: syntax highlighting [:syntax enable]
+
+</ul>
+<li>
 line numbers: set nu
+
+<ul>
+<li>
 relative line numbers: set relativenumber (rnu)(current line = line 0, good for copying lines below)
-							  --&gt; set norelativenumber (nornu)
 
+<ul>
+<li>
+set norelativenumber (nornu)
+
+</ul>
+</ul>
+<li>
 copying and pasting text:
-	-esc + yy = copy line of text
-	-esc + shift + p = put line of text above current line
-	-esc + p = put below current line
-	-esc + u = undo previous action
-	-esc + dd = delete current line + copy to mem
+
+<ul>
+<li>
+esc + yy = copy line of text
+
+<li>
+esc + shift + p = put line of text above current line
+
+<li>
+esc + p = put below current line
+
+<li>
+esc + u = undo previous action
+
+<li>
+esc + dd = delete current line + copy to mem
+
+</ul>
+<li>
 copying multiple lines:
-	-esc + 3 + shift + y = copy current line and 2 lines below (3 total)
 
+<ul>
+<li>
+esc + 3 + shift + y = copy current line and 2 lines below (3 total)
+
+</ul>
+<li>
 deleting text:
-	-esc + 2 + shft + d = delete from where cursor is down 1 line (2 lines deleted)
-	-shift + d = delete everything from cursor to end of line
-	-d + shift + g = delete from cursor line to end of file
-	-d + 2 +  w = delete 2 word + space after
-	-esc + r + c = change char under cursor to c
-	-esc + x = delete char under cursor
-	-esc + ~ = change case of char under cursor
-	-ctrl + c = delete to end of line + insert mode
-	** Y --&gt; always yank entire line, D --&gt; only deletes from cursor to end of line **
 
+<ul>
+<li>
+esc + 2 + shft + d = delete from where cursor is down 1 line (2 lines deleted)
+
+<li>
+shift + d = delete everything from cursor to end of line
+
+<li>
+d + shift + g = delete from cursor line to end of file
+
+<li>
+d + 2 +  w = delete 2 word + space after
+
+<li>
+esc + r + c = change char under cursor to c
+
+<li>
+esc + x = delete char under cursor
+
+<li>
+esc + ~ = change case of char under cursor
+
+<li>
+ctrl + c = delete to end of line + insert mode
+
+<li>
+** Y --&gt; always yank entire line, D --&gt; only deletes from cursor to end of line **
+
+</ul>
+<li>
 appending text:
-	-shift + A = jump to end of line + insert mode	
-	-shift + i = jumpt to start of line + insert mode
-	-a = enter insert mode following where curosr is 
-</pre>
+
+<ul>
+<li>
+shift + A = jump to end of line + insert mode	
+
+<li>
+shift + i = jumpt to start of line + insert mode
+
+<li>
+a = enter insert mode following where curosr is 
+
+</ul>
+</ol>
+	  
+<div id="Vim to IDE"><h3 id="Vim to IDE" class="header"><a href="#Vim to IDE">Vim to IDE</a></h3></div>
+<ol>
+<li>
+Plug in manager 
+
+<ul>
+<li>
+in terminal
+
+<ul>
+<li>
+mkdir ~p ~/.vim/bundle
+
+<li>
+cd ~/.vim/bundle
+
+<li>
+git clone <a href="https://github.com/&lt;VundleVim&gt;/Vundle.vim.git">https://github.com/&lt;VundleVim&gt;/Vundle.vim.git</a> Vundle.vim 
+
+<ul>
+<li>
+remove &lt;&gt; when typing command
+
+</ul>
+</ul>
+<li>
+in vimrc 
+
+<ul>
+<li>
+under: boilerplate for plug in manager vundle
+
+</ul>
+<li>
+enabling vundle 
+
+<ul>
+<li>
+vim ~/.vimrc
+
+<li>
+in .vimrc --&gt; :PluginInstall
+
+<li>
+should open another window and show "done" when done, press "q" to exit
+
+</ul>
+<li>
+how to use: 
+
+<ul>
+<li>
+everytime we want to install a new plugin for vim that's from github, specify:
+
+<ul>
+<li>
+format: Plugin '&lt;gitub_account&gt;/&lt;repository_name&gt;' between &lt;call vundle#begin(...)&gt; and &lt;call vundle#end()&gt; in vimrc
+
+</ul>
+<li>
+remove a plugin: 
+
+<ul>
+<li>
+comment out the &lt;Plugin ...&gt; line in vimrc
+
+<li>
+run PluginClean in Vim (any instance)
+
+</ul>
+<li>
+repos will be downloaded into ~/.vim/plugged/
+
+</ul>
+</ul>
+<li>
+formatting 
+
+<ul>
+<li>
+in vimrc: 
+
+<ul>
+<li>
+set incsearch --&gt;&gt; enable incremental search (automatically update matches in source file)
+
+<li>
+set hlsearch --&gt; enable highlight search
+
+<li>
+can run :noh in vim instance to hide highlighted test
+
+</ul>
+</ul>
+</ol>
 
 </body>
 </html>
