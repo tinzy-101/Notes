@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-16-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Stacks Cont'd"><h3 id="Stacks Cont'd" class="header"><a href="#Stacks Cont'd">Stacks Cont'd</a></h3></div>
+<ol>
+<li>
+evaluate infix expression 
+
+<ul>
+<li>
+pretty much same algo as generating a postfix expression from infix
+
+<li>
+split string into a bunch of tokens (operands and operators) 
+
+<ul>
+<li>
+good to surround operators with spaces when (split based on delimiters of white space) inputting
+
+<li>
+OR just check based on identity of token
+
+</ul>
+<li>
+need operand and operator stack (2)
+
+</ul>
+</ol>
+<div id="Queues"><h3 id="Queues" class="header"><a href="#Queues">Queues</a></h3></div>
+<ol>
+<li>
+queue = ordered entries where entries can only be inserted at one end (rear) and removed from other end (front) 
+
+<ul>
+<li>
+FIFO
+
+</ul>
+<li>
+application: figuring out whether string is a palindrome or not 
+
+<ul>
+<li>
+take string apart char by char
+
+<li>
+use a stack and a queue to store chars
+
+</ul>
+<li>
+monte carlo simulation: car wash 
+
+<ul>
+<li>
+situation
+
+<ul>
+<li>
+if wash car on fast, use a lot of soap and water, but get more customers
+
+<li>
+if wash car slower, use less soap and water, but get less waters
+
+<li>
+what's the ideal trade off? 
+
+<li>
+want to calculate the average wait tme for each car upon entering and upon leaving the carwash
+
+</ul>
+<li>
+input: how much time to wash 1 car, probability that a new car arrives every sec/time frame, total time to simulate
+
+<li>
+output: number of customers services during time, average time customer waits in line during simulation
+
+<li>
+model: maintain a clock that moves 1 sec at a time, every sec, ask if there is another car coming in,
+
+<ul>
+<li>
+maintain a queue of time stamps for each car (when they enter)
+
+<li>
+each car also maintains a waittime variable (difference between entering time and time when it leaves queue)
+
+<li>
+every second, decrease the time in a car wash for car in the car wash
+
+<li>
+every time car enters car wash (leaves queue), send its wait time to an averager, can do same for num cars entering
+
+</ul>
+<li>
+implementation 
+
+<ul>
+<li>
+create a class for bool_source (probability of new car showing up), averager, and washer (stores info abt the washer, how much time it has left washing)
+
+</ul>
+</ul>
+<li>
+array implementation of queue 
+
+<ul>
+<li>
+queue is a way to buffer some content --&gt; replace recursion algos with stack or queue (recursion usually easiest)
+
+<li>
+can use a dynamic or fixed size array
+
+<li>
+end of array is entrance, start of array is the first item in the queue
+
+<li>
+need first and last indieces + circular array 
+
+<ul>
+<li>
+implement using modulo arithmetic
+
+<li>
+everytime you add, need to ask yourself what the next index should be
+
+<li>
+if newindex % capacity = 0, that means youve exceeded capacity and need to go to 0 (e.g. 5 % 5)
+
+<li>
+if 2 % 5, then still get 2 --&gt; constantly use moduluo to get new index
+
+</ul>
+</ul>
+<li>
+linked list implementation 
+
+<ul>
+<li>
+maintain head and tail ptr, one end is entrance, and one end if exit (front)
+
+<li>
+head node = front of queue, tail noe = rear of queue
+
+<li>
+need copy constructor, assignment operator, and destructor
+
+</ul>
+<li>
+stl implementation of double ended queue (deque) 
+
+<ul>
+<li>
+can enter or exit from front or back
+
+<li>
+want to merge benefits of linked list and array (pointer arithmetic)
+
+<li>
+allocate blocks of memory, e.g. 5 elements per block
+
+<li>
+each block is stored in a block pointer array (pointers to each element)
+
+<li>
+more efficient to allocate and deallocate a whole block of entries together rather than one by one 
+
+</ul>
+</ol>
+
+</body>
+</html>
