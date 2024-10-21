@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-21-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 17: Recursion"><h3 id="Chapter 17: Recursion" class="header"><a href="#Chapter 17: Recursion">Chapter 17: Recursion</a></h3></div>
+<ol>
+<li>
+related to recurrence in math
+
+<li>
+any problem that can be solved using recursion in CS can be solved without
+
+<li>
+e.g. computing factorial 
+
+<ul>
+<li>
+6! = 6 * 5 * 4 * 3 * 2 * 1 = 6 * 5!
+
+<li>
+n! = n * (n-1)!
+
+<li>
+function 
+
+<ul>
+<li>
+if n =0 --&gt; return 1
+
+<li>
+or return n * factorial(n-1) --&gt; inside a function called "factorial"
+
+<ul>
+<li>
+define recurrence relationship and base cases 
+
+</ul>
+</ul>
+<li>
+everytime the function is called, push another stack frame for "factorial" onto the stack
+
+<li>
+as soon as return value back to main, pop the function instance from the stack frame
+
+<li>
+final program is returned to main, and main is popped from stack frame 
+
+<ul>
+<li>
+too slow in real life, draw a call tree
+
+</ul>
+</ul>
+<li>
+long long = larger int (compiler sees long = int)
+
+<li>
+e.g. fibonacci numbers 
+
+<ul>
+<li>
+simulates rabbits: 0 1 1 2 3 5 8 13 21 34
+
+<li>
+indices:           0 1 2 3 4 5 6  7  8  9
+
+<li>
+number of rabbits in backyard = sum of 2 previous generations
+
+<li>
+formula 
+
+<ul>
+<li>
+base case: fib(0) = 0, fib(1) = 1
+
+<li>
+fib(index) = fib(index - 1) + fib(index - 2); index &gt;= 2
+
+<li>
+can solve using matrix multiplication, iteration
+
+<li>
+tail recursion is the slowest of all the methods 
+
+<ul>
+<li>
+when get to more generations, the execution almost doubles towards the end
+
+<li>
+number of branches grows exponentially
+
+</ul>
+</ul>
+</ul>
+<li>
+Characteristics of recursion 
+
+<ul>
+<li>
+1+ base cases (simplest case, used to stop recursion)
+
+<li>
+every recursive call reduces orgiinal problem, bringing it closer to the base case
+
+<li>
+everytime you write a recursive solution, you are removing a loop 
+
+<ul>
+<li>
+loop like in iteration
+
+<li>
+recursion can not use loops at all cause we are just automatically calling a function repeatedly
+
+<li>
+hardware stack = "loop" in recursion
+
+</ul>
+<li>
+break problem into subproblems, if subproblem is like og problem, use same approach to solve each
+
+</ul>
+<li>
+e.g. check whether string is palindrome 
+
+<ul>
+<li>
+abc121cba 
+
+<li>
+low --&gt; high
+
+<li>
+first check if first and last are same, then move index low and high up and down
+
+<li>
+base case: length of remaining string is 1 or 0 characters wrong, or if 2 chars to compare are not same
+
+<li>
+very expensive in terms of mem usage bc creating a new substring for each comparison 
+
+<ul>
+<li>
+to improve, use a helper function, set up intial value of the low and high index
+
+</ul>
+</ul>
+<li>
+selection sort 
+
+<ul>
+<li>
+start at position 0, and find the smallest value in the whole array, and swap the element at i=0 with smallest
+
+<li>
+make a step to i = 1, and check the rest of the array for the smallest, and swap again
+
+<li>
+repeat until completely sorted
+
+<li>
+in order to find which is the smallest in the remaining array, have an inner loop to find smallest in subarray (loop within loop)
+
+<li>
+O(n^2)
+
+</ul>
+<li>
+recursive selection sort 
+
+<ul>
+<li>
+swap largest element as the last element in the subarray
+
+<li>
+base case: high=0 (sorting 0 ---&gt; 0)
+
+<li>
+have only 1 loop looking for largest element (instead of smallest, sorting back to front) --&gt; "inner loop"
+
+<li>
+the "outer loop" is removed by using recursion
+
+</ul>
+<li>
+linear search 
+
+<ul>
+<li>
+not already sorted 
+
+<li>
+have array of elements,  look for a key
+
+<li>
+start from the beginning, see if you have a match, if not keep stepping until you find the key
+
+<li>
+O(n)
+
+</ul>
+<li>
+recursive binary search 
+
+<ul>
+<li>
+assume already sorted
+
+<li>
+first look for key in the center ( define a low and high index, and set a midpoint (average low and high index)
+
+<li>
+case 1: if key less than middle, then change high index to be at the midpoint (dont need to look any higher) 
+
+<ul>
+<li>
+also need to reset midpoint using integer division (rounds down)
+
+</ul>
+<li>
+case 2: if high and low switch sides, then know that you dont have a key inside the array, return -(insertion point) - 1 
+
+<ul>
+<li>
+if the key is not found, where to insert the key to maintain the order of the list? --&gt; -(low) - 1
+
+</ul>
+<li>
+case 3: key more than middle, then cut off first half of array
+
+<li>
+O(log(n))
+
+</ul>
+<li>
+implementation of recursive binary search 
+
+<ul>
+<li>
+base case: if low &gt; high, then you just return -low - 1 bc we know its not found
+
+</ul>
+<li>
+towers of hanoi 
+
+<ul>
+<li>
+hard to solve wo recursion
+
+<li>
+move (n-1) disks from A to C
+
+<li>
+move remaining 1 disk from A to B
+
+<li>
+move (n-1) disks back to B 
+
+</ul>
+<li>
+8 queens problem 
+
+<ul>
+<li>
+can solve with iteration (stack) or recursion
+
+<li>
+very useful technique: write recursive funciton as boolean function
+
+<li>
+use an array size 8, store the column info at corresponding index
+
+<li>
+check whether you can place a queen at row i &amp; col j --&gt; assume prev rows occupied, and that those queens are legit
+
+<li>
+write a bool function search: 
+
+<ul>
+<li>
+check whether current row is equal to n, (0-7 rows, but searching on row 8) --&gt; means alrd solved problem, base case
+
+<li>
+if not: general case: 
+
+<ul>
+<li>
+iterate through all functions, and invoke isValid and Search --&gt; check if can place a queen there
+
+<li>
+also run the search() for a future row: search(row+1)
+
+<li>
+if isValid, and the search in the future rows is a true value, then you want to place it there 
+
+</ul>
+</ul>
+</ul>
+</ol>
+	  
+	  
+<div id="Qs for Takyiu"><h3 id="Qs for Takyiu" class="header"><a href="#Qs for Takyiu">Qs for Takyiu</a></h3></div>
+<ol>
+<li>
+how to validate traffic lights output?
+
+<li>
+ask takyiu to bring: extension cord, optical power supply (rmb binder clips)
+
+<li>
+how many cells to make at once?
+
+</ol>
+
+</body>
+</html>
