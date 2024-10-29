@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-28-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Binary Tree"><h3 id="Binary Tree" class="header"><a href="#Binary Tree">Binary Tree</a></h3></div>
+<ol>
+<li>
+single element in tree = root (at the base)
+
+<ul>
+<li>
+have 2 distinct trees: right sub tree, left sub tree
+
+<li>
+left and right subs also have roots, can treat every element as a root
+
+</ul>
+<li>
+binary search tree 
+
+<ul>
+<li>
+if tree perfectly balanced, O(logn) to find an element (base 2)
+
+<li>
+height of tree: num of nodes from root to farthest leaf   
+
+<ul>
+<li>
+how to find: 
+
+<ul>
+<li>
+root is a pointer
+
+</ul>
+</ul>
+<li>
+depth of node: 
+
+<ul>
+<li>
+how many nodes you have to go back to root node
+
+</ul>
+</ul>
+<li>
+want to randomize elements b4 putting into BST, so that the tree is balanced 
+
+<ul>
+<li>
+OR use an AVL tree (well balanced tree, guarantees O(logn)
+
+<li>
+why: really bad to have sorted elements going into BST, just turns into O(n) search
+
+</ul>
+<li>
+representing BST 
+
+<ul>
+<li>
+represented using linked nodes
+
+<li>
+each node contains value + 2 links (left and right)
+
+</ul>
+<li>
+protected access: children of that data member can access (inheritance) 
+
+<ul>
+<li>
+size = num elements
+
+<li>
+createNewNode = virtual and protected 
+
+<ul>
+<li>
+virtual = using polymorphism, want to overwrite the function in children classes
+
+</ul>
+</ul>
+<li>
+post and pre and in order 
+
+<ul>
+<li>
+preorder: look at me first, then recursively at the left sub tree, then at the right sub tree 
+
+<ul>
+<li>
+allows you to reconstruct the tree, if input the nums the same way will get same structure 
+
+</ul>
+<li>
+postorder: look at my left, right, then me last
+
+<li>
+inorder: look at left, look at myself, then right last 
+
+<ul>
+<li>
+elements come out in order 
+
+</ul>
+<li>
+finding a path: look at parents until getting back to root node 
+
+<li>
+ON MIDTERM
+
+</ul>
+<li>
+can also create new nodes using "new" 
+
+<ul>
+<li>
+create everything in the heap space
+
+</ul>
+<li>
+always write code for general case, then edge cases 
+
+<ul>
+<li>
+general case: balanced binary tree
+
+<li>
+edge case: root = null, no left sub tree, no right sub tree
+
+</ul>
+<li>
+inserting element in BST 
+
+<ul>
+<li>
+parent always follows the current, like an inchworm
+
+<li>
+dont support duplicate elements
+
+</ul>
+<li>
+tree traversal 
+
+<ul>
+<li>
+breadth first traversal: visit all nodes level by level (nodes with same depth are at same level) 
+
+<ul>
+<li>
+good bc is optimum value, shortest path from root node to afarthest leaf node
+
+</ul>
+</ul>
+<li>
+BST removal 
+
+<ul>
+<li>
+easy if deleting leaf node (no chidren)
+
+<li>
+if not a leaf node, only have a right child, give up the whole subtree of the right child to your parent
+
+<li>
+if have left node and right sub tree: replace yourself with the greatest (rightmost) child in the left sub tree 
+
+<ul>
+<li>
+if that greatest child has its own children, have it be adopted by the greatest child's parent in the left sub tree
+
+</ul>
+</ul>
+</ol>
+<div id="Qs"><h3 id="Qs" class="header"><a href="#Qs">Qs</a></h3></div>
+<ol>
+<li>
+how to do 42 bears + prefixes
+
+<li>
+how to study for midterm 
+
+</ol>
+
+</body>
+</html>
