@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>10-30-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Deleting Elements in BST"><h3 id="Deleting Elements in BST" class="header"><a href="#Deleting Elements in BST">Deleting Elements in BST</a></h3></div>
+<ol>
+<li>
+ask: does the node you want to delete have a left child? 
+
+<ul>
+<li>
+if yes: 
+
+<ul>
+<li>
+look at the rightmost element in the left sub tree, fetch content, and overwrite curr node with that value
+
+<li>
+when moving the rightmost element up, if there is left sub tree, it should be adopted by the parent as left child
+
+</ul>
+<li>
+if no: 
+
+<ul>
+<li>
+give up right subtree to be adopted by ur parent (the right sub's grandparent node)
+
+</ul>
+</ul>
+<li>
+if duplicate elements in bst: 
+
+<ul>
+<li>
+if trying to insert a duplicate values of one of the nodes, go to the left sub tree of that node
+
+</ul>
+<li>
+deleting with duplicates 
+
+<ul>
+<li>
+need to figure out which you want to delete or if you want to delete all copies
+
+</ul>
+<li>
+iterators 
+
+<ul>
+<li>
+need a uniform way to traversing the elements in the tree
+
+<li>
+have an iterator class
+
+<li>
+tree.begin() = the root element
+
+<li>
+tree.end() = nullptr (moved beyond the bst)
+
+<li>
+++iterator = can move the iterator like an index (preinc overloaded for the class)
+
+<li>
+want to get iterator object out of bst tree: 
+
+<ul>
+<li>
+visit all nodes in bst (e.g. in order)
+
+<li>
+write the values in the nodes into a vector (NOT the node ptrs)
+
+<li>
+traverse the vector of the sorted elemetns, and store the "current" as an index in the vector (current is an int)
+
+</ul>
+<li>
+an iterator object only stores current + vector of all elements
+
+</ul>
+<li>
+define begin() and end() 
+
+<ul>
+<li>
+in the BST tree, NOT in the iterator class 
+
+</ul>
+<li>
+path function 
+
+<ul>
+<li>
+given a node in bst tree, it will give the order that you traverse nodes to reach the desired node (stored in vector)
+
+</ul>
+<li>
+colon means inheritance 
+
+</ol>
+	
+<div id="Huffman Coding Tree"><h3 id="Huffman Coding Tree" class="header"><a href="#Huffman Coding Tree">Huffman Coding Tree</a></h3></div>
+<ol>
+<li>
+xournal++
+
+</ol>
+	
+<div id="HW"><h3 id="HW" class="header"><a href="#HW">HW</a></h3></div>
+<ol>
+<li>
+code trace iterator class: Test BST Iterator
+
+<li>
+code trace BST deleting nodes + path (whichever program)
+
+<li>
+code trace recursion HW  - do on xournal++
+
+<li>
+read the chapter
+
+</ol>
+
+</body>
+</html>
