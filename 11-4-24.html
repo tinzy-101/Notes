@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>11-4-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="AVL Tree Intro"><h3 id="AVL Tree Intro" class="header"><a href="#AVL Tree Intro">AVL Tree Intro</a></h3></div>
+<ol>
+<li>
+if you dont have a well balanced tree, then a BST turns a search into a O(n) operation
+
+<li>
+avl guarantee: height difference between left and right subtree at most +-1 
+
+<ul>
+<li>
+dont need a perfectly balanced bst to get O(logn) search
+
+</ul>
+<li>
+balance factor: height of right sub tree - height of right subtree 
+
+<ul>
+<li>
+balance factor of a parent node must be &gt;=1, else need to some child node so that tree is more balanced
+
+</ul>
+<li>
+different cases of imbalance: 
+
+<ul>
+<li>
+RR rotation: right tree is too long 
+
+<ul>
+<li>
+when right heavy: balance factor = 1
+
+<li>
+parent's balance factor +2, childs balance factor 0 or +1 (match sign)
+
+<li>
+do a left rotation
+
+</ul>
+<li>
+LL rotation: lef tree is too long 
+
+<ul>
+<li>
+when left heavy: balance factor  = -1
+
+<li>
+parent's balance facotr -2, childs balance factor 0 or -1 (match sign)
+
+<li>
+do a right rotation
+
+</ul>
+<li>
+LR rotation: left tree is too long 
+
+<ul>
+<li>
+parent's balane facotr -2, childs balance factor +1 (diff sign)
+
+<li>
+do a left rotation then a right rotation
+
+</ul>
+<li>
+RL rotation: right tree too long 
+
+<ul>
+<li>
+parent's balance factor +2, childs balance factor -1 (diff sign)
+
+<li>
+do a right rotation then a left rotation
+
+</ul>
+</ul>
+<li>
+designing AVL tree 
+
+<ul>
+<li>
+is an inherited class of BST tree, each node had content, left ptr, right ptr, but avl tree also has "height" property
+
+</ul>
+</ol>
+<div id="HW notes"><h3 id="HW notes" class="header"><a href="#HW notes">HW notes</a></h3></div>
+<ol>
+<li>
+AVL practice
+
+<li>
+BST removal practice (figure out the algorithm)
+
+</ol>
+
+</body>
+</html>
