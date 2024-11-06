@@ -54,25 +54,26 @@
 		a. download feh
 		b. feh --bg-scale wallpaper.jpg (in terminal will change wallpaper temp.)
 		c. exec_always feh --bg-scale wallpaper.jpg (in i3 config, permanent wallpaper)
-5. force certain application to open in certain workspace
+1. force certain application to open in certain workspace
 		a. run &lt;xprop&gt; and click on app in terminal to check class of application
 		b. copy second class (Firefox-esr for firefox)
 		c. assign [class="Firefox-esr"] $ws1
 		d. CAREFUL! will ALWAYS open in that workspace
-6. just use ibus 
+2. just use ibus 
 		a. for some reason using setxkbmap is fucking useless of zhuyin, jp and kr
 		b. supposedly, in i3 config file:  exec_always setxkbmap -model pc105 -layout "us,kr" -variant ,, -option "grp:alt_shift_toggle" 
 		c. works for russian, thai and tibetan
 		d. just download ibus and language support (e.g. ibus-zhuyin)
 		e. go to search bar for ibus-setup and use gui to configure
-7. audio/microphone control = pavucontrol (need to install)
-8. file gui = nautilus (comes with fresh install)
-9. blutooth gui = blueman (need to install)
+3. audio/microphone control = pavucontrol (need to install)
+4. file gui = nautilus (comes with fresh install)
+5. blutooth gui = blueman (need to install)
 		a. after connecting to bluetooth headphones, need to change output devices to the headphones in pavucontrol
-10. gui for searching for desktop apps 
+6. gui for searching for desktop apps 
 	 - sudo apt-get install xfce4-appfinder
 	 - launch in term: xfce4-appfinder 
 		- will have popup gui to search for apps
+7. ctrl+shift+y = open downloads (not nautilus, another gui)
 </pre>
 
 <div id="Ricing i3:"><h3 id="Ricing i3:" class="header"><a href="#Ricing i3:">Ricing i3:</a></h3></div>
