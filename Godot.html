@@ -21,6 +21,95 @@ unzip folder
 run the Godot.&lt;version stuff&gt;.x86_64
 
 </ol>
+<div id="Game Dev Background"><h3 id="Game Dev Background" class="header"><a href="#Game Dev Background">Game Dev Background</a></h3></div>
+<ol>
+<li>
+need assets: sprites, models, textures, sounds --&gt; godot doesnt help creating them, rather putting them together
+
+<li>
+can get free assets off the internet --&gt; CC0 = completely free to use + no need to credit
+
+<ul>
+<li>
+itch.io
+
+<li>
+opengameart.org
+
+<li>
+kenney.nl
+
+</ul>
+</ol>
+<div id="Setting up"><h3 id="Setting up" class="header"><a href="#Setting up">Setting up</a></h3></div>
+<ol>
+<li>
+download assets and create folders in bottom right: assets, screens, scripts
+
+<li>
+everything is based off of nodes 
+
+<ul>
+<li>
+if want to creat a player, need to put together a bunch of nodes
+
+</ul>
+<li>
+need to use scenes 
+
+<ul>
+<li>
+help to bundle nodes into reusable packages
+
+<li>
+can use 1 scene for a character, menu, weapon, or an entire level, etc --&gt; scope is up to you!
+
+<li>
+can nest scenes --&gt; e.g. nest player scene inside level 1 scene
+
+<li>
+all the scenes create a scene tree --&gt; at the top = root node
+
+</ul>
+</ol>
+<div id="Creating Player"><h3 id="Creating Player" class="header"><a href="#Creating Player">Creating Player</a></h3></div>
+<ol>
+<li>
+first create a root scene where everything will be organized
+
+<li>
+create another scene for the player --&gt; plus sign where the tabs are 
+
+<ul>
+<li>
+choose type of node: character body 2D
+
+<ul>
+<li>
+2D physics body for characters moving thru script
+
+</ul>
+<li>
+need to add graphics 
+
+</ul>
+<li>
+add a subnode to the characterbody2d for animated sprite 
+
+<ul>
+<li>
+inspector bar on right changes qualities of a node
+
+<li>
+eg. add in sprite frames for animation
+
+<ul>
+<li>
+
+
+</ul>
+</ul>
+</ol>
 <div id="Setting up"><h3 id="Setting up" class="header"><a href="#Setting up">Setting up</a></h3></div>
 <ol>
 <li>
@@ -67,7 +156,40 @@ adding things to scene
 
 <ul>
 <li>
-e.g. create a menu screen
+e.g. create a menu screen, besides the main screen
+
+<li>
+need to create a child node that can be added to the screen 
+
+<ul>
+<li>
+2d node = something with position and allows for 2d object on the screen
+
+</ul>
+<li>
+different types of buttons available, choose default
+
+</ul>
+<li>
+can rename button on the right panel
+
+<li>
+creating a script for main 
+
+<ul>
+<li>
+right click and choose new script
+
+<li>
+settings: 
+
+<ul>
+<li>
+template: Node: Default (empty script), can't change path yet bc no folders
+
+</ul>
+<li>
+once created delete all the default functions EXCEPT extends Node2D
 
 </ul>
 </ol>
@@ -81,6 +203,15 @@ save 1 scene as: ctrl + shift + s
 
 <li>
 save all scenes: ctrl + shift + alt + s
+
+<li>
+duplicate: ctrl + d
+
+<li>
+search for new node: ctrl + a
+
+<li>
+center node on screen: f
 
 </ol>
 
