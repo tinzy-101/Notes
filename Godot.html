@@ -105,93 +105,505 @@ eg. add in sprite frames for animation
 
 <ul>
 <li>
+under Animation tab on the right side, select sprite frames
 
+<li>
+there should be a sprite frames window opneed at the bottom
+
+<li>
+got to the grid thingy --&gt; can add sprites from a spread sheet, so open up sprite sheet pdf (many sprites fo animation)
+
+<li>
+once you have the sprite sheet, press change the dimensions so that each sprite has its own box
+
+<li>
+for animation, press boxes in order you want to play (plays 0--&gt;1)
+
+</ul>
+</ul>
+<li>
+Once you have created a player, if using pixel are, things will look blurry
+
+<ul>
+<li>
+fix: project &gt; project settings &gt; rendering &gt; textures &gt; nearest (texture filter)
+
+</ul>
+<li>
+Playing animation 
+
+<ul>
+<li>
+press the play button in the small window where all the sprites are
+
+<li>
+can increase FPS
+
+</ul>
+<li>
+Things to adjust 
+
+<ul>
+<li>
+name the animation --&gt; idle
+
+<li>
+enable autoplay --&gt; 3rd button from left --&gt; makes sure character starts moving as soon as game starts
+
+<li>
+move the sprite on the big screen so it sits above some "ground" --&gt; middle red line
+
+</ul>
+<li>
+Error: this node has no shape so it cannot interact with other objects 
+
+<ul>
+<li>
+this is bc characterbody2D is a physics node --&gt; need to define a shape physics engine can work with
+
+<li>
+solution: 
+
+<ul>
+<li>
+create a new collision node
+
+<li>
+create a new circle shape for the collision node
+
+<li>
+this circle should rougly line up with the body of the obj, is ok if not perfect
+
+<li>
+circle "collider" needs to be generally a bit smaller than body
+
+</ul>
+</ul>
+<li>
+Now that we've created a player scene, we can go back to the "game" scene tab and simply drag our player in! 
+
+<ul>
+<li>
+player shows up in assets
+
+</ul>
+</ol>
+<div id="Building Game Scene"><h3 id="Building Game Scene" class="header"><a href="#Building Game Scene">Building Game Scene</a></h3></div>
+<ol>
+<li>
+now that you've dragged the player in, also need to have a camera node to control what is being shown on the screen 
+
+<ul>
+<li>
+ctrl a to search for new node, ctrl+d to center and put yourself in perspective
+
+<li>
+should see a pink box outline
+
+</ul>
+<li>
+camera viewport probably too large so can adjust dimensions on the right --&gt; 4x4 is a safe best
+
+<li>
+can move the camera so the player is in the middle or somewhere inside box
+
+<ul>
+<li>
+now try running the scene --&gt; F6
+
+<li>
+i tried running the whole game, but doesnt work bc set to wrong scene maybe; go to project &gt; project setting &gt; applications &gt; run &gt; main scene
+
+</ul>
+</ol>
+<div id="First Script for Player Movement"><h3 id="First Script for Player Movement" class="header"><a href="#First Script for Player Movement">First Script for Player Movement</a></h3></div>
+<ol>
+<li>
+go back to player tab, make sure player is selected on the left bar (and not any of its subnodes), and add new script
+
+<ul>
+<li>
+use a template script first, rename to "player," and make sure to place it in our "scripts" folder
+
+</ul>
+<li>
+with the template, player falls down immediately 
+
+<ul>
+<li>
+this is because character needs a collider to stand on --&gt; char has own collider, but nothing to collide with!
+
+</ul>
+<li>
+for static world boundaries:
+
+<ul>
+<li>
+create new node: staticbody2d in "game"
+
+<li>
+under the new node, create collisionshape2d, and select shape to be "new worldboundaryshape2d"
+
+<li>
+can rotate the shape so the long side is where the boundary for the other nodes are
+
+<li>
+place it under the player node and when playing the game it shouldnt fall through anymore!
+
+</ul>
+<li>
+once you play the game now, should be able to move left and right with arrow keys  + jump with space 
+
+<ul>
+<li>
+but moving a bit too fast --&gt; can adjust by changing SPEED and JUMP_VELOCITY vars in the script
+
+</ul>
+</ol>
+<div id="Worldbuilding!"><h3 id="Worldbuilding!" class="header"><a href="#Worldbuilding!">Worldbuilding!</a></h3></div>
+<ol>
+<li>
+remove the static collider --&gt; going to create new ground for player to stand on
+
+<li>
+need to use concept of tiles --&gt; small blocks that make up a whole background 
+
+<ul>
+<li>
+need a tileset (set of all tiles) to create different tilemaps for each scene --&gt; can do a lot of reusing!
+
+<li>
+add new tilemap node to "game"
+
+<li>
+on right side select "tileset"
+
+<li>
+on bottom go to tileset, instead of tilemap, and drop in your tileset from your assets, select yes to popup
+
+<li>
+program automatically detects tiles, but you can use eraser tool as needed to unselect tiles 
+
+<ul>
+<li>
+e.g. if 1 object is split into multiple tiles, erase, then press shift while dragging to create 1 big tile
+
+</ul>
+</ul>
+<li>
+once you clean up tile map, can start placing tiles! 
+
+<ul>
+<li>
+make sure game is in select mode and tilemap is in paint mode
+
+<li>
+can selecte multiple tiles to place at once, just need to swtich to select mode in tilemap first
+
+</ul>
+<li>
+adding physics to tilemap 
+
+<ul>
+<li>
+go to tilemap &gt; tileset on left side, add physics layer
+
+<li>
+go to tilemap &gt; physics0 on the bottom
+
+<li>
+can start selecting tiles that physics should be applied to (e.g. blocks, but flowers and trees dont need physics bc we want to pass right through)
+
+<li>
+some tiles, like the bridge, we dont want the entire tile to be selected, only partially, so we can adjust the box size 
+
+<ul>
+<li>
+make sure when adjusting, make sure consecutive nodes, like for the bridge, line up! so that the player doesnt get stuck
+
+</ul>
+<li>
+when finished choosing, if hit play again, should get a real world!
+
+</ul>
+<li>
+adjusting camera to follow player 
+
+<ul>
+<li>
+drag the camera node on left side so it is a child of the player node
+
+<li>
+since the camera follows really quickly by default, can go to camera and enable position smoothing (5 pixels) so its less headache inducing lol
+
+</ul>
+</ol>
+<div id="Platforms"><h3 id="Platforms" class="header"><a href="#Platforms">Platforms</a></h3></div>
+<ol>
+<li>
+want to make our game less static! create some moving and non moving platforms --&gt; need to create a new element/scene first
+
+<li>
+add animatablebody2d node 
+
+<ul>
+<li>
+used when want to animate a node but still want the node to collide properly with other objects
+
+<li>
+subnode of the platform scene
+
+</ul>
+<li>
+add sprite 
+
+<ul>
+<li>
+so that there is an image attached to the node
+
+<li>
+drag in platform sprite sheet into right bar &gt; region &gt; enabled &gt; edit region &gt; crop out the other sprites you dont need 
+
+</ul>
+<li>
+add collisionbody2d 
+
+<ul>
+<li>
+so that player can collide with it
+
+<li>
+set the collision gemoetry to be a rectangle and shape it to match the platform shape
+
+</ul>
+<li>
+now have a platform! just drag and drop it into the main game scene as a subnode
+
+<li>
+want to be able to jump up and enter platform from the bottom 
+
+<ul>
+<li>
+got to collision2dobject for platform, on right side &gt; onewaycollsion on
+
+</ul>
+<li>
+if the platform is after the player in the node tree on left side, the player is drawn first and is covered up by the platform 
+
+<ul>
+<li>
+to fix, can either change the order of nodes in the tree --&gt; NOT dependable
+
+<li>
+better: 
+
+<ul>
+<li>
+go to the player and on the right side &gt; ordering &gt; z index &gt; set to something greater than 0 (e.g. 5)
+
+<li>
+by default all scenes have a z index of 0, so follow the ordering of the tree
+
+<li>
+if not all the z indices are 0, then go based on highest z index to be drawn last
+
+</ul>
+</ul>
+<li>
+create moving platform 
+
+<ul>
+<li>
+duplicate the existing platform, and add an animationplayer subnode
+
+<li>
+in bottom bar, add new animation
+
+<li>
+click on player2 in left bar &gt; position on right bar &gt; key symbol &gt; yes to popup
+
+<li>
+move the time bar on the bottom from 0 --&gt; 1 sec (or how ever long you want it to move)
+
+<li>
+move the platform to the place you want it to be at the end of the set time frame 
+
+<ul>
+<li>
+can use shift to lock the node into only 1 axis 
+
+</ul>
+<li>
+click key again
+
+<li>
+can click play button on bottom to see it run
+
+<li>
+to get it to loop 
+
+<ul>
+<li>
+press loop button twice on bottom right
+
+</ul>
+<li>
+if moving too fast, can adjust time length on bottom right
+
+<ul>
+<li>
+after adjusting time, need to move the last keyframe to align with the end of the time period
+
+</ul>
+<li>
+enable autoplay on the bottom right 
+
+<ul>
+<li>
+so that when game starts and the camera moves to the platform, platform is already moving
 
 </ul>
 </ul>
 </ol>
-<div id="Setting up"><h3 id="Setting up" class="header"><a href="#Setting up">Setting up</a></h3></div>
+<div id="Pickups"><h3 id="Pickups" class="header"><a href="#Pickups">Pickups</a></h3></div>
 <ol>
 <li>
-create a new project 
+nodes that can be picked up! good for object-collecting games (like ours tehe)
+
+<li>
+create a new scene + new node area2d 
 
 <ul>
 <li>
-can set path
-
-<li>
-choosing renderer: Forward+ = 3D, Mobile =  2D, Compatibility = beta version but 2D
-
-<li>
-have git version control
+use area2d when you dont want to collide with objects, just want to define an area that can detect collisions
 
 </ul>
 <li>
-on top bar 
+create an animatedsprite2d (bc we want coin to spin) 
 
 <ul>
 <li>
-can toggle a 2D or 3D plane
+on right side, animation &gt; create new sprite frame &gt; on bottom, grid &gt; choose coin sprite sheet &gt; cut up sheet properly, select frames in order
 
 <li>
-script: code that u write shows up there
+change to 10fps
 
 <li>
-assetlib: useful public repo for game stuff u might need
+make sure autoplays on bottom left
 
 </ul>
 <li>
-creating a scene 
+area2d also needs collision shape bc it is a physics body 
 
 <ul>
 <li>
-need to create a scene using the left side (2D screen) to start project, double click to name
-
-<li>
-after you create a scene, you can run the project using run button on top right
+add collisionshape2d with circule smaller than the coin body
 
 </ul>
 <li>
-adding things to scene 
+now can drag coin into the game!
+
+<li>
+getting coin to do stuff when the player comes in contact with it 
 
 <ul>
 <li>
-e.g. create a menu screen, besides the main screen
+go to coin on left side &gt; create new script &gt; default template &gt; save in scripts folder
 
+</ul>
 <li>
-need to create a child node that can be added to the screen 
+tidbits on the script 
 
 <ul>
 <li>
-2d node = something with position and allows for 2d object on the screen
+too see all possible signals: click on the area2d (coin) node on the left bar &gt; on right side click on node
+
+<li>
+want to use "enter body" signal, which is triggered when a physics body enters the area2d
+
+<li>
+add in signal: double click on it and press connect
+
+<li>
+green arrow by function shows that it is triggered by signal
+
+<li>
+to test signal works: print something in console!
+
+<li>
+to delete the coin when its touched: queue_free --&gt; deletes the entire scene from the rendering tree 
 
 </ul>
 <li>
-different types of buttons available, choose default
-
-</ul>
-<li>
-can rename button on the right panel
-
-<li>
-creating a script for main 
+issues with current script: ANY physics body triggers the "+1 coin" output to console 
 
 <ul>
 <li>
-right click and choose new script
+can either specify in script OR put the player on a new physics layer
 
 <li>
-settings: 
+on the player: go the inspector &gt; collisions &gt; on layers &gt; untoggle 1 and toggle 2
+
+<li>
+on the coin: go to the inspector &gt; collisions &gt; on masks &gt; untoggle 1 and toggle 2 
 
 <ul>
 <li>
-template: Node: Default (empty script), can't change path yet bc no folders
+mask defines what layers a node collides with, so only want to recognize collisions on layer 2 (where there is only the player!)
+
+</ul>
+</ul>
+<li>
+PROBLEM 
+
+<ul>
+<li>
+when doing (8), the program refuses to recognize when the player enters the area2d of the coin
+
+<li>
+however, everything works perfectly fine when the player is on another layer --&gt; issue is when we change the mask of the coin, not sure how to fix
+
+<li>
+solution: just make sure that physics bodies other than the player (such as platforms) do not touch the coin
 
 </ul>
 <li>
-once created delete all the default functions EXCEPT extends Node2D
+input from arrow key instead of space 
+
+<ul>
+<li>
+the default program uses the "ui_input" variable as an indication to jump, and ui_input is only mapped to "space" and "enter"
+
+<li>
+go to project settings &gt; input map &gt; show built in settings &gt; look for ui_input &gt; add new mapping to up arrow
+
+<li>
+now can jump using up arrow and fully rely on keypad
 
 </ul>
+</ol>
+<div id="Dying 1.0"><h3 id="Dying 1.0" class="header"><a href="#Dying 1.0">Dying 1.0</a></h3></div>
+<ol>
+<li>
+need to limit the camera for when we fall off the tiles, so that it doesnt follow us infinitely 
+
+<ul>
+<li>
+go to camera &gt; limits on right side bar &gt; set bottom limit
+
+<li>
+can find bottom pixel limit by using rule tool and trace from midline (pink) to the bottommost element you have
+
+<li>
+also enable smoothing
+
+<li>
+now when you die the camera doesnt follow, stays on the current scene
+
+</ul>
+<li>
+creating killzone -- dangerous area player enters, indication to restart the game
+
 </ol>
 <div id="Useful Shortcuts"><h3 id="Useful Shortcuts" class="header"><a href="#Useful Shortcuts">Useful Shortcuts</a></h3></div>
 <ol>
@@ -212,6 +624,23 @@ search for new node: ctrl + a
 
 <li>
 center node on screen: f
+
+<li>
+change to select and move mode: w
+
+<li>
+when selecting tiles for physics tiles: 
+
+<ul>
+<li>
+f = normal select mode
+
+<li>
+c = clear tile mode
+
+</ul>
+<li>
+duplicate node: ctrl + d
 
 </ol>
 
