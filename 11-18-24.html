@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>11-18-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Chapter 12: Searching"><h3 id="Chapter 12: Searching" class="header"><a href="#Chapter 12: Searching">Chapter 12: Searching</a></h3></div>
+<div id="Chapter 12: Searching-Binary Search"><h4 id="Binary Search" class="header"><a href="#Chapter 12: Searching-Binary Search">Binary Search</a></h4></div>
+<ol>
+<li>
+if have an array of random values --&gt; need to search sequentailly
+
+<li>
+if have an array of sorted values --&gt; can use binary search 
+
+<ul>
+<li>
+have 2 params: low index, high index
+
+<li>
+first look at the midpoint of the low and high index: (low+high)/2
+
+<li>
+if item you're looking for is less than midpoint, shift the high index down 1 below midpoint
+
+<li>
+if item you're lookin for is greater than midpoint, shift the low index up 1 above midpoint
+
+</ul>
+<li>
+another approach for binary search 
+
+<ul>
+<li>
+search function: takes in sorted array, starting index, size, target value, bool&amp; found, size_t&amp; location where target found 
+
+<li>
+PITFALL: different index for above vs below the midpoint index
+
+</ul>
+</ol>
+<div id="Chapter 12: Searching-Open Address Hashing"><h4 id="Open Address Hashing" class="header"><a href="#Chapter 12: Searching-Open Address Hashing">Open Address Hashing</a></h4></div>
+<ol>
+<li>
+book talks about hashing in its own right
+
+<li>
+searching algorithm better than O(logn) --&gt; binary search 
+
+<ul>
+<li>
+only thing better is constant time! --&gt; what hashing is for
+
+<li>
+worst case for hashing: linar time, BUT average case is very good
+
+</ul>
+<li>
+e.g. need to put a bunch of tractor structures into software 
+
+<ul>
+<li>
+create an array of 50 tractor objects, and have indices 0-49
+
+<li>
+assign a key to each tractor as part of the struct: key = index in the array 
+
+<ul>
+<li>
+tractor 0 is at index 0 in the tractor array
+
+</ul>
+<li>
+BUT in real life, the keys are already given: 0, 100, 200, 300, ... , 4800, 4900 
+
+<ul>
+<li>
+solution: hashing function to go from key to a index value
+
+<li>
+hashing: way to map contents of an object (key) to one of the indices in the array 
+
+<ul>
+<li>
+BUT what if 2 objects are hashed to the same index: collision
+
+<li>
+collision: produce same hash value from 2 different objects
+
+<li>
+call the array: associative array OR hash table
+
+</ul>
+</ul>
+<li>
+if have 5000 elements to store, only want array of 10000 elements (x2) 
+
+<ul>
+<li>
+need enough space to handle collisions
+
+<li>
+at the same time, also dont want to waste memory
+
+</ul>
+</ul>
+<li>
+generating hash function 
+
+<ul>
+<li>
+look at size of the array, perform modulo: 
+
+<ul>
+<li>
+e.g. have array size 811 --&gt; pick a prime number for the size, bc can better avoid collisions
+
+</ul>
+</ul>
+<li>
+use hashing to implement a map!
+
+<li>
+double hashing
+
+<ul>
+<li>
+first hash function: do modulo to figure out what index to place an entry at
+
+<li>
+2nd hash function: if there is a collision, want to use a new function to calculate how many steps to take in the array to place the 
+	  new value with no collisions
+
+</ul>
+</ol>
+
+</body>
+</html>
