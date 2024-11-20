@@ -602,9 +602,58 @@ now when you die the camera doesnt follow, stays on the current scene
 
 </ul>
 <li>
-creating killzone -- dangerous area player enters, indication to restart the game
+creating killzone -- dangerous area player enters, indication to restart the game 
 
+<ul>
+<li>
+create a new scene called killzone --&gt; area2d --&gt; set collision mask = 2 (bc player is on layer 2 and only want to detect player)
+
+<li>
+dont add a collision shape quite yet bc want to be able to apply this scenes to differen kill zones w/ diff shapes
+
+<li>
+go back to main game scene, drag in killzone node, and add worldboundary collision to the area2d node there
+
+<li>
+write a script so the character "dies" when entering the area 
+
+<ul>
+<li>
+create new empty script
+
+<li>
+click killzone node on left &gt; node col on right &gt; on_body_enteredArea2d signal --&gt; creates a new funciton for us
+
+</ul>
+</ul>
+<li>
+timer 
+
+<ul>
+<li>
+dont want the game to restart immediately after dying, so create timer node under the killzone node
+
+<li>
+to add timer to the script: drag timer node from left bar, hit ctrl, drop the timer into the script --&gt; creates timer var with path to timer
+
+<li>
+start the time inside body of the signal function for killzone
+
+<li>
+create another signal: on_timer_timeout 
+
+<ul>
+<li>
+when the timer runs out of time in the first function, invoke this new function that says to restart/reload the game
+
+<li>
+get infinite loop!
+
+</ul>
+</ul>
 </ol>
+<div id="Worldbuilding 2.0"><h3 id="Worldbuilding 2.0" class="header"><a href="#Worldbuilding 2.0">Worldbuilding 2.0</a></h3></div>
+
 <div id="Useful Shortcuts"><h3 id="Useful Shortcuts" class="header"><a href="#Useful Shortcuts">Useful Shortcuts</a></h3></div>
 <ol>
 <li>

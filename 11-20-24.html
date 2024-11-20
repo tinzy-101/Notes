@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>11-20-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Sorting"><h3 id="Sorting" class="header"><a href="#Sorting">Sorting</a></h3></div>
+<ol>
+<li>
+selection sort 
+
+<ul>
+<li>
+don't use the simulator! --&gt; uses a diff mechanism than our textbook 
+
+<ul>
+<li>
+searches for smallest
+
+</ul>
+<li>
+for NONSORTED lists
+
+<li>
+traverse the whole array [0,n] and find the largest element, swap with the nth index
+
+<li>
+traverse [0, n-1] and find the next largest element, swap with (n-1)th index
+
+<li>
+etc.. until get to index 0, then will be sorted from smallest to largest
+
+<li>
+O(n^2) --&gt; bc have 2 nested loops
+
+</ul>
+<li>
+insertion sort 
+
+<ul>
+<li>
+have a separate empty array (A), move the 0th element of B (og array) to the empty array (sorted A)
+
+<li>
+continue adding 0th element of B and popping from the front, and you need to deliberately choose where to insert into A 
+
+<ul>
+<li>
+A ALWAYS needs to stay sorted
+
+</ul>
+<li>
+TECHNICALLY - do NOT need a separate array 
+
+<ul>
+<li>
+since sum of A and B is always the same size (assuming A+B has (n-1) elements)
+
+<li>
+consider 0th element: sorted
+
+<li>
+consider [0,1]: move around value at 1 to sort if needed
+
+<li>
+consider [0,2]: move around value at 2 to sort if needed
+
+<li>
+...
+
+<li>
+consider [0,n]: move around value at n to sort if needed
+
+</ul>
+<li>
+O(n^2)
+
+</ul>
+</ol>
+<div id="Recurisve Sorting Algos"><h3 id="Recurisve Sorting Algos" class="header"><a href="#Recurisve Sorting Algos">Recurisve Sorting Algos</a></h3></div>
+<ol>
+<li>
+merge sort 
+
+<ul>
+<li>
+implemented using recursion
+
+<li>
+split a list in half &gt; sort each half &gt; merge back into 1 sorted lsit
+
+<li>
+how to merge 2 sorted sublists back into 1 sorted list efficiently? 
+
+<ul>
+<li>
+look at the 0th elements of both arrays (sorted smallest to largest), choose the smaller one to place at the 0th index
+
+<li>
+of a new empty array to create the entire sorted array, increment the index of the array where you pulled the smallest from
+
+<li>
+continue searching at the 0th element, until the index of one array falls off the cliff, then you just copy the rest of the elements
+
+<li>
+from the array that hasnt fallen off the cliff
+
+</ul>
+<li>
+splitting array = O(logn), merging sorted arrays O(n) --&gt; merge sort O(nlogn) 
+
+<ul>
+<li>
+CAN"T get better than O(nlogn) for algos that use comparison to sort
+
+</ul>
+<li>
+problem: have to create a lot of subarrays! --&gt; solved using quick sort 
+
+<ul>
+<li>
+merge sort works, but there is a HUGE memory cost 
+
+</ul>
+</ul>
+<li>
+quick sort 
+
+<ul>
+<li>
+partition: a subset of a set, such that there are no intersection between each subset (partition)
+
+<li>
+randomly choose a pivot in the array --&gt; need to then to create 2 subarrays with all elements &lt; and &gt; pivot 
+
+<ul>
+<li>
+for the example where we are always choosing 0 to be the pivot, we set the low to be at 1st index, and high at the nth index
+
+<li>
+when we are choosing a good ("random") pivot, we choose a set of 3 numbers: value at index 0, value at index n, value in the middle 
+
+<ul>
+<li>
+compare all 3 numbers, choose the middle value as the pivot
+
+<li>
+SWAP the middle value with the 0th position, so the pivot can ALWAYS be at the 0th index, and low at 1st index, and high at nth index
+
+</ul>
+</ul>
+<li>
+low travels right, find first element &gt; pivot
+
+<li>
+high travels left, find first element &lt; pivot
+
+<li>
+swap low and high
+
+<li>
+repeat process until low and high need to cross each other as they move left and right, youre done 
+
+<ul>
+<li>
+after they cross, swap the element in the "high" position with the "0" position (also move pivot! rn assume pivot always at 0 position)
+
+<li>
+created 2 partitions! --&gt; all elements between the 0th position and the point of the "high" are less than pivot, and to the right everything is greater than the pivot
+
+</ul>
+<li>
+if you choose a good pivot (not just arbitrarily the first element), can get behavior similar to merge sort! --&gt; will split into 2 subarrays, &lt; and &gt; pivot, and the sub arrays will be relatively balanced
+
+<li>
+picking the right pivot: O(nlogn), but picking bad pivot: O(n^2) --&gt; really bad!
+
+<li>
+BUT good bc does need subarrays like mergesort!
+
+</ul>
+<li>
+heap sort 
+
+<ul>
+<li>
+both mergesort and quicksort have average case running time O(nlogn)
+
+<li>
+first step: convert array to a max heap in array formation 
+	  -how? 
+
+<li>
+swap first element (largest) with last element, and consider subarray of only last element is sorted
+
+<li>
+remainign array is no longer a heap! --&gt; need to reheapify down (sinking the new root node)
+
+<li>
+now have a max heap again! --&gt; now swap the first element (largest), with the 2nd to last element, so now have subarray of last 2 elements, sorted smallest to largest!
+
+<li>
+continue rebuilding the heap each time to get to a point where completeley sorted
+
+<li>
+time: O(nlogn) --&gt; O(logn) to rebuild the heap each time, but need to rebuild the heap n times each time you swap, so O(nlogn)
+
+</ul>
+<li>
+algos that dont use comparison 
+
+<ul>
+<li>
+if you have a large array with only elements 0-9 repeated, just do a count for each number, and once you have the count of 200 0s, then just place 200 0s in the new sorted array, and etc 
+
+</ul>
+</ol>
+<div id="HW notes"><h3 id="HW notes" class="header"><a href="#HW notes">HW notes</a></h3></div>
+<ol>
+<li>
+implement hash with linked list chaining
+
+<li>
+ask takyiu about ksmallest oslution why redo A x2
+
+<li>
+draw diagram for double hashing
+
+<li>
+draw diagram for merge sort --&gt; splitting and recombinbing
+
+<li>
+draw diagram for quicksort
+
+<li>
+draw diagram for heapsort
+
+</ol>
+
+</body>
+</html>
