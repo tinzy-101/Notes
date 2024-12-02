@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>11-28-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Weighted Graphs"><h3 id="Weighted Graphs" class="header"><a href="#Weighted Graphs">Weighted Graphs</a></h3></div>
+<ol>
+<li>
+vector of vector of edge values (u and v, indices into vertex vector) --&gt; u,v = directed edge from vertex u to vertex v
+
+<li>
+in BFS and DFS only visit each vertex once 
+
+<ul>
+<li>
+DFS recursive
+
+<li>
+BFS is more powerful and helpful for traversal, visit vertices level by level 
+
+<ul>
+<li>
+by the time reach a vertex using BFS, will be using the minimum number of steps/edges to get from root to that specific ndoe
+
+</ul>
+</ul>
+<li>
+MST = minimum spanning tree 
+
+<ul>
+<li>
+creates a tree that spans all connected vertices 
+
+<li>
+sum of all weights on the chosen edges have the minimum value 
+
+<ul>
+<li>
+2 chosen edges out of however many is the smallest weighted path
+
+<li>
+good for cost effeciveness --&gt; cost calculated by ADDITION (not multiplication)
+
+</ul>
+<li>
+can choose any vertex as the "root" of the MST --&gt; will get the same sum of weights (same chosen edges, tho different direction)!
+
+<li>
+if weights are distinct, are guaranteed ONLY 1 unique MST
+
+<li>
+algos to make MST: prims 
+
+<ul>
+<li>
+prims very similar to dijkstra
+
+<li>
+dijkstra only workds for connected graph
+
+<li>
+tell you starting from some vertex, minimum mileage to go to EVERY vertex
+
+</ul>
+</ul>
+<li>
+representing weighted graph 
+
+<ul>
+<li>
+weighted edges: use a 2D array: nx3 --&gt; n objects, each with 3 values 
+
+<ul>
+<li>
+e.g. {{0,1,2}, {0,3,8}, {u, v, w}} 
+
+<li>
+from vertex 0 to vertex 1 with weight of 2
+
+<li>
+from veretx o to vertex 3 wieh weight of 8
+
+<li>
+from vertex u to v with a weight of w 
+
+</ul>
+<li>
+adjacency matrix: each row and column of the matrix represents a vertex, and each intersection in the matrix represents the weight betwee the 2 vertexes 
+
+<ul>
+<li>
+not good when graphi is big (e.g. 100s of edges) --&gt; bc too wasteful, most entries will be nullpointers
+
+<li>
+sparse matrix wastes memory
+
+</ul>
+<li>
+adjacency lists 
+
+<ul>
+<li>
+vector of vector of edge object pointers  --&gt; each edge holds info about starting vertex, edning vertex, and weight along edge connecing them
+
+</ul>
+<li>
+cannot have a weight of 0 or negative   
+
+</ul>
+<li>
+can use inheritance to construct weighted graph class --&gt; bc so similar to unweighted graph implementation 
+
+<ul>
+<li>
+in real life only do public inheritance
+
+</ul>
+<li>
+minimum spanning tree algo: Prim's
+
+<ul>
+<li>
+a graph can have many spanning trees, but there is ONLy 1 unique MST (given unique weights)
+
+<li>
+better to use a priority queue using weights of the edges rather than doing a linear search each time to find the minimum weight
+
+<li>
+in real life: no STL to help you with graphs or trees, so can adopt graphcs package from facebook/google, or write your own implementation
+
+</ul>
+<li>
+Dijkstra's Algo: single source shortest path solution
+
+<ul>
+<li>
+finds shortest path (least weights) to EVERY OTHER vertex from one chosen root vertex
+
+<li>
+separat vertexs into 2 groups 
+
+<ul>
+<li>
+T = vertexes that we already know the path to drive to them from root
+
+<li>
+V-T = vertexes that that don't know yet
+
+</ul>
+<li>
+have same parent and cost array 
+
+</ul>
+</ol>
+	
+
+<div id="Final Notes"><h3 id="Final Notes" class="header"><a href="#Final Notes">Final Notes</a></h3></div>
+<ol>
+<li>
+associated arrays, trees, weighted and unweighted graph
+
+<li>
+graphs or hashing for programming assignment
+
+<li>
+prims algo: KNOW CONTENTS OF PARENT ARRAY AND COST ARRAY 
+
+<li>
+ask takyiu resume + last day to submit HW
+
+<li>
+go thru all c++ slides for graphs, and practice techniques 
+
+<li>
+around jan?
+
+</ol>
+
+</body>
+</html>

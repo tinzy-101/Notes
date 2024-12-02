@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>11-27-24</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="Unweighted Graphs cont'd"><h3 id="Unweighted Graphs cont'd" class="header"><a href="#Unweighted Graphs cont'd">Unweighted Graphs cont'd</a></h3></div>
+<ol>
+<li>
+representing vertices: vector of vector of 
+
+<li>
+representing edges: vector of vector of pointers to edge objects
+
+<li>
+BFS: breadth first search 
+
+<ul>
+<li>
+can choose any vertex as starting point, go level by level to reach every vertex
+
+<li>
+first root of resulting search tree, then all children of root, then all grandchildren of root from left to right
+
+</ul>
+<li>
+degree (of vertex) = number of edges incident on a vertex
+
+<li>
+BFS ON FINAL 
+
+<ul>
+<li>
+tell contents of parents parray, visited bool array, search order
+
+<li>
+will need source code on the test to know order in which nodes are traversed (starting root node, which order to visit your children in) 
+
+<ul>
+<li>
+on final: will always visit children smallest to largest (index: 0 -&gt; 1 -2 -&gt; etc)
+
+</ul>
+</ul>
+<li>
+applications of BFS: 
+
+<ul>
+<li>
+if num vertices searched = num vertices in graph, graph = connected
+
+<li>
+can find a cycle in the graph
+
+<li>
+finding shortest path between 2 vertices 
+
+</ul>
+</ol>
+	  
+	  
+	  
+<div id="HW Notes"><h3 id="HW Notes" class="header"><a href="#HW Notes">HW Notes</a></h3></div>
+<ol>
+<li>
+snakes and ladders:
+
+<ul>
+<li>
+start= root vertex --&gt; look for minimum num of steps to get to squaure 100
+
+</ul>
+</ol>
+
+</body>
+</html>
